@@ -11,6 +11,8 @@ package net.contargo.types;
  */
 public class ContainerNumber {
 
+    private static final int VALID_LENGTH = 11;
+
     private final String value;
 
     /**
@@ -41,6 +43,13 @@ public class ContainerNumber {
     @Override
     public String toString() {
 
-        return value;
+        if (value.length() != VALID_LENGTH) {
+            return value;
+        }
+
+        String normalizedValue = value.replaceAll("[ -]", "").toUpperCase();
+
+        return normalizedValue.substring(0, 4) + " " + normalizedValue.substring(4, 10) + "-"
+            + normalizedValue.charAt(10);
     }
 }
