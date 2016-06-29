@@ -1,0 +1,146 @@
+package net.contargo.types;
+
+import org.junit.*;
+import org.junit.Assert;
+
+
+/**
+ * @author  Aljona Murygina - murygina@synyx.de
+ */
+public class LicensePlateTest {
+
+    // BUILD ---------------------------------------------------------------------------------------
+
+    @Test(expected = IllegalArgumentException.class)
+    public void ensureThrowsIfBuiltWithNull() {
+
+        LicensePlate.forValue(null);
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void ensureThrowsIfBuiltWithEmptyString() {
+
+        LicensePlate.forValue(" ");
+    }
+
+
+    @Test
+    public void ensureCanBeBuiltWithString() {
+
+        LicensePlate licensePlate = LicensePlate.forValue("foo");
+
+        org.junit.Assert.assertNotNull("Should not be null", licensePlate);
+    }
+
+
+    // FORMAT --------------------------------------------------------------------------------------
+
+    @Test
+    public void ensureLicensePlateIsUpperCased() {
+
+        String value = "ka ab 123";
+        LicensePlate licensePlate = LicensePlate.forValue(value);
+
+        Assert.assertEquals("Wrong String representation for: " + value, "KA AB 123", licensePlate.toString());
+    }
+
+
+    @Test
+    public void ensureMinusSeparatorIsReplacedByWhiteSpace() {
+
+        String value = "ka-ab-123";
+        LicensePlate licensePlate = LicensePlate.forValue(value);
+
+        Assert.assertEquals("Wrong String representation for: " + value, "KA AB 123", licensePlate.toString());
+    }
+
+
+    // VALID ---------------------------------------------------------------------------------------
+
+    @Test
+    public void ensureLicensePlateWithLettersAndNumbersIsValid() {
+
+        String value = "KA XY 123";
+        LicensePlate licensePlate = LicensePlate.forValue(value);
+
+        Assert.assertTrue("Should be valid: " + value, licensePlate.isValid());
+    }
+
+
+    @Test
+    public void ensureLicensePlateWithMinusAsSeparatorIsValid() {
+
+        String value = "KA-XY-123";
+        LicensePlate licensePlate = LicensePlate.forValue(value);
+
+        Assert.assertTrue("Should be valid: " + value, licensePlate.isValid());
+    }
+
+
+    @Test
+    public void ensureLicensePlateWithSpecialCharactersIsNotValid() {
+
+        String value = "KA/XY.123";
+        LicensePlate licensePlate = LicensePlate.forValue(value);
+
+        Assert.assertFalse("Should not be valid: " + value, licensePlate.isValid());
+    }
+
+
+    @Test
+    public void ensureLicensePlateWithUmlautIsValid() {
+
+        String value = "LÖ-CR-123";
+        LicensePlate licensePlate = LicensePlate.forValue(value);
+
+        Assert.assertTrue("Should be valid: " + value, licensePlate.isValid());
+    }
+
+
+    // EQUALS --------------------------------------------------------------------------------------
+
+    @Test
+    public void ensureLicensePlatesWithDifferentSeparatorsAreEquals() {
+
+        String v1 = "KA-AB-123";
+        String v2 = "KA AB 123";
+
+        LicensePlate l1 = LicensePlate.forValue(v1);
+        LicensePlate l2 = LicensePlate.forValue(v2);
+
+        Assert.assertTrue(v1 + " should be equals to " + v2, l1.equals(l2));
+    }
+
+
+    @Test
+    public void ensureDifferentLicensePlatesAreNotEquals() {
+
+        String v1 = "KA AB 123";
+        String v2 = "B XY 456";
+
+        LicensePlate l1 = LicensePlate.forValue(v1);
+        LicensePlate l2 = LicensePlate.forValue(v2);
+
+        Assert.assertFalse(v1 + " should not be equals to " + v2, l1.equals(l2));
+    }
+
+
+    @Test
+    public void ensureNotEqualsIfDifferentClassesAreCompared() {
+
+        LicensePlate licensePlate = LicensePlate.forValue("KA AB 123");
+
+        Assert.assertFalse("Different classes should not be equals", licensePlate.equals(new Object()));
+    }
+
+
+    @Test
+    public void ensureEqualsDoesNotBreakOnNull() {
+
+        String value = "KA AB 123";
+        LicensePlate licensePlate = LicensePlate.forValue(value);
+
+        Assert.assertFalse(value + " should not be equals to null", licensePlate.equals(null));
+    }
+}

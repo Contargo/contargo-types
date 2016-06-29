@@ -105,9 +105,9 @@ public class ContainerNumber implements net.contargo.domain.ContainerNumber {
             return false;
         }
 
-        String c1 = this.toString();
-        String c2 = obj.toString();
+        String o1 = this.toString();
+        String o2 = obj.toString();
 
-        return c1.equals(c2);
+        return o1.equals(o2);
     }
 }

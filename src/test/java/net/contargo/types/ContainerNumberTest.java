@@ -227,10 +227,20 @@ public class ContainerNumberTest {
 
 
     @Test
-    public void ensureEqualsDoesNotBreakOnNull() {
+    public void ensureNotEqualsIfDifferentClassesAreCompared() {
 
         ContainerNumber containerNumber = ContainerNumber.forValue("HLXU1234567");
 
-        Assert.assertFalse("HLXU1234567" + " should not be equals to null", containerNumber.equals(null));
+        Assert.assertFalse("Different classes should not be equals", containerNumber.equals(new Object()));
+    }
+
+
+    @Test
+    public void ensureEqualsDoesNotBreakOnNull() {
+
+        String value = "HLXU1234567";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        Assert.assertFalse(value + " should not be equals to null", containerNumber.equals(null));
     }
 }
