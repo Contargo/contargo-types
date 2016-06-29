@@ -9,6 +9,8 @@ import org.junit.Test;
  */
 public class ContainerNumberTest {
 
+    // BUILD ---------------------------------------------------------------------------------------
+
     @Test(expected = IllegalArgumentException.class)
     public void ensureThrowsIfBuiltWithNull() {
 
@@ -29,33 +31,169 @@ public class ContainerNumberTest {
         ContainerNumber containerNumber = ContainerNumber.forValue("foo");
 
         Assert.assertNotNull("Should not be null", containerNumber);
-        Assert.assertEquals("Wrong String representation", "foo", containerNumber.toString());
     }
 
+
+    // FORMAT --------------------------------------------------------------------------------------
 
     @Test
     public void ensureTrimmedContainerNumberIsFormattedCorrectly() {
 
-        ContainerNumber containerNumber = ContainerNumber.forValue("hlxu1234567");
+        String value = "hlxu1234567";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
 
-        Assert.assertEquals("Wrong String representation", "HLXU 123456-7", containerNumber.toString());
+        Assert.assertEquals("Wrong String representation for: " + value, "HLXU 123456-7", containerNumber.toString());
     }
 
 
     @Test
     public void ensureInvalidContainerNumberIsFormattedCorrectly() {
 
-        ContainerNumber containerNumber = ContainerNumber.forValue("foo");
+        String value = "foo";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
 
-        Assert.assertEquals("Wrong String representation", "foo", containerNumber.toString());
+        Assert.assertEquals("Wrong String representation for: " + value, "foo", containerNumber.toString());
     }
 
 
     @Test
     public void ensureAlreadyFormattedContainerNumberIsFormattedCorrectly() {
 
-        ContainerNumber containerNumber = ContainerNumber.forValue("HLXU 123456-7");
+        String value = "HLXU 123456-7";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
 
-        Assert.assertEquals("Wrong String representation", "HLXU 123456-7", containerNumber.toString());
+        Assert.assertEquals("Wrong String representation for: " + value, "HLXU 123456-7", containerNumber.toString());
+    }
+
+
+    // VALID ---------------------------------------------------------------------------------------
+
+    @Test
+    public void ensureTrimmedValidContainerNumberIsValid() {
+
+        String value = "HlXu1234567";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        Assert.assertTrue("Should be valid: " + value, containerNumber.isValid());
+    }
+
+
+    @Test
+    public void ensureValidContainerNumberIsValid() {
+
+        String value = "HLXU 123456-7";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        Assert.assertTrue("Should be valid: " + value, containerNumber.isValid());
+    }
+
+
+    @Test
+    public void ensureCompletelyInvalidContainerNumberIsNotValid() {
+
+        String value = "foo";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        Assert.assertFalse("Should not be valid: " + value, containerNumber.isValid());
+    }
+
+
+    @Test
+    public void ensureContainerNumberWithLessLettersThanFourIsNotValid() {
+
+        String value = "HLX 123456-7";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        Assert.assertFalse("Should not be valid: " + value, containerNumber.isValid());
+    }
+
+
+    @Test
+    public void ensureContainerNumberWithMoreLettersThanFourIsNotValid() {
+
+        String value = "HLXUU 123456-7";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        Assert.assertFalse("Should not be valid: " + value, containerNumber.isValid());
+    }
+
+
+    @Test
+    public void ensureContainerNumberWithLessNumbersThanSixIsNotValid() {
+
+        String value = "HLX 12345-6";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        Assert.assertFalse("Should not be valid: " + value, containerNumber.isValid());
+    }
+
+
+    @Test
+    public void ensureContainerNumberWithMoreNumbersThanSixIsNotValid() {
+
+        String value = "HLX 1234567-8";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        Assert.assertFalse("Should not be valid: " + value, containerNumber.isValid());
+    }
+
+
+    @Test
+    public void ensureContainerNumberWithoutCheckDigitIsNotValid() {
+
+        String value = "HLXU 123456-";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        Assert.assertFalse("Should not be valid: " + value, containerNumber.isValid());
+    }
+
+
+    @Test
+    public void ensureContainerNumberWithCheckDigitThatIsNotANumberIsNotValid() {
+
+        String value = "HLXU 123456-A";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        Assert.assertFalse("Should not be valid: " + value, containerNumber.isValid());
+    }
+
+
+    @Test
+    public void ensureContainerNumberWithNumbersOnLetterPositionsIsNotValid() {
+
+        String value = "H1X2 123456-7";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        Assert.assertFalse("Should not be valid: " + value, containerNumber.isValid());
+    }
+
+
+    @Test
+    public void ensureContainerNumberWithLettersOnNumberPositionsIsNotValid() {
+
+        String value = "HLXU 123AB6-7";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        Assert.assertFalse("Should not be valid: " + value, containerNumber.isValid());
+    }
+
+
+    @Test
+    public void ensureContainerNumberWithSpecialCharactersOnLetterPositionsIsNotValid() {
+
+        String value = "HL.U 123456-7";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        Assert.assertFalse("Should not be valid: " + value, containerNumber.isValid());
+    }
+
+
+    @Test
+    public void ensureContainerNumberWithSpecialCharactersOnNumberPositionsIsNotValid() {
+
+        String value = "HLXU 12/456-7";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        Assert.assertFalse("Should not be valid: " + value, containerNumber.isValid());
     }
 }
