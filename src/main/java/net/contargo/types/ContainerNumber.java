@@ -1,17 +1,12 @@
 package net.contargo.types;
 
 /**
- * Identifies a container.
- *
- * <p>Read more about the <a href="https://en.wikipedia.org/wiki/ISO_6346">ISO 6346 standard</a> to learn more about the
- * format of a container number.</p>
- *
- * <p>Exemplary container number: HLXU 123456-7</p>
+ * Implementation of {@link net.contargo.domain.ContainerNumber}.
  *
  * @author  Aljona Murygina - murygina@synyx.de
  * @since  0.1.0
  */
-public class ContainerNumber {
+public class ContainerNumber implements net.contargo.domain.ContainerNumber {
 
     private static final int VALID_LENGTH = 11;
     private static final int POSITION_END_LETTERS = 4;
