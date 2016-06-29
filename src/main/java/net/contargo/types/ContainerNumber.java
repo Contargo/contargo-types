@@ -92,4 +92,22 @@ public class ContainerNumber implements net.contargo.domain.ContainerNumber {
 
         return validLetters && validNumbers && validCheckDigit;
     }
+
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (obj == null) {
+            return false;
+        }
+
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+
+        String c1 = this.toString();
+        String c2 = obj.toString();
+
+        return c1.equals(c2);
+    }
 }

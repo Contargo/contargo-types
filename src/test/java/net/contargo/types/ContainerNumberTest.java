@@ -196,4 +196,41 @@ public class ContainerNumberTest {
 
         Assert.assertFalse("Should not be valid: " + value, containerNumber.isValid());
     }
+
+
+    // EQUALS --------------------------------------------------------------------------------------
+
+    @Test
+    public void ensureTrimmedAndNotTrimmedContainerNumbersAreEquals() {
+
+        String v1 = "hlxu1234567";
+        String v2 = "HLXU 123456-7";
+
+        ContainerNumber c1 = ContainerNumber.forValue(v1);
+        ContainerNumber c2 = ContainerNumber.forValue(v2);
+
+        Assert.assertTrue(v1 + " should be equals to " + v2, c1.equals(c2));
+    }
+
+
+    @Test
+    public void ensureDifferentContainerNumbersAreNotEquals() {
+
+        String v1 = "HLXU1234567";
+        String v2 = "HLXU1234568";
+
+        ContainerNumber c1 = ContainerNumber.forValue(v1);
+        ContainerNumber c2 = ContainerNumber.forValue(v2);
+
+        Assert.assertFalse(v1 + " should not be equals to " + v2, c1.equals(c2));
+    }
+
+
+    @Test
+    public void ensureEqualsDoesNotBreakOnNull() {
+
+        ContainerNumber containerNumber = ContainerNumber.forValue("HLXU1234567");
+
+        Assert.assertFalse("HLXU1234567" + " should not be equals to null", containerNumber.equals(null));
+    }
 }
