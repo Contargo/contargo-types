@@ -6,7 +6,7 @@ package net.contargo.types;
  * @author  Aljona Murygina - murygina@synyx.de
  * @since  0.1.0
  */
-public class ContainerNumber implements net.contargo.domain.ContainerNumber {
+public class ContainerNumber implements net.contargo.domain.ContainerNumber { // NOSONAR - in this case, it's better to use the same class name
 
     private static final int VALID_LENGTH = 11;
     private static final int POSITION_END_LETTERS = 4;
@@ -97,11 +97,11 @@ public class ContainerNumber implements net.contargo.domain.ContainerNumber {
     @Override
     public boolean equals(Object obj) {
 
-        if (obj == null) {
-            return false;
+        if (this == obj) {
+            return true;
         }
 
-        if (getClass() != obj.getClass()) {
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
 
@@ -109,5 +109,12 @@ public class ContainerNumber implements net.contargo.domain.ContainerNumber {
         String o2 = obj.toString();
 
         return o1.equals(o2);
+    }
+
+
+    @Override
+    public int hashCode() {
+
+        return this.toString().hashCode();
     }
 }

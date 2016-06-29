@@ -6,7 +6,7 @@ package net.contargo.types;
  * @author  Aljona Murygina - murygina@synyx.de
  * @since  0.1.0
  */
-public class LicensePlate implements net.contargo.domain.LicensePlate {
+public class LicensePlate implements net.contargo.domain.LicensePlate { // NOSONAR - in this case, it's better to use the same class name
 
     private final String value;
 
@@ -72,11 +72,11 @@ public class LicensePlate implements net.contargo.domain.LicensePlate {
     @Override
     public boolean equals(Object obj) {
 
-        if (obj == null) {
-            return false;
+        if (this == obj) {
+            return true;
         }
 
-        if (getClass() != obj.getClass()) {
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
 
@@ -84,5 +84,12 @@ public class LicensePlate implements net.contargo.domain.LicensePlate {
         String o2 = obj.toString();
 
         return o1.equals(o2);
+    }
+
+
+    @Override
+    public int hashCode() {
+
+        return this.toString().hashCode();
     }
 }
