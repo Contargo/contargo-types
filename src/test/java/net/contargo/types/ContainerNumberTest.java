@@ -198,6 +198,28 @@ public class ContainerNumberTest {
     }
 
 
+    // ISO 6346 VALID ------------------------------------------------------------------------------
+
+    @Test
+    public void ensureContainerNumberWithCorrectCheckDigitIsISO6346Valid() {
+
+        String value = "HLXU 123456-1";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        Assert.assertTrue("Should be ISO6346 valid: " + value, containerNumber.isISO6346Valid());
+    }
+
+
+    @Test
+    public void ensureContainerNumberWithWrongCheckDigitIsNotISO6346Valid() {
+
+        String value = "HLXU 123456-7";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        Assert.assertFalse("Should not be ISO6346 valid: " + value, containerNumber.isISO6346Valid());
+    }
+
+
     // EQUALS --------------------------------------------------------------------------------------
 
     @Test

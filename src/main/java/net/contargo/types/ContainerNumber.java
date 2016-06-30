@@ -94,6 +94,40 @@ public class ContainerNumber implements net.contargo.domain.ContainerNumber { //
     }
 
 
+    /**
+     * Check if the {@link ContainerNumber} is ISO6346 valid, i.e. has a valid format and a correct check digit.
+     *
+     * @return  {@code true} if the {@link ContainerNumber} is ISO6346 valid, else {@code false}
+     */
+    public boolean isISO6346Valid() {
+
+        if (!isValid()) {
+            return false;
+        }
+
+        int correctCheckDigit = 0;
+        String charCode = "0123456789A?BCDEFGHIJK?LMNOPQRSTU?VWXYZ";
+
+        for (int i = 0; i < 10; i++) {
+            char character = normalizedValue.charAt(i);
+            double index = character == '?' ? 1 : charCode.indexOf(character);
+
+            if (index < 0) {
+                return false;
+            }
+
+            index = index * Math.pow(2, i);
+            correctCheckDigit += index;
+        }
+
+        correctCheckDigit = (correctCheckDigit % 11) % 10;
+
+        int actualCheckDigit = Character.getNumericValue(getCheckDigit());
+
+        return actualCheckDigit == correctCheckDigit;
+    }
+
+
     @Override
     public boolean equals(Object obj) {
 
