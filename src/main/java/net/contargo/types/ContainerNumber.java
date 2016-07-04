@@ -1,5 +1,8 @@
 package net.contargo.types;
 
+import java.util.Optional;
+
+
 /**
  * Each {@link net.contargo.domain.Container} has a worldwide unique container number.
  *
@@ -41,11 +44,22 @@ public final class ContainerNumber {
      * <p>The owner code is worldwide unique and indicates the principal operator of the
      * {@link net.contargo.domain.Container}.</p>
      *
-     * @return  owner code consisting of three capital letters
+     * @return  optional owner code consisting of three capital letters, may be empty if the normalized container number
+     *          has less or more {@value VALID_LENGTH} characters
      */
-    public String getOwnerCode() {
+    public Optional<String> getOwnerCode() {
 
-        return normalizedContainerNumber.substring(0, POSITION_END_OWNER_CODE);
+        if (hasValidLength()) {
+            return Optional.of(normalizedContainerNumber.substring(0, POSITION_END_OWNER_CODE));
+        }
+
+        return Optional.empty();
+    }
+
+
+    private boolean hasValidLength() {
+
+        return normalizedContainerNumber.length() == VALID_LENGTH;
     }
 
 
@@ -58,11 +72,16 @@ public final class ContainerNumber {
      *
      * <p>'Z' for trailers and chassis</p>
      *
-     * @return  equipment category consisting of one capital letter
+     * @return  optional equipment category consisting of one capital letter, may be empty if the normalized container
+     *          number has less or more {@value VALID_LENGTH} characters
      */
-    public Character getEquipmentCategory() {
+    public Optional<Character> getEquipmentCategory() {
 
-        return normalizedContainerNumber.charAt(POSITION_END_EQUIPMENT_CATEGORY);
+        if (hasValidLength()) {
+            return Optional.of(normalizedContainerNumber.charAt(POSITION_END_EQUIPMENT_CATEGORY));
+        }
+
+        return Optional.empty();
     }
 
 
@@ -72,11 +91,17 @@ public final class ContainerNumber {
      * <p>The serial number is assigned by the owner or operator and identifies the
      * {@link net.contargo.domain.Container} within that owner's/operator's {@link net.contargo.domain.Fleet}</p>
      *
-     * @return  serial number consisting of 6 numeric digits
+     * @return  optional serial number consisting of 6 numeric digits, may be empty if the normalized container number
+     *          has less or more {@value VALID_LENGTH} characters
      */
-    public String getSerialNumber() {
+    public Optional<String> getSerialNumber() {
 
-        return normalizedContainerNumber.substring(POSITION_END_EQUIPMENT_CATEGORY + 1, POSITION_END_SERIAL_NUMBER);
+        if (hasValidLength()) {
+            return Optional.of(normalizedContainerNumber.substring(POSITION_END_EQUIPMENT_CATEGORY + 1,
+                        POSITION_END_SERIAL_NUMBER));
+        }
+
+        return Optional.empty();
     }
 
 
@@ -86,11 +111,16 @@ public final class ContainerNumber {
      * <p>The check digit provides a means of validating the recording and transmission accuracies of the owner code and
      * serial number.</p>
      *
-     * @return  check digit consisting of one numeric digit
+     * @return  optional check digit consisting of one numeric digit, may be empty if the normalized container number
+     *          has less or more {@value VALID_LENGTH} characters
      */
-    public Character getCheckDigit() {
+    public Optional<Character> getCheckDigit() {
 
-        return normalizedContainerNumber.charAt(POSITION_END_SERIAL_NUMBER);
+        if (hasValidLength()) {
+            return Optional.of(normalizedContainerNumber.charAt(POSITION_END_SERIAL_NUMBER));
+        }
+
+        return Optional.empty();
     }
 
 
@@ -112,13 +142,22 @@ public final class ContainerNumber {
     /**
      * Return the {@link ContainerNumber} in a formatted way.
      *
-     * @return  formatted {@link ContainerNumber}, never {@code null}
+     * @return  formatted {@link ContainerNumber} or the initial value, never {@code null}
      */
     @Override
     public String toString() {
 
-        if (isValid()) {
-            return getOwnerCode() + getEquipmentCategory() + " " + getSerialNumber() + "-" + getCheckDigit();
+        Optional<String> optionalOwnerCode = getOwnerCode();
+        Optional<Character> optionalEquipmentCategory = getEquipmentCategory();
+        Optional<String> optionalSerialNumber = getSerialNumber();
+        Optional<Character> optionalCheckDigit = getCheckDigit();
+
+        boolean hasValidFormat = optionalOwnerCode.isPresent() && optionalEquipmentCategory.isPresent()
+            && optionalSerialNumber.isPresent() && optionalCheckDigit.isPresent();
+
+        if (hasValidFormat) {
+            return optionalOwnerCode.get() + optionalEquipmentCategory.get() + " " + optionalSerialNumber.get() + "-"
+                + optionalCheckDigit.get();
         }
 
         return value;
@@ -132,14 +171,21 @@ public final class ContainerNumber {
      */
     public boolean isValid() {
 
-        if (normalizedContainerNumber.length() != VALID_LENGTH) {
+        if (!hasValidLength()) {
             return false;
         }
 
-        boolean validOwnerCode = getOwnerCode().matches("[A-Z]{3}");
-        boolean validEquipmentCategory = String.valueOf(getEquipmentCategory()).matches("[UJZ]{1}");
-        boolean validNumbers = getSerialNumber().matches("[0-9]{6}");
-        boolean validCheckDigit = String.valueOf(getCheckDigit()).matches("[0-9]{1}");
+        Optional<String> optionalOwnerCode = getOwnerCode();
+        Optional<Character> optionalEquipmentCategory = getEquipmentCategory();
+        Optional<String> optionalSerialNumber = getSerialNumber();
+        Optional<Character> optionalCheckDigit = getCheckDigit();
+
+        boolean validOwnerCode = optionalOwnerCode.isPresent() && optionalOwnerCode.get().matches("[A-Z]{3}");
+        boolean validEquipmentCategory = optionalEquipmentCategory.isPresent()
+            && String.valueOf(optionalEquipmentCategory.get()).matches("[UJZ]{1}");
+        boolean validNumbers = optionalSerialNumber.isPresent() && optionalSerialNumber.get().matches("[0-9]{6}");
+        boolean validCheckDigit = optionalCheckDigit.isPresent()
+            && String.valueOf(optionalCheckDigit.get()).matches("[0-9]{1}");
 
         return validOwnerCode && validEquipmentCategory && validNumbers && validCheckDigit;
     }
@@ -154,6 +200,12 @@ public final class ContainerNumber {
     public boolean isISO6346Valid() {
 
         if (!isValid()) {
+            return false;
+        }
+
+        Optional<Character> optionalCheckDigit = getCheckDigit();
+
+        if (!optionalCheckDigit.isPresent()) {
             return false;
         }
 
@@ -174,7 +226,7 @@ public final class ContainerNumber {
 
         correctCheckDigit = (correctCheckDigit % 11) % 10;
 
-        int actualCheckDigit = Character.getNumericValue(getCheckDigit());
+        int actualCheckDigit = Character.getNumericValue(optionalCheckDigit.get());
 
         return actualCheckDigit == correctCheckDigit;
     }

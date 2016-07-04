@@ -3,6 +3,9 @@ package net.contargo.types;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Optional;
+import java.util.function.Consumer;
+
 
 /**
  * @author  Aljona Murygina - murygina@synyx.de
@@ -47,12 +50,23 @@ public class ContainerNumberTest {
 
 
     @Test
-    public void ensureInvalidContainerNumberIsFormattedCorrectly() {
+    public void ensureCompletelyInvalidContainerNumberIsFormattedCorrectly() {
 
         String value = "foo";
         ContainerNumber containerNumber = ContainerNumber.forValue(value);
 
         Assert.assertEquals("Wrong String representation for: " + value, "foo", containerNumber.toString());
+    }
+
+
+    @Test
+    public void ensureInvalidContainerNumberIsFormattedCorrectly() {
+
+        // 'W' is not an allowed equipment category
+        String value = "HLXW1234567";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        Assert.assertEquals("Wrong String representation for: " + value, "HLXW 123456-7", containerNumber.toString());
     }
 
 
@@ -99,17 +113,7 @@ public class ContainerNumberTest {
 
 
     @Test
-    public void ensureContainerNumberWithLessLettersThanFourIsNotValid() {
-
-        String value = "HLX 123456-7";
-        ContainerNumber containerNumber = ContainerNumber.forValue(value);
-
-        Assert.assertFalse("Should not be valid: " + value, containerNumber.isValid());
-    }
-
-
-    @Test
-    public void ensureContainerNumberWithMoreLettersThanFourIsNotValid() {
+    public void ensureContainerNumberWithOwnerCodeOfMoreThanFourLettersIsNotValid() {
 
         String value = "HLXUU 123456-7";
         ContainerNumber containerNumber = ContainerNumber.forValue(value);
@@ -119,7 +123,63 @@ public class ContainerNumberTest {
 
 
     @Test
-    public void ensureContainerNumberWithLessNumbersThanSixIsNotValid() {
+    public void ensureContainerNumberWithOwnerCodeContainingADigitIsNotValid() {
+
+        String value = "H1XU 123456-7";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        Assert.assertFalse("Should not be valid: " + value, containerNumber.isValid());
+    }
+
+
+    @Test
+    public void ensureContainerNumberWithOwnerCodeContainingSpecialCharactersIsNotValid() {
+
+        String value = "HL.U 123456-7";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        Assert.assertFalse("Should not be valid: " + value, containerNumber.isValid());
+    }
+
+
+    @Test
+    public void ensureContainerNumberWithMissingEquipmentCategoryIsNotValid() {
+
+        String value = "HLX 123456-7";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        Assert.assertFalse("Should not be valid: " + value, containerNumber.isValid());
+    }
+
+
+    @Test
+    public void ensureContainerNumberWithAllowedEquipmentCategoryIsValid() {
+
+        Consumer<String> assertValid = (value) -> {
+            ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+            Assert.assertTrue("Should be valid: " + value, containerNumber.isValid());
+        };
+
+        // allowed equipment categories: U, J, Z
+        assertValid.accept("HLXU 123456-7");
+        assertValid.accept("HLXJ 123456-7");
+        assertValid.accept("HLXZ 123456-7");
+    }
+
+
+    @Test
+    public void ensureContainerNumberWithNotAllowedEquipmentCategoryIsNotValid() {
+
+        String value = "HLXA 123456-7";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        Assert.assertFalse("Should not be valid: " + value, containerNumber.isValid());
+    }
+
+
+    @Test
+    public void ensureContainerNumberWithSerialNumberOfLessThanSixDigitsIsNotValid() {
 
         String value = "HLX 12345-6";
         ContainerNumber containerNumber = ContainerNumber.forValue(value);
@@ -129,9 +189,29 @@ public class ContainerNumberTest {
 
 
     @Test
-    public void ensureContainerNumberWithMoreNumbersThanSixIsNotValid() {
+    public void ensureContainerNumberWithSerialNumberOfMoreThanSixDigitsIsNotValid() {
 
         String value = "HLX 1234567-8";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        Assert.assertFalse("Should not be valid: " + value, containerNumber.isValid());
+    }
+
+
+    @Test
+    public void ensureContainerNumberWithSerialNumberContainingLettersIsNotValid() {
+
+        String value = "HLXU 123AB6-7";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        Assert.assertFalse("Should not be valid: " + value, containerNumber.isValid());
+    }
+
+
+    @Test
+    public void ensureContainerNumberWithSerialNumberContainingSpecialCharactersIsNotValid() {
+
+        String value = "HLXU 12/456-7";
         ContainerNumber containerNumber = ContainerNumber.forValue(value);
 
         Assert.assertFalse("Should not be valid: " + value, containerNumber.isValid());
@@ -158,120 +238,89 @@ public class ContainerNumberTest {
     }
 
 
-    @Test
-    public void ensureContainerNumberWithNumbersOnLetterPositionsIsNotValid() {
-
-        String value = "H1X2 123456-7";
-        ContainerNumber containerNumber = ContainerNumber.forValue(value);
-
-        Assert.assertFalse("Should not be valid: " + value, containerNumber.isValid());
-    }
-
-
-    @Test
-    public void ensureContainerNumberWithLettersOnNumberPositionsIsNotValid() {
-
-        String value = "HLXU 123AB6-7";
-        ContainerNumber containerNumber = ContainerNumber.forValue(value);
-
-        Assert.assertFalse("Should not be valid: " + value, containerNumber.isValid());
-    }
-
-
-    @Test
-    public void ensureContainerNumberWithSpecialCharactersOnLetterPositionsIsNotValid() {
-
-        String value = "HL.U 123456-7";
-        ContainerNumber containerNumber = ContainerNumber.forValue(value);
-
-        Assert.assertFalse("Should not be valid: " + value, containerNumber.isValid());
-    }
-
-
-    @Test
-    public void ensureContainerNumberWithSpecialCharactersOnNumberPositionsIsNotValid() {
-
-        String value = "HLXU 12/456-7";
-        ContainerNumber containerNumber = ContainerNumber.forValue(value);
-
-        Assert.assertFalse("Should not be valid: " + value, containerNumber.isValid());
-    }
-
-
     // CONTAINER NUMBER SECTIONS -------------------------------------------------------------------
 
     @Test
     public void ensureOwnerCodeIsReturnedCorrectlyForValidContainerNumber() {
 
-        String value = "HLXU 123456-7";
-        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+        ContainerNumber containerNumber = ContainerNumber.forValue("HLXU 123456-7");
 
-        String ownerCode = containerNumber.getOwnerCode();
+        Optional<String> optionalOwnerCode = containerNumber.getOwnerCode();
 
-        Assert.assertEquals("Wrong owner code", "HLX", ownerCode);
+        Assert.assertTrue("Missing owner code", optionalOwnerCode.isPresent());
+        Assert.assertEquals("Wrong owner code", "HLX", optionalOwnerCode.get());
+    }
+
+
+    @Test
+    public void ensureOwnerCodeIsAbsentForInvalidContainerNumber() {
+
+        ContainerNumber containerNumber = ContainerNumber.forValue("XY");
+
+        Assert.assertFalse("Owner code should be absent", containerNumber.getOwnerCode().isPresent());
     }
 
 
     @Test
     public void ensureEquipmentCategoryIsReturnedCorrectlyForValidContainerNumber() {
 
-        String value = "HLXU 123456-7";
-        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+        ContainerNumber containerNumber = ContainerNumber.forValue("HLXU 123456-7");
 
-        Character equipmentCategory = containerNumber.getEquipmentCategory();
+        Optional<Character> optionalEquipmentCategory = containerNumber.getEquipmentCategory();
 
-        Assert.assertEquals("Wrong equipment category", "U", String.valueOf(equipmentCategory));
+        Assert.assertTrue("Missing equipment category", optionalEquipmentCategory.isPresent());
+        Assert.assertEquals("Wrong equipment category", "U", String.valueOf(optionalEquipmentCategory.get()));
+    }
+
+
+    @Test
+    public void ensureEquipmentCategoryIsAbsentForInvalidContainerNumber() {
+
+        ContainerNumber containerNumber = ContainerNumber.forValue("Foo");
+
+        Assert.assertFalse("Equipment category should be absent", containerNumber.getEquipmentCategory().isPresent());
     }
 
 
     @Test
     public void ensureSerialNumberIsReturnedCorrectlyForValidContainerNumber() {
 
-        String value = "HLXU 123456-7";
-        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+        ContainerNumber containerNumber = ContainerNumber.forValue("HLXU 123456-7");
 
-        String serialNumber = containerNumber.getSerialNumber();
+        Optional<String> optionalSerialNumber = containerNumber.getSerialNumber();
 
-        Assert.assertEquals("Wrong serial number", "123456", serialNumber);
+        Assert.assertTrue("Missing serial number", optionalSerialNumber.isPresent());
+        Assert.assertEquals("Wrong serial number", "123456", optionalSerialNumber.get());
+    }
+
+
+    @Test
+    public void ensureSerialNumberIsAbsentForInvalidContainerNumber() {
+
+        ContainerNumber containerNumber = ContainerNumber.forValue("Foo");
+
+        Assert.assertFalse("Serial number should be absent", containerNumber.getSerialNumber().isPresent());
     }
 
 
     @Test
     public void ensureCheckDigitIsReturnedCorrectlyForValidContainerNumber() {
 
-        String value = "HLXU 123456-7";
-        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+        ContainerNumber containerNumber = ContainerNumber.forValue("HLXU 123456-7");
 
-        Character checkDigit = containerNumber.getCheckDigit();
+        Optional<Character> optionalCheckDigit = containerNumber.getCheckDigit();
 
-        Assert.assertEquals("Wrong check digit", "7", String.valueOf(checkDigit));
+        Assert.assertTrue("Missing check digit", optionalCheckDigit.isPresent());
+        Assert.assertEquals("Wrong check digit", "7", String.valueOf(optionalCheckDigit.get()));
     }
 
 
     @Test
-    public void ensureValidContainerNumbersHaveCorrectEquipmentCategoryRange() {
+    public void ensureCheckDigitIsAbsentForInvalidContainerNumber() {
 
-        String c1 = "HLXU 123456-7";
-        ContainerNumber cn1 = ContainerNumber.forValue(c1);
+        ContainerNumber containerNumber = ContainerNumber.forValue("Foo");
 
-        String c2 = "HLXJ 123456-7";
-        ContainerNumber cn2 = ContainerNumber.forValue(c2);
-
-        String c3 = "HLXZ 123456-7";
-        ContainerNumber cn3 = ContainerNumber.forValue(c3);
-
-        String c4 = "HLXA 123456-7";
-        ContainerNumber invalidContainerNumber = ContainerNumber.forValue(c4);
-
-        Character validEquipmentCategory1 = cn1.getCheckDigit();
-        Character validEquipmentCategory2 = cn2.getCheckDigit();
-        Character validEquipmentCategory3 = cn3.getCheckDigit();
-        Character invalidEquipmentCategory = invalidContainerNumber.getCheckDigit();
-
-        Assert.assertTrue("Should be valid: " + validEquipmentCategory1, cn1.isValid());
-        Assert.assertTrue("Should be valid: " + validEquipmentCategory2, cn2.isValid());
-        Assert.assertTrue("Should be valid: " + validEquipmentCategory3, cn3.isValid());
-        Assert.assertFalse("Should be valid: " + invalidEquipmentCategory, invalidContainerNumber.isValid());
+        Assert.assertFalse("Check digit should be absent", containerNumber.getCheckDigit().isPresent());
     }
 
 
