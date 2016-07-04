@@ -198,6 +198,8 @@ public class ContainerNumberTest {
     }
 
 
+    // CONTAINER NUMBER SECTIONS -------------------------------------------------------------------
+
     @Test
     public void ensureOwnerCodeIsReturnedCorrectlyForValidContainerNumber() {
 
@@ -206,7 +208,7 @@ public class ContainerNumberTest {
 
         String ownerCode = containerNumber.getOwnerCode();
 
-        Assert.assertTrue("Should be valid: HLX", ownerCode.equals("HLX"));
+        Assert.assertEquals("Wrong owner code", "HLX", ownerCode);
     }
 
 
@@ -218,7 +220,7 @@ public class ContainerNumberTest {
 
         Character equipmentCategory = containerNumber.getEquipmentCategory();
 
-        Assert.assertTrue("Should be valid: U", equipmentCategory.equals('U'));
+        Assert.assertEquals("Wrong equipment category", "U", String.valueOf(equipmentCategory));
     }
 
 
@@ -230,7 +232,7 @@ public class ContainerNumberTest {
 
         String serialNumber = containerNumber.getSerialNumber();
 
-        Assert.assertTrue("Should be valid: 123456", serialNumber.equals("123456"));
+        Assert.assertEquals("Wrong serial number", "123456", serialNumber);
     }
 
 
@@ -242,12 +244,12 @@ public class ContainerNumberTest {
 
         Character checkDigit = containerNumber.getCheckDigit();
 
-        Assert.assertTrue("Should be valid: 7", checkDigit.equals('7'));
+        Assert.assertEquals("Wrong check digit", "7", String.valueOf(checkDigit));
     }
 
 
     @Test
-    public void ensureValidContainerNumbersHaveCorrectEquipmentCategroyRange() {
+    public void ensureValidContainerNumbersHaveCorrectEquipmentCategoryRange() {
 
         String c1 = "HLXU 123456-7";
         ContainerNumber cn1 = ContainerNumber.forValue(c1);
@@ -267,8 +269,8 @@ public class ContainerNumberTest {
         Character invalidEquipmentCategory = invalidContainerNumber.getCheckDigit();
 
         Assert.assertTrue("Should be valid: " + validEquipmentCategory1, cn1.isValid());
-        Assert.assertTrue("Should be valid: " + validEquipmentCategory1, cn2.isValid());
-        Assert.assertTrue("Should be valid: " + validEquipmentCategory1, cn3.isValid());
+        Assert.assertTrue("Should be valid: " + validEquipmentCategory2, cn2.isValid());
+        Assert.assertTrue("Should be valid: " + validEquipmentCategory3, cn3.isValid());
         Assert.assertFalse("Should be valid: " + invalidEquipmentCategory, invalidContainerNumber.isValid());
     }
 

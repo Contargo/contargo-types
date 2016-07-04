@@ -23,13 +23,6 @@ public final class ContainerNumber {
 
     private final String value;
     private final String normalizedContainerNumber;
-    private final boolean isValid;
-    private final boolean isISO6346Valid;
-
-    private final String ownerCode;
-    private final Character equipmentCategory;
-    private final String serialNumber;
-    private final Character checkDigit;
 
     /**
      * Use {@link #forValue(String)} to build a new {@link ContainerNumber} instance.
@@ -40,46 +33,64 @@ public final class ContainerNumber {
 
         this.value = value;
         this.normalizedContainerNumber = value.replaceAll("[ -]", "").toUpperCase();
-
-        if (normalizedContainerNumber.length() == VALID_LENGTH) {
-            this.ownerCode = getOwnerCodeLetters();
-            this.equipmentCategory = getEquipmentCategoryLetter();
-            this.serialNumber = getSerialNumberLetter();
-            this.checkDigit = getCheckDigitLetter();
-        } else {
-            // find a sound way to extract as much given information as possible
-            // these default settings are not good!
-            this.ownerCode = "ZZZ";
-            this.equipmentCategory = 'X';
-            this.serialNumber = "123456";
-            this.checkDigit = '7';
-        }
-
-        this.isValid = checkValidity();
-        this.isISO6346Valid = checkISO6346Validity();
     }
 
+    /**
+     * Get the owner code of this {@link ContainerNumber}.
+     *
+     * <p>The owner code is worldwide unique and indicates the principal operator of the
+     * {@link net.contargo.domain.Container}.</p>
+     *
+     * @return  owner code consisting of three capital letters
+     */
     public String getOwnerCode() {
 
-        return ownerCode;
+        return normalizedContainerNumber.substring(0, POSITION_END_OWNER_CODE);
     }
 
 
+    /**
+     * Get the equipment category of this {@link ContainerNumber}.
+     *
+     * <p>'U' for all freight containers</p>
+     *
+     * <p>'J' for detachable freight container-related equipment</p>
+     *
+     * <p>'Z' for trailers and chassis</p>
+     *
+     * @return  equipment category consisting of one capital letter
+     */
     public Character getEquipmentCategory() {
 
-        return equipmentCategory;
+        return normalizedContainerNumber.charAt(POSITION_END_EQUIPMENT_CATEGORY);
     }
 
 
+    /**
+     * Get the serial number of this {@link ContainerNumber}.
+     *
+     * <p>The serial number is assigned by the owner or operator and identifies the
+     * {@link net.contargo.domain.Container} within that owner's/operator's {@link net.contargo.domain.Fleet}</p>
+     *
+     * @return  serial number consisting of 6 numeric digits
+     */
     public String getSerialNumber() {
 
-        return serialNumber;
+        return normalizedContainerNumber.substring(POSITION_END_EQUIPMENT_CATEGORY + 1, POSITION_END_SERIAL_NUMBER);
     }
 
 
+    /**
+     * Get the check digit of this {@link ContainerNumber}.
+     *
+     * <p>The check digit provides a means of validating the recording and transmission accuracies of the owner code and
+     * serial number.</p>
+     *
+     * @return  check digit consisting of one numeric digit
+     */
     public Character getCheckDigit() {
 
-        return checkDigit;
+        return normalizedContainerNumber.charAt(POSITION_END_SERIAL_NUMBER);
     }
 
 
@@ -107,34 +118,10 @@ public final class ContainerNumber {
     public String toString() {
 
         if (isValid()) {
-            return this.ownerCode + this.equipmentCategory + " " + this.serialNumber + "-" + this.checkDigit;
+            return getOwnerCode() + getEquipmentCategory() + " " + getSerialNumber() + "-" + getCheckDigit();
         }
 
         return value;
-    }
-
-
-    private String getOwnerCodeLetters() {
-
-        return normalizedContainerNumber.substring(0, POSITION_END_OWNER_CODE);
-    }
-
-
-    private char getEquipmentCategoryLetter() {
-
-        return normalizedContainerNumber.charAt(POSITION_END_EQUIPMENT_CATEGORY);
-    }
-
-
-    private String getSerialNumberLetter() {
-
-        return normalizedContainerNumber.substring(POSITION_END_EQUIPMENT_CATEGORY + 1, POSITION_END_SERIAL_NUMBER);
-    }
-
-
-    private char getCheckDigitLetter() {
-
-        return normalizedContainerNumber.charAt(POSITION_END_SERIAL_NUMBER);
     }
 
 
@@ -145,20 +132,14 @@ public final class ContainerNumber {
      */
     public boolean isValid() {
 
-        return isValid;
-    }
-
-
-    private boolean checkValidity() {
-
         if (normalizedContainerNumber.length() != VALID_LENGTH) {
             return false;
         }
 
-        boolean validOwnerCode = this.ownerCode.matches("[A-Z]{3}");
-        boolean validEquipmentCategory = String.valueOf(this.equipmentCategory).matches("[UJZ]{1}");
-        boolean validNumbers = getSerialNumberLetter().matches("[0-9]{6}");
-        boolean validCheckDigit = String.valueOf(getCheckDigitLetter()).matches("[0-9]{1}");
+        boolean validOwnerCode = getOwnerCode().matches("[A-Z]{3}");
+        boolean validEquipmentCategory = String.valueOf(getEquipmentCategory()).matches("[UJZ]{1}");
+        boolean validNumbers = getSerialNumber().matches("[0-9]{6}");
+        boolean validCheckDigit = String.valueOf(getCheckDigit()).matches("[0-9]{1}");
 
         return validOwnerCode && validEquipmentCategory && validNumbers && validCheckDigit;
     }
@@ -171,12 +152,6 @@ public final class ContainerNumber {
      */
 
     public boolean isISO6346Valid() {
-
-        return isISO6346Valid;
-    }
-
-
-    public boolean checkISO6346Validity() {
 
         if (!isValid()) {
             return false;
@@ -199,7 +174,7 @@ public final class ContainerNumber {
 
         correctCheckDigit = (correctCheckDigit % 11) % 10;
 
-        int actualCheckDigit = Character.getNumericValue(this.checkDigit);
+        int actualCheckDigit = Character.getNumericValue(getCheckDigit());
 
         return actualCheckDigit == correctCheckDigit;
     }
