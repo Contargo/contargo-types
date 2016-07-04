@@ -39,6 +39,21 @@ public final class ContainerNumber {
     }
 
     /**
+     * Build a new {@link ContainerNumber} with a {@link String} value.
+     *
+     * @param  value  represents a container number
+     *
+     * @return  a {@link ContainerNumber}, never {@code null}
+     */
+    public static ContainerNumber forValue(String value) {
+
+        Assert.notBlank(value, "Value for container number must not be null or empty");
+
+        return new ContainerNumber(value);
+    }
+
+
+    /**
      * Get the owner code of this {@link ContainerNumber}.
      *
      * <p>The owner code is worldwide unique and indicates the principal operator of the
@@ -121,21 +136,6 @@ public final class ContainerNumber {
         }
 
         return Optional.empty();
-    }
-
-
-    /**
-     * Build a new {@link ContainerNumber} with a {@link String} value.
-     *
-     * @param  value  represents a container number
-     *
-     * @return  a {@link ContainerNumber}, never {@code null}
-     */
-    public static ContainerNumber forValue(String value) {
-
-        Assert.notBlank(value, "Value for container number must not be null or empty");
-
-        return new ContainerNumber(value);
     }
 
 
