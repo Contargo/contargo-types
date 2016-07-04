@@ -175,19 +175,18 @@ public final class ContainerNumber {
             return false;
         }
 
-        Optional<String> optionalOwnerCode = getOwnerCode();
-        Optional<Character> optionalEquipmentCategory = getEquipmentCategory();
-        Optional<String> optionalSerialNumber = getSerialNumber();
-        Optional<Character> optionalCheckDigit = getCheckDigit();
+        boolean validOwnerCode = match(getOwnerCode(), "[A-Z]{3}");
+        boolean validEquipmentCategory = match(getEquipmentCategory(), "[UJZ]{1}");
+        boolean validSerialNumber = match(getSerialNumber(), "[0-9]{6}");
+        boolean validCheckDigit = match(getCheckDigit(), "[0-9]{1}");
 
-        boolean validOwnerCode = optionalOwnerCode.isPresent() && optionalOwnerCode.get().matches("[A-Z]{3}");
-        boolean validEquipmentCategory = optionalEquipmentCategory.isPresent()
-            && String.valueOf(optionalEquipmentCategory.get()).matches("[UJZ]{1}");
-        boolean validNumbers = optionalSerialNumber.isPresent() && optionalSerialNumber.get().matches("[0-9]{6}");
-        boolean validCheckDigit = optionalCheckDigit.isPresent()
-            && String.valueOf(optionalCheckDigit.get()).matches("[0-9]{1}");
+        return validOwnerCode && validEquipmentCategory && validSerialNumber && validCheckDigit;
+    }
 
-        return validOwnerCode && validEquipmentCategory && validNumbers && validCheckDigit;
+
+    private boolean match(Optional<?> optional, String regex) {
+
+        return optional.isPresent() && String.valueOf(optional.get()).matches(regex);
     }
 
 
@@ -196,16 +195,9 @@ public final class ContainerNumber {
      *
      * @return  {@code true} if the {@link ContainerNumber} is ISO6346 valid, else {@code false}
      */
-
     public boolean isISO6346Valid() {
 
         if (!isValid()) {
-            return false;
-        }
-
-        Optional<Character> optionalCheckDigit = getCheckDigit();
-
-        if (!optionalCheckDigit.isPresent()) {
             return false;
         }
 
@@ -226,7 +218,9 @@ public final class ContainerNumber {
 
         correctCheckDigit = (correctCheckDigit % 11) % 10;
 
-        int actualCheckDigit = Character.getNumericValue(optionalCheckDigit.get());
+        Optional<Character> optionalCheckDigit = getCheckDigit();
+        int actualCheckDigit = optionalCheckDigit.isPresent() ? Character.getNumericValue(optionalCheckDigit.get())
+                                                              : -1;
 
         return actualCheckDigit == correctCheckDigit;
     }
