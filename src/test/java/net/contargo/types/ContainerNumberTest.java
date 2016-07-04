@@ -198,6 +198,81 @@ public class ContainerNumberTest {
     }
 
 
+    @Test
+    public void ensureOwnerCodeIsReturnedCorrectlyForValidContainerNumber() {
+
+        String value = "HLXU 123456-7";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        String ownerCode = containerNumber.getOwnerCode();
+
+        Assert.assertTrue("Should be valid: HLX", ownerCode.equals("HLX"));
+    }
+
+
+    @Test
+    public void ensureEquipmentCategoryIsReturnedCorrectlyForValidContainerNumber() {
+
+        String value = "HLXU 123456-7";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        Character equipmentCategory = containerNumber.getEquipmentCategory();
+
+        Assert.assertTrue("Should be valid: U", equipmentCategory.equals('U'));
+    }
+
+
+    @Test
+    public void ensureSerialNumberIsReturnedCorrectlyForValidContainerNumber() {
+
+        String value = "HLXU 123456-7";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        String serialNumber = containerNumber.getSerialNumber();
+
+        Assert.assertTrue("Should be valid: 123456", serialNumber.equals("123456"));
+    }
+
+
+    @Test
+    public void ensureCheckDigitIsReturnedCorrectlyForValidContainerNumber() {
+
+        String value = "HLXU 123456-7";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        Character checkDigit = containerNumber.getCheckDigit();
+
+        Assert.assertTrue("Should be valid: 7", checkDigit.equals('7'));
+    }
+
+
+    @Test
+    public void ensureValidContainerNumbersHaveCorrectEquipmentCategroyRange() {
+
+        String c1 = "HLXU 123456-7";
+        ContainerNumber cn1 = ContainerNumber.forValue(c1);
+
+        String c2 = "HLXJ 123456-7";
+        ContainerNumber cn2 = ContainerNumber.forValue(c2);
+
+        String c3 = "HLXZ 123456-7";
+        ContainerNumber cn3 = ContainerNumber.forValue(c3);
+
+        String c4 = "HLXA 123456-7";
+        ContainerNumber invalidContainerNumber = ContainerNumber.forValue(c4);
+
+        Character validEquipmentCategory1 = cn1.getCheckDigit();
+        Character validEquipmentCategory2 = cn2.getCheckDigit();
+        Character validEquipmentCategory3 = cn3.getCheckDigit();
+        Character invalidEquipmentCategory = invalidContainerNumber.getCheckDigit();
+
+        Assert.assertTrue("Should be valid: " + validEquipmentCategory1, cn1.isValid());
+        Assert.assertTrue("Should be valid: " + validEquipmentCategory1, cn2.isValid());
+        Assert.assertTrue("Should be valid: " + validEquipmentCategory1, cn3.isValid());
+        Assert.assertFalse("Should be valid: " + invalidEquipmentCategory, invalidContainerNumber.isValid());
+    }
+
+
     // ISO 6346 VALID ------------------------------------------------------------------------------
 
     @Test

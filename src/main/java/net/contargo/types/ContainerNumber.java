@@ -1,19 +1,30 @@
 package net.contargo.types;
 
 /**
- * Implementation of {@link net.contargo.domain.ContainerNumber}.
+ * Implementation of {@link net.contargo.domain.ContainerNumber}. A container number is valid, if it consists of four
+ * letters, of which the first three indicate the worldwide unique owner code according to 'Bureau International des
+ * Conteneurs' in Paris, and the forth the equipment category (U for all freight containers, J for detachable freight
+ * container-related equipment, Z for trailers and chassis).
  *
  * @author  Aljona Murygina - murygina@synyx.de
  * @since  0.1.0
  */
-public class ContainerNumber implements net.contargo.domain.ContainerNumber { // NOSONAR - in this case, it's better to use the same class name
+public final class ContainerNumber implements net.contargo.domain.ContainerNumber { // NOSONAR - in this case, it's better to use the same class name
 
     private static final int VALID_LENGTH = 11;
-    private static final int POSITION_END_LETTERS = 4;
-    private static final int POSITION_END_NUMBERS = 10;
+    private static final int POSITION_END_OWNER_CODE = 3;
+    private static final int POSITION_END_EQUIPMENT_CATEGORY = 3;
+    private static final int POSITION_END_SERIAL_NUMBER = 10;
 
     private final String value;
-    private final String normalizedValue;
+    private final String normalizedContainerNumber;
+    private final boolean isValid;
+    private final boolean isISO6346Valid;
+
+    private final String ownerCode;
+    private final Character equipmentCategory;
+    private final String serialNumber;
+    private final Character checkDigit;
 
     /**
      * Use {@link #forValue(String)} to build a new {@link ContainerNumber} instance.
@@ -23,8 +34,49 @@ public class ContainerNumber implements net.contargo.domain.ContainerNumber { //
     private ContainerNumber(String value) {
 
         this.value = value;
-        this.normalizedValue = value.replaceAll("[ -]", "").toUpperCase();
+        this.normalizedContainerNumber = value.replaceAll("[ -]", "").toUpperCase();
+
+        if (normalizedContainerNumber.length() == VALID_LENGTH) {
+            this.ownerCode = getOwnerCodeLetters();
+            this.equipmentCategory = getEquipmentCategoryLetter();
+            this.serialNumber = getSerialNumberLetter();
+            this.checkDigit = getCheckDigitLetter();
+        } else {
+            // find a sound way to extract as much given information as possible
+            // these default settings are not good!
+            this.ownerCode = "ZZZ";
+            this.equipmentCategory = 'X';
+            this.serialNumber = "123456";
+            this.checkDigit = '7';
+        }
+
+        this.isValid = checkValidity();
+        this.isISO6346Valid = checkISO6346Validity();
     }
+
+    public String getOwnerCode() {
+
+        return ownerCode;
+    }
+
+
+    public Character getEquipmentCategory() {
+
+        return equipmentCategory;
+    }
+
+
+    public String getSerialNumber() {
+
+        return serialNumber;
+    }
+
+
+    public Character getCheckDigit() {
+
+        return checkDigit;
+    }
+
 
     /**
      * Build a new {@link ContainerNumber} with a {@link String} value.
@@ -50,28 +102,34 @@ public class ContainerNumber implements net.contargo.domain.ContainerNumber { //
     public String toString() {
 
         if (isValid()) {
-            return getLetters() + " " + getNumbers() + "-" + getCheckDigit();
+            return this.ownerCode + this.equipmentCategory + " " + this.serialNumber + "-" + this.checkDigit;
         }
 
         return value;
     }
 
 
-    private String getLetters() {
+    private String getOwnerCodeLetters() {
 
-        return normalizedValue.substring(0, POSITION_END_LETTERS);
+        return normalizedContainerNumber.substring(0, POSITION_END_OWNER_CODE);
     }
 
 
-    private String getNumbers() {
+    private char getEquipmentCategoryLetter() {
 
-        return normalizedValue.substring(POSITION_END_LETTERS, POSITION_END_NUMBERS);
+        return normalizedContainerNumber.charAt(POSITION_END_EQUIPMENT_CATEGORY);
     }
 
 
-    private char getCheckDigit() {
+    private String getSerialNumberLetter() {
 
-        return normalizedValue.charAt(POSITION_END_NUMBERS);
+        return normalizedContainerNumber.substring(POSITION_END_EQUIPMENT_CATEGORY + 1, POSITION_END_SERIAL_NUMBER);
+    }
+
+
+    private char getCheckDigitLetter() {
+
+        return normalizedContainerNumber.charAt(POSITION_END_SERIAL_NUMBER);
     }
 
 
@@ -82,15 +140,22 @@ public class ContainerNumber implements net.contargo.domain.ContainerNumber { //
      */
     public boolean isValid() {
 
-        if (normalizedValue.length() != VALID_LENGTH) {
+        return isValid;
+    }
+
+
+    private boolean checkValidity() {
+
+        if (normalizedContainerNumber.length() != VALID_LENGTH) {
             return false;
         }
 
-        boolean validLetters = getLetters().matches("[A-Z]*");
-        boolean validNumbers = getNumbers().matches("[0-9]*");
-        boolean validCheckDigit = String.valueOf(getCheckDigit()).matches("[0-9]*");
+        boolean validOwnerCode = this.ownerCode.matches("[A-Z]{3}");
+        boolean validEquipmentCategory = String.valueOf(this.equipmentCategory).matches("[UJZ]{1}");
+        boolean validNumbers = getSerialNumberLetter().matches("[0-9]{6}");
+        boolean validCheckDigit = String.valueOf(getCheckDigitLetter()).matches("[0-9]{1}");
 
-        return validLetters && validNumbers && validCheckDigit;
+        return validOwnerCode && validEquipmentCategory && validNumbers && validCheckDigit;
     }
 
 
@@ -99,7 +164,14 @@ public class ContainerNumber implements net.contargo.domain.ContainerNumber { //
      *
      * @return  {@code true} if the {@link ContainerNumber} is ISO6346 valid, else {@code false}
      */
+
     public boolean isISO6346Valid() {
+
+        return isISO6346Valid;
+    }
+
+
+    public boolean checkISO6346Validity() {
 
         if (!isValid()) {
             return false;
@@ -109,7 +181,7 @@ public class ContainerNumber implements net.contargo.domain.ContainerNumber { //
         String charCode = "0123456789A?BCDEFGHIJK?LMNOPQRSTU?VWXYZ";
 
         for (int i = 0; i < 10; i++) {
-            char character = normalizedValue.charAt(i);
+            char character = normalizedContainerNumber.charAt(i);
             double index = character == '?' ? 1 : charCode.indexOf(character);
 
             if (index < 0) {
@@ -122,7 +194,7 @@ public class ContainerNumber implements net.contargo.domain.ContainerNumber { //
 
         correctCheckDigit = (correctCheckDigit % 11) % 10;
 
-        int actualCheckDigit = Character.getNumericValue(getCheckDigit());
+        int actualCheckDigit = Character.getNumericValue(this.checkDigit);
 
         return actualCheckDigit == correctCheckDigit;
     }
