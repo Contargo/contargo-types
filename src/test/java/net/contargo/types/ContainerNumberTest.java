@@ -71,7 +71,7 @@ public class ContainerNumberTest {
 
 
     @Test
-    public void ensureAlreadyFormattedContainerNumberIsFormattedCorrectly() {
+    public void ensureAlreadyCorrectlyFormattedContainerNumberIsFormattedCorrectly() {
 
         String value = "HLXU 123456-7";
         ContainerNumber containerNumber = ContainerNumber.forValue(value);
@@ -103,7 +103,7 @@ public class ContainerNumberTest {
 
 
     @Test
-    public void ensureCompletelyInvalidContainerNumberIsNotValid() {
+    public void ensureInvalidContainerNumberIsNotValid() {
 
         String value = "foo";
         ContainerNumber containerNumber = ContainerNumber.forValue(value);
@@ -349,7 +349,7 @@ public class ContainerNumberTest {
     // EQUALS --------------------------------------------------------------------------------------
 
     @Test
-    public void ensureTrimmedAndNotTrimmedContainerNumbersAreEquals() {
+    public void ensureTrimmedAndNotTrimmedContainerNumbersAreEqual() {
 
         String v1 = "hlxu1234567";
         String v2 = "HLXU 123456-7";
@@ -357,12 +357,12 @@ public class ContainerNumberTest {
         ContainerNumber c1 = ContainerNumber.forValue(v1);
         ContainerNumber c2 = ContainerNumber.forValue(v2);
 
-        Assert.assertTrue(v1 + " should be equals to " + v2, c1.equals(c2));
+        Assert.assertTrue(v1 + " should be equal to " + v2, c1.equals(c2));
     }
 
 
     @Test
-    public void ensureDifferentContainerNumbersAreNotEquals() {
+    public void ensureDifferentContainerNumbersAreNotEqual() {
 
         String v1 = "HLXU1234567";
         String v2 = "HLXU1234568";
@@ -370,7 +370,7 @@ public class ContainerNumberTest {
         ContainerNumber c1 = ContainerNumber.forValue(v1);
         ContainerNumber c2 = ContainerNumber.forValue(v2);
 
-        Assert.assertFalse(v1 + " should not be equals to " + v2, c1.equals(c2));
+        Assert.assertFalse(v1 + " should not be equal to " + v2, c1.equals(c2));
     }
 
 
@@ -379,7 +379,7 @@ public class ContainerNumberTest {
 
         ContainerNumber containerNumber = ContainerNumber.forValue("HLXU1234567");
 
-        Assert.assertFalse("Different classes should not be equals", containerNumber.equals(new Object()));
+        Assert.assertFalse("Different classes should not be equal", containerNumber.equals(new Object()));
     }
 
 
@@ -389,6 +389,6 @@ public class ContainerNumberTest {
         String value = "HLXU1234567";
         ContainerNumber containerNumber = ContainerNumber.forValue(value);
 
-        Assert.assertFalse(value + " should not be equals to null", containerNumber.equals(null));
+        Assert.assertFalse(value + " should not be equal to null", containerNumber.equals(null));
     }
 }
