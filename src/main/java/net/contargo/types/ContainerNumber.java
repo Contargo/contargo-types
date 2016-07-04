@@ -1,15 +1,20 @@
 package net.contargo.types;
 
 /**
- * Implementation of {@link net.contargo.domain.ContainerNumber}. A container number is valid, if it consists of four
- * letters, of which the first three indicate the worldwide unique owner code according to 'Bureau International des
- * Conteneurs' in Paris, and the forth the equipment category (U for all freight containers, J for detachable freight
- * container-related equipment, Z for trailers and chassis).
+ * Each {@link net.contargo.domain.Container} has a worldwide unique container number.
+ *
+ * <p>Example: HLXU 123456-7</p>
+ *
+ * <p>A container number is valid, if it consists of four letters, of which the first three indicate the worldwide
+ * unique owner code according to 'Bureau International des Conteneurs' in Paris, and the forth the equipment category
+ * (U for all freight containers, J for detachable freight container-related equipment, Z for trailers and chassis).</p>
+ *
+ * <p>Further information: <a href="https://en.wikipedia.org/wiki/ISO_6346">ISO 6346 standard</a></p>
  *
  * @author  Aljona Murygina - murygina@synyx.de
  * @since  0.1.0
  */
-public final class ContainerNumber implements net.contargo.domain.ContainerNumber { // NOSONAR - in this case, it's better to use the same class name
+public final class ContainerNumber {
 
     private static final int VALID_LENGTH = 11;
     private static final int POSITION_END_OWNER_CODE = 3;

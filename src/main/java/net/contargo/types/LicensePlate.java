@@ -1,12 +1,12 @@
 package net.contargo.types;
 
 /**
- * Implementation of {@link net.contargo.domain.LicensePlate}.
+ * Each {@link net.contargo.domain.Truck} can be identified by its license plate.
  *
  * @author  Aljona Murygina - murygina@synyx.de
  * @since  0.1.0
  */
-public class LicensePlate implements net.contargo.domain.LicensePlate { // NOSONAR - in this case, it's better to use the same class name
+public final class LicensePlate {
 
     private final String value;
 
