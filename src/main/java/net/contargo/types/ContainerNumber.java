@@ -184,7 +184,7 @@ public final class ContainerNumber {
     }
 
 
-    private boolean match(Optional<?> optional, String regex) {
+    private static boolean match(Optional<?> optional, String regex) {
 
         return optional.isPresent() && String.valueOf(optional.get()).matches(regex);
     }
@@ -204,7 +204,7 @@ public final class ContainerNumber {
         int correctCheckDigit = 0;
         String charCode = "0123456789A?BCDEFGHIJK?LMNOPQRSTU?VWXYZ";
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < VALID_LENGTH - 1; i++) {
             char character = normalizedContainerNumber.charAt(i);
             double index = character == '?' ? 1 : charCode.indexOf(character);
 
@@ -212,11 +212,11 @@ public final class ContainerNumber {
                 return false;
             }
 
-            index = index * Math.pow(2, i);
+            index = index * Math.pow(2, i); // NOSONAR - position is the exponent to base 2
             correctCheckDigit += index;
         }
 
-        correctCheckDigit = (correctCheckDigit % 11) % 10;
+        correctCheckDigit = (correctCheckDigit % VALID_LENGTH) % 10; // NOSONAR
 
         Optional<Character> optionalCheckDigit = getCheckDigit();
         int actualCheckDigit = optionalCheckDigit.isPresent() ? Character.getNumericValue(optionalCheckDigit.get())
