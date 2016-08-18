@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.function.Consumer;
+
 
 /**
  * @author  Aljona Murygina - murygina@synyx.de
@@ -11,6 +13,18 @@ import org.junit.Test;
 public class DefaultLicensePlateValidatorTest {
 
     private DefaultLicensePlateValidator validator;
+
+    private Consumer<String> assertIsValid = value -> {
+        LicensePlate licensePlate = LicensePlate.forValue(value);
+
+        Assert.assertTrue("Should be valid: " + value, validator.isValid(licensePlate));
+    };
+
+    private Consumer<String> assertIsNotValid = value -> {
+        LicensePlate licensePlate = LicensePlate.forValue(value);
+
+        Assert.assertFalse("Should not be valid: " + value, validator.isValid(licensePlate));
+    };
 
     @Before
     public void setUp() {
@@ -22,39 +36,27 @@ public class DefaultLicensePlateValidatorTest {
     @Test
     public void ensureLicensePlateWithLettersAndNumbersIsValid() {
 
-        String value = "KA XY 123";
-        LicensePlate licensePlate = LicensePlate.forValue(value);
-
-        Assert.assertTrue("Should be valid: " + value, validator.isValid(licensePlate));
+        assertIsValid.accept("KA XY 123");
     }
 
 
     @Test
     public void ensureLicensePlateWithMinusAsSeparatorIsValid() {
 
-        String value = "KA-XY-123";
-        LicensePlate licensePlate = LicensePlate.forValue(value);
-
-        Assert.assertTrue("Should be valid: " + value, validator.isValid(licensePlate));
+        assertIsValid.accept("KA-XY-123");
     }
 
 
     @Test
     public void ensureLicensePlateWithSpecialCharactersIsNotValid() {
 
-        String value = "KA/XY.123";
-        LicensePlate licensePlate = LicensePlate.forValue(value);
-
-        Assert.assertFalse("Should not be valid: " + value, validator.isValid(licensePlate));
+        assertIsNotValid.accept("KA/XY.123");
     }
 
 
     @Test
     public void ensureLicensePlateWithUmlautIsValid() {
 
-        String value = "LÖ-CR-123";
-        LicensePlate licensePlate = LicensePlate.forValue(value);
-
-        Assert.assertTrue("Should be valid: " + value, validator.isValid(licensePlate));
+        assertIsValid.accept("LÖ-CR-123");
     }
 }
