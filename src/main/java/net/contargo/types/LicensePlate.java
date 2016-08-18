@@ -12,7 +12,7 @@ import java.util.Optional;
 public final class LicensePlate {
 
     private final String value;
-    private String country;
+    private Country country;
 
     /**
      * Use {@link #forValue(String)} to build a new {@link LicensePlate} instance.
@@ -40,17 +40,17 @@ public final class LicensePlate {
 
 
     /**
-     * Set the country of this {@link LicensePlate}.
+     * Set the {@link Country} for this {@link LicensePlate}.
      *
-     * @param  countryCode  represents a country, for example "D", never {@code null}
+     * @param  country  never {@code null}
      *
      * @return  {@link LicensePlate}, never {@code null}
      */
-    public LicensePlate withCountryCode(String countryCode) {
+    public LicensePlate withCountry(Country country) {
 
-        Assert.notBlank(countryCode, "Country code must not be null or empty");
+        Assert.notNull(country, "Country must not be null");
 
-        this.country = countryCode;
+        this.country = country;
 
         return this;
     }
@@ -115,7 +115,7 @@ public final class LicensePlate {
     }
 
 
-    public Optional<String> getCountry() {
+    public Optional<Country> getCountry() {
 
         return Optional.ofNullable(country);
     }

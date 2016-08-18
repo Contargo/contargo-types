@@ -152,36 +152,26 @@ public class LicensePlateTest {
     @Test
     public void ensureCountryCanBeEmpty() {
 
-        LicensePlate licensePlate = LicensePlate.forValue("abc");
-
-        Assert.assertNotNull("Should not be null", licensePlate);
-        Assert.assertFalse("Country should not be set", licensePlate.getCountry().isPresent());
+        Assert.assertFalse("Country should not be set", LicensePlate.forValue("abc").getCountry().isPresent());
     }
 
 
     @Test
-    public void ensureCanBeBuiltWithCountryCode() {
+    public void ensureCanBeBuiltWithCountry() {
 
-        LicensePlate licensePlate = LicensePlate.forValue("abc").withCountryCode("D");
+        LicensePlate licensePlate = LicensePlate.forValue("abc").withCountry(Country.GERMANY);
 
         Assert.assertNotNull("Should not be null", licensePlate);
 
-        Optional<String> optionalCountry = licensePlate.getCountry();
+        Optional<Country> optionalCountry = licensePlate.getCountry();
         Assert.assertTrue("Missing country", optionalCountry.isPresent());
-        Assert.assertEquals("Wrong country", "D", optionalCountry.get());
+        Assert.assertEquals("Wrong country", Country.GERMANY, optionalCountry.get());
     }
 
 
     @Test(expected = IllegalArgumentException.class)
-    public void ensureThrowsIfBuiltWithNullCountryCode() {
+    public void ensureThrowsIfBuiltWithNullCountry() {
 
-        LicensePlate.forValue("abc").withCountryCode(null);
-    }
-
-
-    @Test(expected = IllegalArgumentException.class)
-    public void ensureThrowsIfBuiltWithEmptyCountryCode() {
-
-        LicensePlate.forValue("abc").withCountryCode(" ");
+        LicensePlate.forValue("abc").withCountry(null);
     }
 }
