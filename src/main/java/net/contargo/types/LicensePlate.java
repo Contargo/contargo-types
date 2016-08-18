@@ -75,7 +75,7 @@ public final class LicensePlate {
      */
     public boolean isValid() {
 
-        return LicensePlateValidatorFactory.getForCountry(country).isValid(this);
+        return LicensePlateHandlerFactory.getForCountry(country).validate(this);
     }
 
 
@@ -116,7 +116,7 @@ public final class LicensePlate {
 
 
     /**
-     * Access to value of this {@link LicensePlate} is needed for {@link LicensePlateValidator} implementations.
+     * Access to value is needed for {@link LicensePlateHandler} implementations.
      *
      * @return  underlying value of this license plate
      */
