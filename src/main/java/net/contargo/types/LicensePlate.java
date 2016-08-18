@@ -1,5 +1,8 @@
 package net.contargo.types;
 
+import java.util.Optional;
+
+
 /**
  * Each {@link net.contargo.domain.Truck} can be identified by its license plate.
  *
@@ -9,6 +12,7 @@ package net.contargo.types;
 public final class LicensePlate {
 
     private final String value;
+    private String country;
 
     /**
      * Use {@link #forValue(String)} to build a new {@link LicensePlate} instance.
@@ -32,6 +36,23 @@ public final class LicensePlate {
         Assert.notBlank(value, "Value for license plate must not be null or empty");
 
         return new LicensePlate(value);
+    }
+
+
+    /**
+     * Set the country of this {@link LicensePlate}.
+     *
+     * @param  countryCode  represents a country, for example "D", never {@code null}
+     *
+     * @return  {@link LicensePlate}, never {@code null}
+     */
+    public LicensePlate withCountryCode(String countryCode) {
+
+        Assert.notBlank(countryCode, "Country code must not be null or empty");
+
+        this.country = countryCode;
+
+        return this;
     }
 
 
@@ -91,5 +112,11 @@ public final class LicensePlate {
     public int hashCode() {
 
         return this.toString().hashCode();
+    }
+
+
+    public Optional<String> getCountry() {
+
+        return Optional.ofNullable(country);
     }
 }

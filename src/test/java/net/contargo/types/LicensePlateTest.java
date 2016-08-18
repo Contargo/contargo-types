@@ -1,7 +1,9 @@
 package net.contargo.types;
 
-import org.junit.*;
 import org.junit.Assert;
+import org.junit.Test;
+
+import java.util.Optional;
 
 
 /**
@@ -30,7 +32,7 @@ public class LicensePlateTest {
 
         LicensePlate licensePlate = LicensePlate.forValue("foo");
 
-        org.junit.Assert.assertNotNull("Should not be null", licensePlate);
+        Assert.assertNotNull("Should not be null", licensePlate);
     }
 
 
@@ -142,5 +144,44 @@ public class LicensePlateTest {
         LicensePlate licensePlate = LicensePlate.forValue(value);
 
         Assert.assertFalse(value + " should not be equals to null", licensePlate.equals(null));
+    }
+
+
+    // COUNTRY -------------------------------------------------------------------------------------
+
+    @Test
+    public void ensureCountryCanBeEmpty() {
+
+        LicensePlate licensePlate = LicensePlate.forValue("abc");
+
+        Assert.assertNotNull("Should not be null", licensePlate);
+        Assert.assertFalse("Country should not be set", licensePlate.getCountry().isPresent());
+    }
+
+
+    @Test
+    public void ensureCanBeBuiltWithCountryCode() {
+
+        LicensePlate licensePlate = LicensePlate.forValue("abc").withCountryCode("D");
+
+        Assert.assertNotNull("Should not be null", licensePlate);
+
+        Optional<String> optionalCountry = licensePlate.getCountry();
+        Assert.assertTrue("Missing country", optionalCountry.isPresent());
+        Assert.assertEquals("Wrong country", "D", optionalCountry.get());
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void ensureThrowsIfBuiltWithNullCountryCode() {
+
+        LicensePlate.forValue("abc").withCountryCode(null);
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void ensureThrowsIfBuiltWithEmptyCountryCode() {
+
+        LicensePlate.forValue("abc").withCountryCode(" ");
     }
 }
