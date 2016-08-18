@@ -58,48 +58,6 @@ public class LicensePlateTest {
     }
 
 
-    // VALID ---------------------------------------------------------------------------------------
-
-    @Test
-    public void ensureLicensePlateWithLettersAndNumbersIsValid() {
-
-        String value = "KA XY 123";
-        LicensePlate licensePlate = LicensePlate.forValue(value);
-
-        Assert.assertTrue("Should be valid: " + value, licensePlate.isValid());
-    }
-
-
-    @Test
-    public void ensureLicensePlateWithMinusAsSeparatorIsValid() {
-
-        String value = "KA-XY-123";
-        LicensePlate licensePlate = LicensePlate.forValue(value);
-
-        Assert.assertTrue("Should be valid: " + value, licensePlate.isValid());
-    }
-
-
-    @Test
-    public void ensureLicensePlateWithSpecialCharactersIsNotValid() {
-
-        String value = "KA/XY.123";
-        LicensePlate licensePlate = LicensePlate.forValue(value);
-
-        Assert.assertFalse("Should not be valid: " + value, licensePlate.isValid());
-    }
-
-
-    @Test
-    public void ensureLicensePlateWithUmlautIsValid() {
-
-        String value = "LÖ-CR-123";
-        LicensePlate licensePlate = LicensePlate.forValue(value);
-
-        Assert.assertTrue("Should be valid: " + value, licensePlate.isValid());
-    }
-
-
     // EQUALS --------------------------------------------------------------------------------------
 
     @Test

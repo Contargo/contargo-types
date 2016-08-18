@@ -10,9 +10,9 @@ import org.junit.Test;
 public class LicensePlateValidatorFactoryTest {
 
     @Test
-    public void ensureCanHazzDefaultValidator() {
+    public void ensureCanHazzDefaultValidatorForNullCountry() {
 
-        LicensePlateValidator validator = LicensePlateValidatorFactory.getDefault();
+        LicensePlateValidator validator = LicensePlateValidatorFactory.getForCountry(null);
 
         Assert.assertNotNull("Missing validator", validator);
         Assert.assertTrue("Wrong validator implementation", validator instanceof DefaultLicensePlateValidator);
@@ -36,12 +36,5 @@ public class LicensePlateValidatorFactoryTest {
 
         Assert.assertNotNull("Missing validator", validator);
         Assert.assertTrue("Wrong validator implementation", validator instanceof DefaultLicensePlateValidator);
-    }
-
-
-    @Test(expected = IllegalArgumentException.class)
-    public void ensureThrowsIfTryingToGetMatchingValidatorForNullCountry() {
-
-        LicensePlateValidatorFactory.getForCountry(null);
     }
 }

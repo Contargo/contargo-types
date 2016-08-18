@@ -81,12 +81,7 @@ public final class LicensePlate {
      */
     public boolean isValid() {
 
-        String normalizedValue = getNormalizedValue();
-
-        String trimmedValue = normalizedValue.replaceAll("\\s", "");
-
-        // allowed: any letter or digit, but no special characters
-        return trimmedValue.matches("[\\p{L}0-9]*");
+        return LicensePlateValidatorFactory.getForCountry(country).isValid(this);
     }
 
 
@@ -115,6 +110,11 @@ public final class LicensePlate {
     }
 
 
+    /**
+     * Get the {@link Country} of this {@link LicensePlate}.
+     *
+     * @return  country, may be empty
+     */
     public Optional<Country> getCountry() {
 
         return Optional.ofNullable(country);

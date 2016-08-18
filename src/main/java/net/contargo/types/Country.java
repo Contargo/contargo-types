@@ -3,6 +3,10 @@ package net.contargo.types;
 /**
  * Currently supported countries for {@link LicensePlate}s.
  *
+ * <p>For further information see the list of <a
+ * href="https://en.wikipedia.org/wiki/List_of_international_vehicle_registration_codes">international license plate
+ * country codes</a>.</p>
+ *
  * @author  Aljona Murygina - murygina@synyx.de
  */
 public enum Country {
