@@ -9,6 +9,7 @@ import java.util.Map;
  * Factory providing {@link LicensePlateHandler}s.
  *
  * @author  Aljona Murygina - murygina@synyx.de
+ * @since  0.2.0
  */
 class LicensePlateHandlerFactory {
 

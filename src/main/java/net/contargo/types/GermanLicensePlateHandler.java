@@ -4,6 +4,7 @@ package net.contargo.types;
  * Can handle German {@link LicensePlate}s.
  *
  * @author  Aljona Murygina - murygina@synyx.de
+ * @since  0.2.0
  */
 class GermanLicensePlateHandler implements LicensePlateHandler {
 

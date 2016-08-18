@@ -8,6 +8,7 @@ package net.contargo.types;
  * country codes</a>.</p>
  *
  * @author  Aljona Murygina - murygina@synyx.de
+ * @since  0.2.0
  */
 public enum Country {
 

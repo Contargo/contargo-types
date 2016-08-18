@@ -4,6 +4,7 @@ package net.contargo.types;
  * Default implementation for {@link LicensePlateHandler}s.
  *
  * @author  Aljona Murygina - murygina@synyx.de
+ * @since  0.2.0
  */
 class DefaultLicensePlateHandler implements LicensePlateHandler {
 
