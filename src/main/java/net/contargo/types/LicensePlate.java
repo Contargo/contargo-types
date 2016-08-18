@@ -64,7 +64,7 @@ public final class LicensePlate {
     @Override
     public String toString() {
 
-        return value.replaceAll("-", " ").toUpperCase();
+        return LicensePlateHandlerFactory.getForCountry(country).format(this);
     }
 
 

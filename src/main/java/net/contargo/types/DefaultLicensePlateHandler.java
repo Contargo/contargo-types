@@ -9,6 +9,22 @@ package net.contargo.types;
 class DefaultLicensePlateHandler implements LicensePlateHandler {
 
     /**
+     * Normalizes the given {@link LicensePlate} by upper casing it and replacing all "-" by whitespace.
+     *
+     * @param  licensePlate  to get the normalized value of, never {@code null}
+     *
+     * @return  the normalized value, never {@code null}
+     */
+    @Override
+    public String normalize(LicensePlate licensePlate) {
+
+        String value = licensePlate.getValue();
+
+        return value.replaceAll("\\s+", "-").replaceAll("\\-+", "-").toUpperCase();
+    }
+
+
+    /**
      * Validates the given {@link LicensePlate}.
      *
      * <p>The given {@link LicensePlate} is considered valid if it contains no special characters except '-'.</p>
@@ -20,15 +36,13 @@ class DefaultLicensePlateHandler implements LicensePlateHandler {
     @Override
     public boolean validate(LicensePlate licensePlate) {
 
-        String formattedValue = format(licensePlate);
-
         // allowed: any letter or digit, but no special characters except '-' and ' '
-        return formattedValue.matches("[\\p{L}0-9\\- ]*");
+        return normalize(licensePlate).matches("[\\p{L}0-9\\- ]*");
     }
 
 
     /**
-     * Formats the given {@link LicensePlate} in a very simple way: just upper case it.
+     * Formats the given {@link LicensePlate} in a very simple way: just return the normalized value.
      *
      * @param  licensePlate  to get the formatted value for, never {@code null}
      *
@@ -37,8 +51,6 @@ class DefaultLicensePlateHandler implements LicensePlateHandler {
     @Override
     public String format(LicensePlate licensePlate) {
 
-        String value = licensePlate.getValue();
-
-        return value.toUpperCase();
+        return normalize(licensePlate);
     }
 }

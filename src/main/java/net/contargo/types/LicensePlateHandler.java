@@ -9,6 +9,16 @@ package net.contargo.types;
 interface LicensePlateHandler {
 
     /**
+     * Get the normalized value of the given {@link LicensePlate}.
+     *
+     * @param  licensePlate  to get the normalized value of, never {@code null}
+     *
+     * @return  the normalized license plate, never {@code null}
+     */
+    String normalize(LicensePlate licensePlate);
+
+
+    /**
      * Validates the given {@link LicensePlate}.
      *
      * @param  licensePlate  to be validated, never {@code null}

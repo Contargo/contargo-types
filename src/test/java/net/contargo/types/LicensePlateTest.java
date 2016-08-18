@@ -38,23 +38,27 @@ public class LicensePlateTest {
 
     // FORMAT --------------------------------------------------------------------------------------
 
+    // NOTE: Further tests for formatting can be found in the specialized handler tests.
     @Test
-    public void ensureLicensePlateIsUpperCased() {
+    public void ensureLicensePlateWithoutCountryIsUpperCased() {
 
         String value = "ka ab 123";
         LicensePlate licensePlate = LicensePlate.forValue(value);
 
-        Assert.assertEquals("Wrong String representation for: " + value, "KA AB 123", licensePlate.toString());
+        Assert.assertEquals("Wrong String representation for: " + value, "KA-AB-123", licensePlate.toString());
     }
 
 
-    @Test
-    public void ensureMinusSeparatorIsReplacedByWhiteSpace() {
+    // VALID ---------------------------------------------------------------------------------------
 
-        String value = "ka-ab-123";
+    // NOTE: Further tests for validation can be found in the specialized handler tests.
+    @Test
+    public void ensureValidLicensePlateWithoutCountryIsValid() {
+
+        String value = "KA XY 123";
         LicensePlate licensePlate = LicensePlate.forValue(value);
 
-        Assert.assertEquals("Wrong String representation for: " + value, "KA AB 123", licensePlate.toString());
+        Assert.assertTrue("Should be valid: " + value, licensePlate.isValid());
     }
 
 
@@ -65,6 +69,19 @@ public class LicensePlateTest {
 
         String v1 = "KA-AB-123";
         String v2 = "KA AB 123";
+
+        LicensePlate l1 = LicensePlate.forValue(v1);
+        LicensePlate l2 = LicensePlate.forValue(v2);
+
+        Assert.assertTrue(v1 + " should be equals to " + v2, l1.equals(l2));
+    }
+
+
+    @Test
+    public void ensureLicensePlatesWithDifferentCasesAreEquals() {
+
+        String v1 = "KA-AB-123";
+        String v2 = "ka ab 123";
 
         LicensePlate l1 = LicensePlate.forValue(v1);
         LicensePlate l2 = LicensePlate.forValue(v2);
@@ -131,27 +148,5 @@ public class LicensePlateTest {
     public void ensureThrowsIfBuiltWithNullCountry() {
 
         LicensePlate.forValue("abc").withCountry(null);
-    }
-
-
-    // VALID ---------------------------------------------------------------------------------------
-
-    @Test
-    public void ensureValidLicensePlateWithoutCountryIsValid() {
-
-        String value = "KA XY 123";
-        LicensePlate licensePlate = LicensePlate.forValue(value);
-
-        Assert.assertTrue("Should be valid: " + value, licensePlate.isValid());
-    }
-
-
-    @Test
-    public void ensureInvalidLicensePlateWithoutCountryIsNotValid() {
-
-        String value = "KA/XY.123";
-        LicensePlate licensePlate = LicensePlate.forValue(value);
-
-        Assert.assertFalse("Should not be valid: " + value, licensePlate.isValid());
     }
 }

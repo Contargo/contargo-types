@@ -9,6 +9,30 @@ package net.contargo.types;
 class GermanLicensePlateHandler implements LicensePlateHandler {
 
     /**
+     * Normalizes the given {@link LicensePlate} by executing the following steps:
+     *
+     * <p>1.) Upper case: "ka ab123" to "KA AB123"</p>
+     *
+     * <p>2.) Use minus instead of whitespace separator: "KA AB123" to "KA-AB123"</p>
+     *
+     * <p>3.) Ensure identification numbers are separated from identification letters: "KA-AB123" to "KA--AB-123"</p>
+     *
+     * <p>4.) Remove the duplicated minus separators: "KA--AB-123" to "KA-AB-123"</p>
+     *
+     * @param  licensePlate  to get the normalized value for, never {@code null}
+     *
+     * @return  the normalized value, never {@code null}
+     */
+    @Override
+    public String normalize(LicensePlate licensePlate) {
+
+        String value = licensePlate.getValue();
+
+        return value.toUpperCase().replaceAll("\\s+", "-").replaceAll("(?<=\\D)(?=\\d)", "-").replaceAll("\\-+", "-");
+    }
+
+
+    /**
      * Validates the given {@link LicensePlate}.
      *
      * <p>A German license plate consists of maximum 8 characters and contains two parts:</p>
@@ -42,22 +66,14 @@ class GermanLicensePlateHandler implements LicensePlateHandler {
     @Override
     public boolean validate(LicensePlate licensePlate) {
 
-        String formattedValue = format(licensePlate);
+        String normalizedValue = normalize(licensePlate);
 
-        return formattedValue.matches("^[A-ZÄÖÜ]{1,3}\\-[A-Z]{0,2}\\-{0,1}[1-9]{1}[0-9]{0,3}");
+        return normalizedValue.matches("^[A-ZÄÖÜ]{1,3}\\-[A-Z]{0,2}\\-{0,1}[1-9]{1}[0-9]{0,3}");
     }
 
 
     /**
-     * Formats the given {@link LicensePlate} executing the following steps:
-     *
-     * <p>1.) Upper case: "ka ab123" to "KA AB123"</p>
-     *
-     * <p>2.) Use minus instead of whitespace separator: "KA AB123" to "KA-AB123"</p>
-     *
-     * <p>3.) Ensure identification numbers are separated from identification letters: "KA-AB123" to "KA--AB-123"</p>
-     *
-     * <p>4.) Remove the duplicated minus separators: "KA--AB-123" to "KA-AB-123"</p>
+     * Formats the given {@link LicensePlate} by replacing "-" by whitespaces of the normalized value.
      *
      * @param  licensePlate  to get the formatted value for, never {@code null}
      *
@@ -66,8 +82,6 @@ class GermanLicensePlateHandler implements LicensePlateHandler {
     @Override
     public String format(LicensePlate licensePlate) {
 
-        String value = licensePlate.getValue();
-
-        return value.toUpperCase().replaceAll("\\s+", "-").replaceAll("(?<=\\D)(?=\\d)", "-").replaceAll("\\-+", "-");
+        return normalize(licensePlate).replaceAll("-", " ");
     }
 }

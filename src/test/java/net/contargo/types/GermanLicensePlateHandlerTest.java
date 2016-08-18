@@ -21,16 +21,22 @@ public class GermanLicensePlateHandlerTest {
         Assert.assertTrue("Should be valid: " + value, handler.validate(licensePlate));
     };
 
+    private Consumer<String> assertIsNotValid = value -> {
+        LicensePlate licensePlate = LicensePlate.forValue(value);
+
+        Assert.assertFalse("Should not be valid: " + value, handler.validate(licensePlate));
+    };
+
     private BiConsumer<String, String> assertIsFormattedFromTo = (value, expected) -> {
         LicensePlate licensePlate = LicensePlate.forValue(value);
 
         Assert.assertEquals("Wrong formatted value", expected, handler.format(licensePlate));
     };
 
-    private Consumer<String> assertIsNotValid = value -> {
+    private BiConsumer<String, String> assertIsNormalizedFromTo = (value, expected) -> {
         LicensePlate licensePlate = LicensePlate.forValue(value);
 
-        Assert.assertFalse("Should not be valid: " + value, handler.validate(licensePlate));
+        Assert.assertEquals("Wrong formatted value", expected, handler.normalize(licensePlate));
     };
 
     @Before
@@ -211,14 +217,28 @@ public class GermanLicensePlateHandlerTest {
     }
 
 
+    // NORMALIZING -----------------------------------------------------------------------------------------------------
+
+    @Test
+    public void ensureLicensePlateIsNormalizedCorrectly() {
+
+        assertIsNormalizedFromTo.accept("ka ab 123", "KA-AB-123");
+        assertIsNormalizedFromTo.accept("ka-ab 123", "KA-AB-123");
+        assertIsNormalizedFromTo.accept("KA-AB123", "KA-AB-123");
+        assertIsNormalizedFromTo.accept("KA A123", "KA-A-123");
+        assertIsNormalizedFromTo.accept("KA  A123", "KA-A-123");
+        assertIsNormalizedFromTo.accept("KA  A--123", "KA-A-123");
+    }
+
+
     // FORMATTING ------------------------------------------------------------------------------------------------------
 
     @Test
     public void ensureLicensePlateIsFormattedCorrectly() {
 
-        assertIsFormattedFromTo.accept("ka ab 123", "KA-AB-123");
-        assertIsFormattedFromTo.accept("ka-ab 123", "KA-AB-123");
-        assertIsFormattedFromTo.accept("KA-AB123", "KA-AB-123");
-        assertIsFormattedFromTo.accept("KA A123", "KA-A-123");
+        assertIsFormattedFromTo.accept("ka ab 123", "KA AB 123");
+        assertIsFormattedFromTo.accept("ka-ab 123", "KA AB 123");
+        assertIsFormattedFromTo.accept("KA-AB123", "KA AB 123");
+        assertIsFormattedFromTo.accept("KA A123", "KA A 123");
     }
 }

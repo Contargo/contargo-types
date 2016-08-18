@@ -27,6 +27,12 @@ public class DefaultLicensePlateHandlerTest {
         Assert.assertEquals("Wrong formatted value", expected, handler.format(licensePlate));
     };
 
+    private BiConsumer<String, String> assertIsNormalizedFromTo = (value, expected) -> {
+        LicensePlate licensePlate = LicensePlate.forValue(value);
+
+        Assert.assertEquals("Wrong formatted value", expected, handler.normalize(licensePlate));
+    };
+
     private Consumer<String> assertIsNotValid = value -> {
         LicensePlate licensePlate = LicensePlate.forValue(value);
 
@@ -70,12 +76,24 @@ public class DefaultLicensePlateHandlerTest {
     }
 
 
+    // NORMALIZING -----------------------------------------------------------------------------------------------------
+
+    @Test
+    public void ensureLicensePlateIsNormalizedCorrectly() {
+
+        assertIsNormalizedFromTo.accept("ka ab 123", "KA-AB-123");
+        assertIsNormalizedFromTo.accept("ka-ab 123", "KA-AB-123");
+        assertIsNormalizedFromTo.accept("ka-ab  123", "KA-AB-123");
+        assertIsNormalizedFromTo.accept("ka--ab  123", "KA-AB-123");
+    }
+
+
     // FORMATTING ------------------------------------------------------------------------------------------------------
 
     @Test
-    public void ensureLicensePlateIsJustUpperCased() {
+    public void ensureLicensePlateIsFormattedCorrectly() {
 
-        assertIsFormattedFromTo.accept("ka ab 123", "KA AB 123");
-        assertIsFormattedFromTo.accept("ka-ab 123", "KA-AB 123");
+        assertIsFormattedFromTo.accept("ka ab 123", "KA-AB-123");
+        assertIsFormattedFromTo.accept("ka-ab 123", "KA-AB-123");
     }
 }
