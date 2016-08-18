@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 
@@ -18,6 +19,12 @@ public class GermanLicensePlateHandlerTest {
         LicensePlate licensePlate = LicensePlate.forValue(value);
 
         Assert.assertTrue("Should be valid: " + value, handler.validate(licensePlate));
+    };
+
+    private BiConsumer<String, String> assertIsFormattedFromTo = (value, expected) -> {
+        LicensePlate licensePlate = LicensePlate.forValue(value);
+
+        Assert.assertEquals("Wrong formatted value", expected, handler.format(licensePlate));
     };
 
     private Consumer<String> assertIsNotValid = value -> {
@@ -203,7 +210,15 @@ public class GermanLicensePlateHandlerTest {
         assertIsValid.accept("ka ab 666");
     }
 
+
     // FORMATTING ------------------------------------------------------------------------------------------------------
 
-    // TODO: Add tests!
+    @Test
+    public void ensureLicensePlateIsFormattedCorrectly() {
+
+        assertIsFormattedFromTo.accept("ka ab 123", "KA-AB-123");
+        assertIsFormattedFromTo.accept("ka-ab 123", "KA-AB-123");
+        assertIsFormattedFromTo.accept("KA-AB123", "KA-AB-123");
+        assertIsFormattedFromTo.accept("KA A123", "KA-A-123");
+    }
 }
