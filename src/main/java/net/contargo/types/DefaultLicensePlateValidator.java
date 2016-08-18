@@ -10,7 +10,7 @@ class DefaultLicensePlateValidator implements LicensePlateValidator {
     /**
      * Validates the given {@link LicensePlate}.
      *
-     * <p>If the given {@link LicensePlate} contains no special characters, it is considered valid.</p>
+     * <p>If the given {@link LicensePlate} contains no special characters except '-', it is considered valid.</p>
      *
      * @param  licensePlate  to be validated, never {@code null}
      *
@@ -19,6 +19,10 @@ class DefaultLicensePlateValidator implements LicensePlateValidator {
     @Override
     public boolean isValid(LicensePlate licensePlate) {
 
-        throw new UnsupportedOperationException();
+        String value = licensePlate.getValue();
+        String normalizedValue = value.toUpperCase().replaceAll("\\s", "");
+
+        // allowed: any letter or digit, but no special characters except '-'
+        return normalizedValue.matches("[\\p{L}0-9\\-]*");
     }
 }

@@ -64,12 +64,6 @@ public final class LicensePlate {
     @Override
     public String toString() {
 
-        return getNormalizedValue();
-    }
-
-
-    private String getNormalizedValue() {
-
         return value.replaceAll("-", " ").toUpperCase();
     }
 
@@ -118,5 +112,16 @@ public final class LicensePlate {
     public Optional<Country> getCountry() {
 
         return Optional.ofNullable(country);
+    }
+
+
+    /**
+     * Access to value of this {@link LicensePlate} is needed for {@link LicensePlateValidator} implementations.
+     *
+     * @return  underlying value of this license plate
+     */
+    String getValue() {
+
+        return value;
     }
 }

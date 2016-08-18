@@ -132,4 +132,26 @@ public class LicensePlateTest {
 
         LicensePlate.forValue("abc").withCountry(null);
     }
+
+
+    // VALID ---------------------------------------------------------------------------------------
+
+    @Test
+    public void ensureValidLicensePlateWithoutCountryIsValid() {
+
+        String value = "KA XY 123";
+        LicensePlate licensePlate = LicensePlate.forValue(value);
+
+        Assert.assertTrue("Should be valid: " + value, licensePlate.isValid());
+    }
+
+
+    @Test
+    public void ensureInvalidLicensePlateWithoutCountryIsNotValid() {
+
+        String value = "KA/XY.123";
+        LicensePlate licensePlate = LicensePlate.forValue(value);
+
+        Assert.assertFalse("Should not be valid: " + value, licensePlate.isValid());
+    }
 }
