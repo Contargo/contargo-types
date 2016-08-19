@@ -12,23 +12,31 @@ package net.contargo.types;
  */
 public enum Country {
 
-    GERMANY("D"),
-    NETHERLANDS("NL"),
-    BELGIUM("B"),
-    SWITZERLAND("CH"),
-    FRANCE("F"),
-    POLAND("PL"),
-    CZECH_REPUBLIC("CZ");
+    GERMANY("D", new GermanLicensePlateHandler()),
+    NETHERLANDS("NL", new DutchLicensePlateHandler()),
+    BELGIUM("B", new DefaultLicensePlateHandler()),
+    SWITZERLAND("CH", new DefaultLicensePlateHandler()),
+    FRANCE("F", new DefaultLicensePlateHandler()),
+    POLAND("PL", new DefaultLicensePlateHandler()),
+    CZECH_REPUBLIC("CZ", new DefaultLicensePlateHandler());
 
     private String countryCode;
+    private LicensePlateHandler licensePlateHandler;
 
-    Country(String countryCode) {
+    Country(String countryCode, LicensePlateHandler licensePlateHandler) {
 
         this.countryCode = countryCode;
+        this.licensePlateHandler = licensePlateHandler;
     }
 
     public String getCountryCode() {
 
         return countryCode;
+    }
+
+
+    public LicensePlateHandler getLicensePlateHandler() {
+
+        return licensePlateHandler;
     }
 }

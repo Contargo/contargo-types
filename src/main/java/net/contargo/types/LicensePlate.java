@@ -11,6 +11,8 @@ import java.util.Optional;
  */
 public final class LicensePlate {
 
+    private static final LicensePlateHandler FALLBACK_HANDLER = new DefaultLicensePlateHandler();
+
     private final String value;
     private Country country;
 
@@ -64,7 +66,19 @@ public final class LicensePlate {
     @Override
     public String toString() {
 
-        return LicensePlateHandlerFactory.getForCountry(country).format(this);
+        return getHandler().format(this);
+    }
+
+
+    private LicensePlateHandler getHandler() {
+
+        Optional<Country> optionalCountry = getCountry();
+
+        if (optionalCountry.isPresent()) {
+            return optionalCountry.get().getLicensePlateHandler();
+        }
+
+        return FALLBACK_HANDLER;
     }
 
 
@@ -75,7 +89,7 @@ public final class LicensePlate {
      */
     public boolean isValid() {
 
-        return LicensePlateHandlerFactory.getForCountry(country).validate(this);
+        return getHandler().validate(this);
     }
 
 
