@@ -27,16 +27,15 @@ class DutchLicensePlateHandler implements LicensePlateHandler {
     private static final Logger LOG = LoggerFactory.getLogger(DutchLicensePlateHandler.class);
 
     /**
-     * Normalizes the given {@link LicensePlate} by upper casing it and replacing all "-" by whitespace.
+     * Normalizes the given {@link LicensePlate} value by upper casing it and replacing all "-" by whitespace.
      *
-     * @param  licensePlate  to get the normalized value of, never {@code null}
+     * @param  value  to get the normalized value of, never {@code null}
      *
      * @return  the normalized value, never {@code null}
      */
     @Override
-    public String normalize(LicensePlate licensePlate) {
+    public String normalize(String value) {
 
-        String value = licensePlate.getValue();
         String normalizedValue = value.replaceAll("\\s+", "-").replaceAll("\\-+", "-").toUpperCase();
 
         LOG.debug("Normalized '{}' to '{}'", value, normalizedValue);
@@ -46,7 +45,7 @@ class DutchLicensePlateHandler implements LicensePlateHandler {
 
 
     /**
-     * Validates the given {@link LicensePlate}.
+     * Validates the given {@link LicensePlate} value.
      *
      * <p>A Dutch license plate consists of three groups of one to three letters or digits that are separated by a
      * hyphen.</p>
@@ -56,30 +55,30 @@ class DutchLicensePlateHandler implements LicensePlateHandler {
      *
      * <p>Note that these special cases are not covered by this validator!</p>
      *
-     * @param  licensePlate  to be validated, never {@code null}
+     * @param  value  to be validated, never {@code null}
      *
      * @return  {@code true} if the given {@link LicensePlate} is valid, else {@code false}
      */
     @Override
-    public boolean validate(LicensePlate licensePlate) {
+    public boolean validate(String value) {
 
-        String normalizedValue = normalize(licensePlate);
+        String normalizedValue = normalize(value);
 
         return normalizedValue.matches("[A-Z0-9]{1,3}\\-[A-Z0-9]{1,3}\\-[A-Z0-9]{1,3}");
     }
 
 
     /**
-     * Formats the given {@link LicensePlate} in a very simple way: just return the normalized value.
+     * Formats the given {@link LicensePlate} value in a very simple way: just return the normalized value.
      *
-     * @param  licensePlate  to get the formatted value for, never {@code null}
+     * @param  value  to get the formatted value for, never {@code null}
      *
      * @return  the formatted value, never {@code null}
      */
     @Override
-    public String format(LicensePlate licensePlate) {
+    public String format(String value) {
 
-        String normalizedValue = normalize(licensePlate);
+        String normalizedValue = normalize(value);
 
         LOG.debug("Formatted '{}' to '{}'", normalizedValue, normalizedValue);
 

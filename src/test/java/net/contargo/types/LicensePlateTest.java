@@ -56,13 +56,15 @@ public class LicensePlateTest {
         LicensePlateHandler handlerMock = Mockito.mock(LicensePlateHandler.class);
         Country country = new DummyCountry(handlerMock);
 
-        String formatted = "formatted";
-        Mockito.when(handlerMock.format(Mockito.any(LicensePlate.class))).thenReturn(formatted);
+        String value = "foo";
+        String formattedValue = "formatted";
 
-        LicensePlate licensePlate = LicensePlate.forValue("foo").withCountry(country);
+        Mockito.when(handlerMock.format(Mockito.anyString())).thenReturn(formattedValue);
 
-        Assert.assertEquals("Wrong String representation", formatted, licensePlate.toString());
-        Mockito.verify(handlerMock).format(Mockito.any(LicensePlate.class));
+        LicensePlate licensePlate = LicensePlate.forValue(value).withCountry(country);
+
+        Assert.assertEquals("Wrong String representation", formattedValue, licensePlate.toString());
+        Mockito.verify(handlerMock).format(value);
     }
 
 
@@ -74,13 +76,14 @@ public class LicensePlateTest {
 
         LicensePlateHandler handlerMock = Mockito.mock(LicensePlateHandler.class);
         Country country = new DummyCountry(handlerMock);
+        String value = "foo";
 
-        Mockito.when(handlerMock.validate(Mockito.any(LicensePlate.class))).thenReturn(true);
+        Mockito.when(handlerMock.validate(Mockito.anyString())).thenReturn(true);
 
-        LicensePlate licensePlate = LicensePlate.forValue("foo").withCountry(country);
+        LicensePlate licensePlate = LicensePlate.forValue(value).withCountry(country);
 
         Assert.assertTrue("Should be valid", licensePlate.isValid());
-        Mockito.verify(handlerMock).validate(Mockito.any(LicensePlate.class));
+        Mockito.verify(handlerMock).validate(value);
     }
 
 

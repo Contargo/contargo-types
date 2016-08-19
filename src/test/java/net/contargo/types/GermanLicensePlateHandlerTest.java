@@ -13,32 +13,22 @@ import java.util.function.Consumer;
  */
 public class GermanLicensePlateHandlerTest {
 
-    private static final Country COUNTRY = LicensePlateCountry.GERMANY;
-
     private LicensePlateHandler handler;
 
     private Consumer<String> assertIsValid = value -> {
-        LicensePlate licensePlate = LicensePlate.forValue(value).withCountry(COUNTRY);
-
-        Assert.assertTrue("Should be valid: " + value, handler.validate(licensePlate));
+        Assert.assertTrue("Should be valid: " + value, handler.validate(value));
     };
 
     private Consumer<String> assertIsNotValid = value -> {
-        LicensePlate licensePlate = LicensePlate.forValue(value).withCountry(COUNTRY);
-
-        Assert.assertFalse("Should not be valid: " + value, handler.validate(licensePlate));
+        Assert.assertFalse("Should not be valid: " + value, handler.validate(value));
     };
 
     private BiConsumer<String, String> assertIsFormattedFromTo = (value, expected) -> {
-        LicensePlate licensePlate = LicensePlate.forValue(value).withCountry(COUNTRY);
-
-        Assert.assertEquals("Wrong formatted value", expected, handler.format(licensePlate));
+        Assert.assertEquals("Wrong formatted value", expected, handler.format(value));
     };
 
     private BiConsumer<String, String> assertIsNormalizedFromTo = (value, expected) -> {
-        LicensePlate licensePlate = LicensePlate.forValue(value).withCountry(COUNTRY);
-
-        Assert.assertEquals("Wrong formatted value", expected, handler.normalize(licensePlate));
+        Assert.assertEquals("Wrong formatted value", expected, handler.normalize(value));
     };
 
     @Before

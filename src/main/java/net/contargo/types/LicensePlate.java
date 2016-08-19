@@ -44,7 +44,7 @@ public final class LicensePlate {
     @Override
     public String toString() {
 
-        return country.getLicensePlateHandler().format(this);
+        return country.getLicensePlateHandler().format(value);
     }
 
 
@@ -55,7 +55,7 @@ public final class LicensePlate {
      */
     public boolean isValid() {
 
-        return country.getLicensePlateHandler().validate(this);
+        return country.getLicensePlateHandler().validate(value);
     }
 
 
@@ -92,17 +92,6 @@ public final class LicensePlate {
     public Country getCountry() {
 
         return country;
-    }
-
-
-    /**
-     * Access to value is needed for {@link LicensePlateHandler} implementations.
-     *
-     * @return  underlying value of this license plate
-     */
-    String getValue() {
-
-        return value;
     }
 
     public static class LicensePlateBuilder {
