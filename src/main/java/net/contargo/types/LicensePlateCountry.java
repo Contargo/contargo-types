@@ -10,7 +10,7 @@ package net.contargo.types;
  * @author  Aljona Murygina - murygina@synyx.de
  * @since  0.2.0
  */
-public enum Country {
+public enum LicensePlateCountry {
 
     GERMANY("D", new GermanLicensePlateHandler()),
     NETHERLANDS("NL", new DutchLicensePlateHandler()),
@@ -23,7 +23,7 @@ public enum Country {
     private String countryCode;
     private LicensePlateHandler licensePlateHandler;
 
-    Country(String countryCode, LicensePlateHandler licensePlateHandler) {
+    LicensePlateCountry(String countryCode, LicensePlateHandler licensePlateHandler) {
 
         this.countryCode = countryCode;
         this.licensePlateHandler = licensePlateHandler;

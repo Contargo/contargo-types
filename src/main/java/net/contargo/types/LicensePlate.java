@@ -14,7 +14,7 @@ public final class LicensePlate {
     private static final LicensePlateHandler FALLBACK_HANDLER = new DefaultLicensePlateHandler();
 
     private final String value;
-    private Country country;
+    private LicensePlateCountry country;
 
     /**
      * Use {@link #forValue(String)} to build a new {@link LicensePlate} instance.
@@ -42,13 +42,13 @@ public final class LicensePlate {
 
 
     /**
-     * Set the {@link Country} for this {@link LicensePlate}.
+     * Set the {@link LicensePlateCountry} for this {@link LicensePlate}.
      *
      * @param  country  never {@code null}
      *
      * @return  {@link LicensePlate}, never {@code null}
      */
-    public LicensePlate withCountry(Country country) {
+    public LicensePlate withCountry(LicensePlateCountry country) {
 
         Assert.notNull(country, "Country must not be null");
 
@@ -72,7 +72,7 @@ public final class LicensePlate {
 
     private LicensePlateHandler getHandler() {
 
-        Optional<Country> optionalCountry = getCountry();
+        Optional<LicensePlateCountry> optionalCountry = getCountry();
 
         if (optionalCountry.isPresent()) {
             return optionalCountry.get().getLicensePlateHandler();
@@ -119,11 +119,11 @@ public final class LicensePlate {
 
 
     /**
-     * Get the {@link Country} of this {@link LicensePlate}.
+     * Get the {@link LicensePlateCountry} of this {@link LicensePlate}.
      *
      * @return  country, may be empty
      */
-    public Optional<Country> getCountry() {
+    public Optional<LicensePlateCountry> getCountry() {
 
         return Optional.ofNullable(country);
     }

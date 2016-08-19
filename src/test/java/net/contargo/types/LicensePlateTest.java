@@ -134,13 +134,13 @@ public class LicensePlateTest {
     @Test
     public void ensureCanBeBuiltWithCountry() {
 
-        LicensePlate licensePlate = LicensePlate.forValue("abc").withCountry(Country.GERMANY);
+        LicensePlate licensePlate = LicensePlate.forValue("abc").withCountry(LicensePlateCountry.GERMANY);
 
         Assert.assertNotNull("Should not be null", licensePlate);
 
-        Optional<Country> optionalCountry = licensePlate.getCountry();
+        Optional<LicensePlateCountry> optionalCountry = licensePlate.getCountry();
         Assert.assertTrue("Missing country", optionalCountry.isPresent());
-        Assert.assertEquals("Wrong country", Country.GERMANY, optionalCountry.get());
+        Assert.assertEquals("Wrong country", LicensePlateCountry.GERMANY, optionalCountry.get());
     }
 
 
