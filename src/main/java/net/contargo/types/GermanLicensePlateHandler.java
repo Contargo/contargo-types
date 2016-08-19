@@ -1,5 +1,9 @@
 package net.contargo.types;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 /**
  * Can handle German {@link LicensePlate}s.
  *
@@ -20,6 +24,8 @@ package net.contargo.types;
  */
 class GermanLicensePlateHandler implements LicensePlateHandler {
 
+    private static final Logger LOG = LoggerFactory.getLogger(GermanLicensePlateHandler.class);
+
     /**
      * Normalizes the given {@link LicensePlate} by executing the following steps:
      *
@@ -39,8 +45,14 @@ class GermanLicensePlateHandler implements LicensePlateHandler {
     public String normalize(LicensePlate licensePlate) {
 
         String value = licensePlate.getValue();
+        String normalizedValue = value.toUpperCase()
+                .replaceAll("\\s+", "-")
+                .replaceAll("(?<=\\D)(?=\\d)", "-")
+                .replaceAll("\\-+", "-");
 
-        return value.toUpperCase().replaceAll("\\s+", "-").replaceAll("(?<=\\D)(?=\\d)", "-").replaceAll("\\-+", "-");
+        LOG.debug("Normalized '{}' to '{}'", value, normalizedValue);
+
+        return normalizedValue;
     }
 
 
@@ -91,6 +103,11 @@ class GermanLicensePlateHandler implements LicensePlateHandler {
     @Override
     public String format(LicensePlate licensePlate) {
 
-        return normalize(licensePlate).replaceAll("-", " ");
+        String normalizedValue = normalize(licensePlate);
+        String formattedValue = normalizedValue.replaceAll("-", " ");
+
+        LOG.debug("Formatted '{}' to '{}'", normalizedValue, formattedValue);
+
+        return formattedValue;
     }
 }

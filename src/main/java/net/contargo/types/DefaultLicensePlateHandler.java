@@ -1,5 +1,9 @@
 package net.contargo.types;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 /**
  * Default implementation for {@link LicensePlateHandler}s.
  *
@@ -7,6 +11,8 @@ package net.contargo.types;
  * @since  0.2.0
  */
 class DefaultLicensePlateHandler implements LicensePlateHandler {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultLicensePlateHandler.class);
 
     /**
      * Normalizes the given {@link LicensePlate} by upper casing it and replacing all "-" by whitespace.
@@ -19,8 +25,11 @@ class DefaultLicensePlateHandler implements LicensePlateHandler {
     public String normalize(LicensePlate licensePlate) {
 
         String value = licensePlate.getValue();
+        String normalizedValue = value.replaceAll("\\s+", "-").replaceAll("\\-+", "-").toUpperCase();
 
-        return value.replaceAll("\\s+", "-").replaceAll("\\-+", "-").toUpperCase();
+        LOG.debug("Normalized '{}' to '{}'", value, normalizedValue);
+
+        return normalizedValue;
     }
 
 
@@ -51,6 +60,10 @@ class DefaultLicensePlateHandler implements LicensePlateHandler {
     @Override
     public String format(LicensePlate licensePlate) {
 
-        return normalize(licensePlate);
+        String normalizedValue = normalize(licensePlate);
+
+        LOG.debug("Formatted '{}' to '{}'", normalizedValue, normalizedValue);
+
+        return normalizedValue;
     }
 }
