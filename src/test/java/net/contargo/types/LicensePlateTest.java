@@ -3,8 +3,6 @@ package net.contargo.types;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Optional;
-
 
 /**
  * @author  Aljona Murygina - murygina@synyx.de
@@ -33,6 +31,23 @@ public class LicensePlateTest {
         LicensePlate licensePlate = LicensePlate.forValue("foo");
 
         Assert.assertNotNull("Should not be null", licensePlate);
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void ensureThrowsIfBuiltWithNullCountry() {
+
+        LicensePlate.forValue("abc").withCountry(null);
+    }
+
+
+    @Test
+    public void ensureCanBeBuiltWithCountry() {
+
+        LicensePlate licensePlate = LicensePlate.forValue("abc").withCountry(LicensePlateCountry.GERMANY);
+
+        Assert.assertNotNull("Should not be null", licensePlate);
+        Assert.assertEquals("Wrong country", LicensePlateCountry.GERMANY, licensePlate.getCountry());
     }
 
 
@@ -119,34 +134,5 @@ public class LicensePlateTest {
         LicensePlate licensePlate = LicensePlate.forValue(value);
 
         Assert.assertFalse(value + " should not be equals to null", licensePlate.equals(null));
-    }
-
-
-    // COUNTRY -------------------------------------------------------------------------------------
-
-    @Test
-    public void ensureCountryCanBeEmpty() {
-
-        Assert.assertFalse("Country should not be set", LicensePlate.forValue("abc").getCountry().isPresent());
-    }
-
-
-    @Test
-    public void ensureCanBeBuiltWithCountry() {
-
-        LicensePlate licensePlate = LicensePlate.forValue("abc").withCountry(LicensePlateCountry.GERMANY);
-
-        Assert.assertNotNull("Should not be null", licensePlate);
-
-        Optional<LicensePlateCountry> optionalCountry = licensePlate.getCountry();
-        Assert.assertTrue("Missing country", optionalCountry.isPresent());
-        Assert.assertEquals("Wrong country", LicensePlateCountry.GERMANY, optionalCountry.get());
-    }
-
-
-    @Test(expected = IllegalArgumentException.class)
-    public void ensureThrowsIfBuiltWithNullCountry() {
-
-        LicensePlate.forValue("abc").withCountry(null);
     }
 }

@@ -1,8 +1,5 @@
 package net.contargo.types;
 
-import java.util.Optional;
-
-
 /**
  * Each {@link net.contargo.domain.Truck} can be identified by its license plate.
  *
@@ -72,13 +69,11 @@ public final class LicensePlate {
 
     private LicensePlateHandler getHandler() {
 
-        Optional<LicensePlateCountry> optionalCountry = getCountry();
-
-        if (optionalCountry.isPresent()) {
-            return optionalCountry.get().getLicensePlateHandler();
+        if (country == null) {
+            return FALLBACK_HANDLER;
         }
 
-        return FALLBACK_HANDLER;
+        return country.getLicensePlateHandler();
     }
 
 
@@ -123,9 +118,9 @@ public final class LicensePlate {
      *
      * @return  country, may be empty
      */
-    public Optional<LicensePlateCountry> getCountry() {
+    public LicensePlateCountry getCountry() {
 
-        return Optional.ofNullable(country);
+        return country;
     }
 
 
