@@ -11,7 +11,7 @@ import org.mockito.Mockito;
  */
 public class LicensePlateTest {
 
-    private static final LicensePlateCountry COUNTRY = LicensePlateCountry.GERMANY;
+    private static final Country COUNTRY = SupportedLicensePlateCountry.GERMANY;
 
     // BUILD ---------------------------------------------------------------------------------------
 
