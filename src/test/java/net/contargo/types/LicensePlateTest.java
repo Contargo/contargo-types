@@ -11,7 +11,7 @@ import org.mockito.Mockito;
  */
 public class LicensePlateTest {
 
-    private static final Country COUNTRY = SupportedLicensePlateCountry.GERMANY;
+    private static final LicensePlateCountry COUNTRY = SupportedLicensePlateCountry.GERMANY;
 
     // BUILD ---------------------------------------------------------------------------------------
 
@@ -54,7 +54,7 @@ public class LicensePlateTest {
     public void ensureHandlerForCountryIsCalledOnToString() {
 
         LicensePlateHandler handlerMock = Mockito.mock(LicensePlateHandler.class);
-        Country country = new DummyCountry(handlerMock);
+        LicensePlateCountry country = new DummyCountry(handlerMock);
 
         String value = "foo";
         String formattedValue = "formatted";
@@ -75,7 +75,7 @@ public class LicensePlateTest {
     public void ensureHandlerForCountryIsCalledOnIsValid() {
 
         LicensePlateHandler handlerMock = Mockito.mock(LicensePlateHandler.class);
-        Country country = new DummyCountry(handlerMock);
+        LicensePlateCountry country = new DummyCountry(handlerMock);
         String value = "foo";
 
         Mockito.when(handlerMock.validate(Mockito.anyString())).thenReturn(true);
@@ -146,7 +146,7 @@ public class LicensePlateTest {
         Assert.assertFalse(value + " should not be equals to null", licensePlate.equals(null));
     }
 
-    private class DummyCountry implements Country {
+    private class DummyCountry implements LicensePlateCountry {
 
         private final LicensePlateHandler handler;
 

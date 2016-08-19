@@ -10,7 +10,7 @@ package net.contargo.types;
  * @author  Aljona Murygina - murygina@synyx.de
  * @since  0.2.0
  */
-public interface Country {
+public interface LicensePlateCountry {
 
     /**
      * Get the international license plate country code for this country.

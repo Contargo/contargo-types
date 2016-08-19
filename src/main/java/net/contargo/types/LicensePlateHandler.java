@@ -1,7 +1,7 @@
 package net.contargo.types;
 
 /**
- * Provides a set of functionalities for {@link LicensePlate} values depending on a {@link Country}.
+ * Provides a set of functionalities for {@link LicensePlate} values depending on a {@link LicensePlateCountry}.
  *
  * @author  Aljona Murygina - murygina@synyx.de
  * @since  0.2.0

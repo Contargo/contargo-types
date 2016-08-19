@@ -6,7 +6,7 @@ package net.contargo.types;
  * @author  Aljona Murygina - murygina@synyx.de
  * @since  0.2.0
  */
-public enum SupportedLicensePlateCountry implements Country {
+public enum SupportedLicensePlateCountry implements LicensePlateCountry {
 
     GERMANY("D", new GermanLicensePlateHandler()),
     NETHERLANDS("NL", new DutchLicensePlateHandler()),
@@ -26,7 +26,7 @@ public enum SupportedLicensePlateCountry implements Country {
     }
 
     /**
-     * @see  Country#getCountryCode()
+     * @see  LicensePlateCountry#getCountryCode()
      */
     @Override
     public String getCountryCode() {
@@ -36,7 +36,7 @@ public enum SupportedLicensePlateCountry implements Country {
 
 
     /**
-     * @see  Country#getLicensePlateHandler()
+     * @see  LicensePlateCountry#getLicensePlateHandler()
      */
     @Override
     public LicensePlateHandler getLicensePlateHandler() {
@@ -54,7 +54,7 @@ public enum SupportedLicensePlateCountry implements Country {
      *
      * @throws  IllegalArgumentException  if no matching country can be found for the given country code
      */
-    public static Country forCountryCode(String countryCode) {
+    public static LicensePlateCountry forCountryCode(String countryCode) {
 
         Assert.notBlank(countryCode, "Country code must not be null or empty");
 
