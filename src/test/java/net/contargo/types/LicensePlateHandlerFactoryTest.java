@@ -3,38 +3,53 @@ package net.contargo.types;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.function.BiConsumer;
+
 
 /**
  * @author  Aljona Murygina - murygina@synyx.de
  */
 public class LicensePlateHandlerFactoryTest {
 
+    private BiConsumer<LicensePlateHandler, Class> assertCorrectHandler = (handler, clazz) -> {
+        Assert.assertNotNull("Missing handler", handler);
+        Assert.assertEquals("Wrong handler implementation", clazz, handler.getClass());
+    };
+
     @Test
     public void ensureCanHazzDefaultHandlerForNullCountry() {
 
-        LicensePlateHandler handler = LicensePlateHandlerFactory.getForCountry(null);
-
-        Assert.assertNotNull("Missing handler", handler);
-        Assert.assertTrue("Wrong handler implementation", handler instanceof DefaultLicensePlateHandler);
+        assertCorrectHandler.accept(LicensePlateHandlerFactory.getForCountry(null), DefaultLicensePlateHandler.class);
     }
 
 
     @Test
     public void ensureCanHazzMatchingHandlerForCountry() {
 
-        LicensePlateHandler handler = LicensePlateHandlerFactory.getForCountry(Country.GERMANY);
+        assertCorrectHandler.accept(LicensePlateHandlerFactory.getForCountry(Country.GERMANY),
+            GermanLicensePlateHandler.class);
 
-        Assert.assertNotNull("Missing handler", handler);
-        Assert.assertTrue("Wrong handler implementation", handler instanceof GermanLicensePlateHandler);
+        assertCorrectHandler.accept(LicensePlateHandlerFactory.getForCountry(Country.NETHERLANDS),
+            DutchLicensePlateHandler.class);
     }
 
 
     @Test
     public void ensureCanHazzMatchingHandlerForCountryWithoutHandlerImplementation() {
 
-        LicensePlateHandler handler = LicensePlateHandlerFactory.getForCountry(Country.BELGIUM);
+        assertCorrectHandler.accept(LicensePlateHandlerFactory.getForCountry(Country.BELGIUM),
+            DefaultLicensePlateHandler.class);
 
-        Assert.assertNotNull("Missing handler", handler);
-        Assert.assertTrue("Wrong handler implementation", handler instanceof DefaultLicensePlateHandler);
+        assertCorrectHandler.accept(LicensePlateHandlerFactory.getForCountry(Country.SWITZERLAND),
+            DefaultLicensePlateHandler.class);
+
+        assertCorrectHandler.accept(LicensePlateHandlerFactory.getForCountry(Country.FRANCE),
+            DefaultLicensePlateHandler.class);
+
+        assertCorrectHandler.accept(LicensePlateHandlerFactory.getForCountry(Country.POLAND),
+            DefaultLicensePlateHandler.class);
+
+        assertCorrectHandler.accept(LicensePlateHandlerFactory.getForCountry(Country.CZECH_REPUBLIC),
+            DefaultLicensePlateHandler.class);
     }
 }

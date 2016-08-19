@@ -3,6 +3,18 @@ package net.contargo.types;
 /**
  * Can handle German {@link LicensePlate}s.
  *
+ * <p>Examples of German license plates:</p>
+ *
+ * <ul>
+ * <li>KA AB 123</li>
+ * <li>B XY 492</li>
+ * <li>GER U 181</li>
+ * <li>LÖ U 1048</li>
+ * </ul>
+ *
+ * <p>Further information: <a href="https://de.wikipedia.org/wiki/Kfz-Kennzeichen_(Deutschland)#Aufbau">License plates
+ * of Germany</a></p>
+ *
  * @author  Aljona Murygina - murygina@synyx.de
  * @since  0.2.0
  */
@@ -55,9 +67,6 @@ class GermanLicensePlateHandler implements LicensePlateHandler {
      * </ul>
      *
      * <p>Note that these special cases are not covered by this validator!</p>
-     *
-     * <p>Further information: <a href="https://de.wikipedia.org/wiki/Kfz-Kennzeichen_(Deutschland)#Aufbau">License
-     * plates of Germany</a></p>
      *
      * @param  licensePlate  to be validated, never {@code null}
      *

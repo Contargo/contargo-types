@@ -19,6 +19,7 @@ class LicensePlateHandlerFactory {
     static {
         Map<Country, LicensePlateHandler> map = new HashMap<>();
         map.put(Country.GERMANY, new GermanLicensePlateHandler());
+        map.put(Country.NETHERLANDS, new DutchLicensePlateHandler());
 
         COUNTRY_HANDLERS = Collections.unmodifiableMap(map);
     }
