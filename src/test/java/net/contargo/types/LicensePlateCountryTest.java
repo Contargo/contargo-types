@@ -51,7 +51,7 @@ public class LicensePlateCountryTest {
     @Test
     public void ensureCanGetCountryByCountryCode() {
 
-        LicensePlateCountry country = LicensePlateCountry.forCountryCode("D");
+        Country country = LicensePlateCountry.forCountryCode("D");
 
         Assert.assertEquals("Wrong country", LicensePlateCountry.GERMANY, country);
     }

@@ -8,10 +8,8 @@ package net.contargo.types;
  */
 public final class LicensePlate {
 
-    private static final LicensePlateHandler FALLBACK_HANDLER = new DefaultLicensePlateHandler();
-
     private final String value;
-    private LicensePlateCountry country;
+    private Country country;
 
     /**
      * Use {@link #forValue(String)} to build a new {@link LicensePlate} instance.
@@ -30,28 +28,11 @@ public final class LicensePlate {
      *
      * @return  a {@link LicensePlate}, never {@code null}
      */
-    public static LicensePlate forValue(String value) {
+    public static LicensePlateBuilder forValue(String value) {
 
         Assert.notBlank(value, "Value for license plate must not be null or empty");
 
-        return new LicensePlate(value);
-    }
-
-
-    /**
-     * Set the {@link LicensePlateCountry} for this {@link LicensePlate}.
-     *
-     * @param  country  never {@code null}
-     *
-     * @return  {@link LicensePlate}, never {@code null}
-     */
-    public LicensePlate withCountry(LicensePlateCountry country) {
-
-        Assert.notNull(country, "Country must not be null");
-
-        this.country = country;
-
-        return this;
+        return new LicensePlateBuilder(value);
     }
 
 
@@ -63,17 +44,7 @@ public final class LicensePlate {
     @Override
     public String toString() {
 
-        return getHandler().format(this);
-    }
-
-
-    private LicensePlateHandler getHandler() {
-
-        if (country == null) {
-            return FALLBACK_HANDLER;
-        }
-
-        return country.getLicensePlateHandler();
+        return country.getLicensePlateHandler().format(this);
     }
 
 
@@ -84,7 +55,7 @@ public final class LicensePlate {
      */
     public boolean isValid() {
 
-        return getHandler().validate(this);
+        return country.getLicensePlateHandler().validate(this);
     }
 
 
@@ -114,11 +85,11 @@ public final class LicensePlate {
 
 
     /**
-     * Get the {@link LicensePlateCountry} of this {@link LicensePlate}.
+     * Get the {@link Country} of this {@link LicensePlate}.
      *
      * @return  country, may be empty
      */
-    public LicensePlateCountry getCountry() {
+    public Country getCountry() {
 
         return country;
     }
@@ -132,5 +103,31 @@ public final class LicensePlate {
     String getValue() {
 
         return value;
+    }
+
+    public static class LicensePlateBuilder {
+
+        private LicensePlate licensePlate;
+
+        private LicensePlateBuilder(String value) {
+
+            this.licensePlate = new LicensePlate(value);
+        }
+
+        /**
+         * Set the {@link Country} for this {@link LicensePlate}.
+         *
+         * @param  country  never {@code null}
+         *
+         * @return  {@link LicensePlate}, never {@code null}
+         */
+        public LicensePlate withCountry(Country country) {
+
+            Assert.notNull(country, "Country must not be null");
+
+            licensePlate.country = country;
+
+            return licensePlate;
+        }
     }
 }

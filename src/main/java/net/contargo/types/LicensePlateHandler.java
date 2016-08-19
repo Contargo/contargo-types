@@ -1,7 +1,7 @@
 package net.contargo.types;
 
 /**
- * Get information from a {@link LicensePlate} that may depend on a {@link LicensePlateCountry}.
+ * Get information from a {@link LicensePlate} that depends on a {@link Country}.
  *
  * @author  Aljona Murygina - murygina@synyx.de
  * @since  0.2.0

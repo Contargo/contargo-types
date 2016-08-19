@@ -3,14 +3,10 @@ package net.contargo.types;
 /**
  * Currently supported countries for {@link LicensePlate}s.
  *
- * <p>For further information see the list of <a
- * href="https://en.wikipedia.org/wiki/List_of_international_vehicle_registration_codes">international license plate
- * country codes</a>.</p>
- *
  * @author  Aljona Murygina - murygina@synyx.de
  * @since  0.2.0
  */
-public enum LicensePlateCountry {
+public enum LicensePlateCountry implements Country {
 
     GERMANY("D", new GermanLicensePlateHandler()),
     NETHERLANDS("NL", new DutchLicensePlateHandler()),
@@ -29,19 +25,36 @@ public enum LicensePlateCountry {
         this.licensePlateHandler = licensePlateHandler;
     }
 
+    /**
+     * @see  Country#getCountryCode()
+     */
+    @Override
     public String getCountryCode() {
 
         return countryCode;
     }
 
 
+    /**
+     * @see  Country#getLicensePlateHandler()
+     */
+    @Override
     public LicensePlateHandler getLicensePlateHandler() {
 
         return licensePlateHandler;
     }
 
 
-    public static LicensePlateCountry forCountryCode(String countryCode) {
+    /**
+     * Find the matching country for a country code.
+     *
+     * @param  countryCode  to find a country for
+     *
+     * @return  the matching country
+     *
+     * @throws  IllegalArgumentException  if no matching country can be found for the given country code
+     */
+    public static Country forCountryCode(String countryCode) {
 
         Assert.notBlank(countryCode, "Country code must not be null or empty");
 

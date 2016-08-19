@@ -13,28 +13,30 @@ import java.util.function.Consumer;
  */
 public class DefaultLicensePlateHandlerTest {
 
+    private static final Country COUNTRY = LicensePlateCountry.BELGIUM;
+
     private LicensePlateHandler handler;
 
     private Consumer<String> assertIsValid = value -> {
-        LicensePlate licensePlate = LicensePlate.forValue(value);
+        LicensePlate licensePlate = LicensePlate.forValue(value).withCountry(COUNTRY);
 
         Assert.assertTrue("Should be valid: " + value, handler.validate(licensePlate));
     };
 
     private BiConsumer<String, String> assertIsFormattedFromTo = (value, expected) -> {
-        LicensePlate licensePlate = LicensePlate.forValue(value);
+        LicensePlate licensePlate = LicensePlate.forValue(value).withCountry(COUNTRY);
 
         Assert.assertEquals("Wrong formatted value", expected, handler.format(licensePlate));
     };
 
     private BiConsumer<String, String> assertIsNormalizedFromTo = (value, expected) -> {
-        LicensePlate licensePlate = LicensePlate.forValue(value);
+        LicensePlate licensePlate = LicensePlate.forValue(value).withCountry(COUNTRY);
 
         Assert.assertEquals("Wrong formatted value", expected, handler.normalize(licensePlate));
     };
 
     private Consumer<String> assertIsNotValid = value -> {
-        LicensePlate licensePlate = LicensePlate.forValue(value);
+        LicensePlate licensePlate = LicensePlate.forValue(value).withCountry(COUNTRY);
 
         Assert.assertFalse("Should not be valid: " + value, handler.validate(licensePlate));
     };
