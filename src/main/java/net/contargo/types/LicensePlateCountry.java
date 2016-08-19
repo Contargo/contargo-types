@@ -39,4 +39,18 @@ public enum LicensePlateCountry {
 
         return licensePlateHandler;
     }
+
+
+    public static LicensePlateCountry forCountryCode(String countryCode) {
+
+        Assert.notBlank(countryCode, "Country code must not be null or empty");
+
+        for (LicensePlateCountry country : LicensePlateCountry.values()) {
+            if (country.getCountryCode().equals(countryCode)) {
+                return country;
+            }
+        }
+
+        throw new IllegalArgumentException(String.format("No country with country code '%s' found", countryCode));
+    }
 }

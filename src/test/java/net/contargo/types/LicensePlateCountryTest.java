@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 
 /**
@@ -44,5 +45,39 @@ public class LicensePlateCountryTest {
     public void ensureCanHazzCountryCode() {
 
         Assert.assertEquals("Wrong country code", "D", LicensePlateCountry.GERMANY.getCountryCode());
+    }
+
+
+    @Test
+    public void ensureCanGetCountryByCountryCode() {
+
+        LicensePlateCountry country = LicensePlateCountry.forCountryCode("D");
+
+        Assert.assertEquals("Wrong country", LicensePlateCountry.GERMANY, country);
+    }
+
+
+    @Test
+    public void ensureThrowsIfTryingToGetCountryByEmptyCountryCode() {
+
+        Consumer<String> assertNotEmpty = countryCode -> {
+            try {
+                LicensePlateCountry.forCountryCode(countryCode);
+                Assert.fail(String.format("Should throw if trying to get country by country code: '%s'", countryCode));
+            } catch (IllegalArgumentException ex) {
+                // Expected
+            }
+        };
+
+        assertNotEmpty.accept(null);
+        assertNotEmpty.accept("");
+        assertNotEmpty.accept(" ");
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void ensureThrowsIfTryingToGetCountryByUnknownCountryCode() {
+
+        LicensePlateCountry.forCountryCode("XY");
     }
 }
