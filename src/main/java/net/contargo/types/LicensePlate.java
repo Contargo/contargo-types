@@ -8,6 +8,8 @@ package net.contargo.types;
  */
 public final class LicensePlate {
 
+    private static final LicensePlateCountry DEFAULT_COUNTRY = SupportedLicensePlateCountry.GERMANY;
+
     private final String value;
     private LicensePlateCountry country;
 
@@ -28,11 +30,31 @@ public final class LicensePlate {
      *
      * @return  a {@link LicensePlate}, never {@code null}
      */
-    public static LicensePlateBuilder forValue(String value) {
+    public static LicensePlate forValue(String value) {
 
         Assert.notBlank(value, "Value for license plate must not be null or empty");
 
-        return new LicensePlateBuilder(value);
+        LicensePlate licensePlate = new LicensePlate(value);
+        licensePlate.country = DEFAULT_COUNTRY;
+
+        return licensePlate;
+    }
+
+
+    /**
+     * Set the {@link LicensePlateCountry} for this {@link LicensePlate}.
+     *
+     * @param  country  never {@code null}
+     *
+     * @return  {@link LicensePlate}, never {@code null}
+     */
+    public LicensePlate withCountry(LicensePlateCountry country) {
+
+        Assert.notNull(country, "Country must not be null");
+
+        this.country = country;
+
+        return this;
     }
 
 
@@ -92,31 +114,5 @@ public final class LicensePlate {
     public LicensePlateCountry getCountry() {
 
         return country;
-    }
-
-    public static class LicensePlateBuilder {
-
-        private LicensePlate licensePlate;
-
-        private LicensePlateBuilder(String value) {
-
-            this.licensePlate = new LicensePlate(value);
-        }
-
-        /**
-         * Set the {@link LicensePlateCountry} for this {@link LicensePlate}.
-         *
-         * @param  country  never {@code null}
-         *
-         * @return  {@link LicensePlate}, never {@code null}
-         */
-        public LicensePlate withCountry(LicensePlateCountry country) {
-
-            Assert.notNull(country, "Country must not be null");
-
-            licensePlate.country = country;
-
-            return licensePlate;
-        }
     }
 }
