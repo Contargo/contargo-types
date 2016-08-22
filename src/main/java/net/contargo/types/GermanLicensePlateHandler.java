@@ -93,7 +93,7 @@ class GermanLicensePlateHandler implements LicensePlateHandler {
 
 
     /**
-     * Formats the given {@link LicensePlate} value by replacing "-" by whitespaces of the normalized value.
+     * Formats the given {@link LicensePlate} value by replacing hyphens by whitespaces in the normalized value.
      *
      * @param  value  to get the formatted value for, never {@code null}
      *

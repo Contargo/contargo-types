@@ -15,7 +15,7 @@ class DefaultLicensePlateHandler implements LicensePlateHandler {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultLicensePlateHandler.class);
 
     /**
-     * Normalizes the given {@link LicensePlate} value by upper casing it and replacing all "-" by whitespace.
+     * Normalizes the given {@link LicensePlate} value by upper casing it and replacing all hyphens by whitespaces.
      *
      * @param  value  to get the normalized value of, never {@code null}
      *
