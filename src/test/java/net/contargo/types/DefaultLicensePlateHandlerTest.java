@@ -1,35 +1,13 @@
 package net.contargo.types;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 
 /**
  * @author  Aljona Murygina - murygina@synyx.de
  */
-public class DefaultLicensePlateHandlerTest {
-
-    private LicensePlateHandler handler;
-
-    private Consumer<String> assertIsValid = value -> {
-        Assert.assertTrue("Should be valid: " + value, handler.validate(value));
-    };
-
-    private BiConsumer<String, String> assertIsFormattedFromTo = (value, expected) -> {
-        Assert.assertEquals("Wrong formatted value", expected, handler.format(value));
-    };
-
-    private BiConsumer<String, String> assertIsNormalizedFromTo = (value, expected) -> {
-        Assert.assertEquals("Wrong formatted value", expected, handler.normalize(value));
-    };
-
-    private Consumer<String> assertIsNotValid = value -> {
-        Assert.assertFalse("Should not be valid: " + value, handler.validate(value));
-    };
+public class DefaultLicensePlateHandlerTest extends AbstractLicensePlateHandlerTest {
 
     @Before
     public void setUp() {
