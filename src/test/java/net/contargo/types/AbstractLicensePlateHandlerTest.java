@@ -11,7 +11,7 @@ import java.util.function.Consumer;
  *
  * @author  Aljona Murygina - murygina@synyx.de
  */
-class AbstractLicensePlateHandlerTest {
+abstract class AbstractLicensePlateHandlerTest {
 
     LicensePlateHandler handler;
 
