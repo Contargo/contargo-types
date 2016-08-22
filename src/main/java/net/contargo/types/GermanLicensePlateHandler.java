@@ -31,7 +31,7 @@ class GermanLicensePlateHandler implements LicensePlateHandler {
      *
      * <p>1.) Upper case: "ka ab123" to "KA AB123"</p>
      *
-     * <p>2.) Use minus instead of whitespace separator: "KA AB123" to "KA-AB123"</p>
+     * <p>2.) Use hyphen instead of whitespace: "KA AB123" to "KA-AB123"</p>
      *
      * <p>3.) Ensure identification numbers are separated from identification letters: "KA-AB123" to "KA--AB-123"</p>
      *

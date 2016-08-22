@@ -27,7 +27,7 @@ class DutchLicensePlateHandler implements LicensePlateHandler {
     private static final Logger LOG = LoggerFactory.getLogger(DutchLicensePlateHandler.class);
 
     /**
-     * Normalizes the given {@link LicensePlate} value by upper casing it and replacing all hyphens by whitespaces.
+     * Normalizes the given {@link LicensePlate} value by upper casing it and replacing all whitespaces by hyphens.
      *
      * @param  value  to get the normalized value of, never {@code null}
      *
