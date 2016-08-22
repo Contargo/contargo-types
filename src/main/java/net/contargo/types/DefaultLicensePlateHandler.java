@@ -17,7 +17,7 @@ class DefaultLicensePlateHandler implements LicensePlateHandler {
     /**
      * Normalizes the given {@link LicensePlate} value by upper casing it and replacing all hyphens by whitespaces.
      *
-     * @param  value  to get the normalized value of, never {@code null}
+     * @param  value  to get the normalized value for, never {@code null}
      *
      * @return  the normalized value, never {@code null}
      */
@@ -35,7 +35,8 @@ class DefaultLicensePlateHandler implements LicensePlateHandler {
     /**
      * Validates the given {@link LicensePlate} value.
      *
-     * <p>The given {@link LicensePlate} value is considered valid if it contains no special characters except '-'.</p>
+     * <p>The given {@link LicensePlate} value is considered valid if it contains no special characters except hyphens
+     * or whitespaces.</p>
      *
      * @param  value  to be validated, never {@code null}
      *

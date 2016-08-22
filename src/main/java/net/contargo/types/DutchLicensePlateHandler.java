@@ -29,7 +29,7 @@ class DutchLicensePlateHandler implements LicensePlateHandler {
     /**
      * Normalizes the given {@link LicensePlate} value by upper casing it and replacing all whitespaces by hyphens.
      *
-     * @param  value  to get the normalized value of, never {@code null}
+     * @param  value  to get the normalized value for, never {@code null}
      *
      * @return  the normalized value, never {@code null}
      */
