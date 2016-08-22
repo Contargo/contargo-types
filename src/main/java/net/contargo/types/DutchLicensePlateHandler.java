@@ -50,6 +50,8 @@ class DutchLicensePlateHandler implements LicensePlateHandler {
      * <p>A Dutch license plate consists of three groups of one to three letters or digits that are separated by a
      * hyphen.</p>
      *
+     * <p>Structure: 999-XX-9, XXX-99-X, 99-XX-XX etc.</p>
+     *
      * <p>There are certain license plates that may deviate from this rule, for example royal cars containing only two
      * groups.</p>
      *

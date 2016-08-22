@@ -66,6 +66,8 @@ class GermanLicensePlateHandler implements LicensePlateHandler {
      * leading zero)</li>
      * </ul>
      *
+     * <p>Structure: GGG XX 9999</p>
+     *
      * <p>After the geographic identifier there are the round vehicle safety test and registration seal stickers placed
      * above each other.</p>
      *
