@@ -10,8 +10,8 @@ public enum SupportedLicensePlateCountry implements LicensePlateCountry {
 
     GERMANY("D", new GermanLicensePlateHandler()),
     NETHERLANDS("NL", new DutchLicensePlateHandler()),
-    BELGIUM("B", new DefaultLicensePlateHandler()),
-    SWITZERLAND("CH", new DefaultLicensePlateHandler()),
+    BELGIUM("B", new BelgianLicensePlateHandler()),
+    SWITZERLAND("CH", new SwissLicensePlateHandler()),
     FRANCE("F", new DefaultLicensePlateHandler()),
     POLAND("PL", new DefaultLicensePlateHandler()),
     CZECH_REPUBLIC("CZ", new DefaultLicensePlateHandler());

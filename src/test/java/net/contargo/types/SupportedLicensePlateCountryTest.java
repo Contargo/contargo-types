@@ -23,15 +23,14 @@ public class SupportedLicensePlateCountryTest {
         // dedicated handler
         assertCorrectHandler.accept(SupportedLicensePlateCountry.GERMANY.getLicensePlateHandler(),
             GermanLicensePlateHandler.class);
-
         assertCorrectHandler.accept(SupportedLicensePlateCountry.NETHERLANDS.getLicensePlateHandler(),
             DutchLicensePlateHandler.class);
+        assertCorrectHandler.accept(SupportedLicensePlateCountry.BELGIUM.getLicensePlateHandler(),
+            BelgianLicensePlateHandler.class);
+        assertCorrectHandler.accept(SupportedLicensePlateCountry.SWITZERLAND.getLicensePlateHandler(),
+            SwissLicensePlateHandler.class);
 
         // default handler
-        assertCorrectHandler.accept(SupportedLicensePlateCountry.BELGIUM.getLicensePlateHandler(),
-            DefaultLicensePlateHandler.class);
-        assertCorrectHandler.accept(SupportedLicensePlateCountry.SWITZERLAND.getLicensePlateHandler(),
-            DefaultLicensePlateHandler.class);
         assertCorrectHandler.accept(SupportedLicensePlateCountry.FRANCE.getLicensePlateHandler(),
             DefaultLicensePlateHandler.class);
         assertCorrectHandler.accept(SupportedLicensePlateCountry.POLAND.getLicensePlateHandler(),
