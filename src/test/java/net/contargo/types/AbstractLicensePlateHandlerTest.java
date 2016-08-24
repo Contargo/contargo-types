@@ -23,10 +23,6 @@ abstract class AbstractLicensePlateHandlerTest {
         Assert.assertFalse("Should not be valid: " + value, handler.validate(value));
     };
 
-    BiConsumer<String, String> assertIsFormattedFromTo = (value, expected) -> {
-        Assert.assertEquals("Wrong formatted value", expected, handler.format(value));
-    };
-
     BiConsumer<String, String> assertIsNormalizedFromTo = (value, expected) -> {
         Assert.assertEquals("Wrong formatted value", expected, handler.normalize(value));
     };

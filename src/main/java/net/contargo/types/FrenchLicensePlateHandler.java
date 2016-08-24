@@ -81,22 +81,4 @@ class FrenchLicensePlateHandler implements LicensePlateHandler {
 
         return normalize(value).matches("[A-Z]{2}-[0-9]{3}-[A-Z]{2}");
     }
-
-
-    /**
-     * Formats the given {@link LicensePlate} value in a very simple way: just return the normalized value.
-     *
-     * @param  value  to get the formatted value for, never {@code null}
-     *
-     * @return  the formatted value, never {@code null}
-     */
-    @Override
-    public String format(String value) {
-
-        String normalizedValue = normalize(value);
-
-        LOG.debug("Formatted '{}' to '{}'", normalizedValue, normalizedValue);
-
-        return normalizedValue;
-    }
 }

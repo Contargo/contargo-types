@@ -48,22 +48,4 @@ class DefaultLicensePlateHandler implements LicensePlateHandler {
         // allowed: any letter or digit, but no special characters except '-' and ' '
         return normalize(value).matches("[\\p{L}0-9\\- ]*");
     }
-
-
-    /**
-     * Formats the given {@link LicensePlate} value in a very simple way: just return the normalized value.
-     *
-     * @param  value  to get the formatted value for, never {@code null}
-     *
-     * @return  the formatted value, never {@code null}
-     */
-    @Override
-    public String format(String value) {
-
-        String normalizedValue = normalize(value);
-
-        LOG.debug("Formatted '{}' to '{}'", normalizedValue, normalizedValue);
-
-        return normalizedValue;
-    }
 }

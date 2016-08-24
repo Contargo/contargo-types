@@ -56,14 +56,4 @@ public class DefaultLicensePlateHandlerTest extends AbstractLicensePlateHandlerT
         assertIsNormalizedFromTo.accept("ka-ab  123", "KA-AB-123");
         assertIsNormalizedFromTo.accept("ka--ab  123", "KA-AB-123");
     }
-
-
-    // FORMATTING ------------------------------------------------------------------------------------------------------
-
-    @Test
-    public void ensureLicensePlateIsFormattedCorrectly() {
-
-        assertIsFormattedFromTo.accept("ka ab 123", "KA-AB-123");
-        assertIsFormattedFromTo.accept("ka-ab 123", "KA-AB-123");
-    }
 }

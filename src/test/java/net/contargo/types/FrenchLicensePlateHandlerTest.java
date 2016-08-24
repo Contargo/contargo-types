@@ -27,23 +27,20 @@ public class FrenchLicensePlateHandlerTest extends AbstractLicensePlateHandlerTe
     }
 
 
-    // FORMATTING ------------------------------------------------------------------------------------------------------
-
-    @Test
-    public void ensureLicensePlateIsFormattedCorrectly() {
-
-        assertIsFormattedFromTo.accept("aa 001 ab", "AA-001-AB");
-        assertIsFormattedFromTo.accept("aa  001-ab", "AA-001-AB");
-        assertIsFormattedFromTo.accept("aa--001-ab", "AA-001-AB");
-    }
-
-
     // VALIDATION ------------------------------------------------------------------------------------------------------
 
     @Test
     public void ensureLicensePlateWithThreeGroupsIsValid() {
 
         assertIsValid.accept("AA-001-AB");
+    }
+
+
+    @Test
+    public void ensureLicensePlateWithMoreOrLessThanThreeGroupsIsNotValid() {
+
+        assertIsNotValid.accept("AA-001");
+        assertIsNotValid.accept("AA-001-AB-CD");
     }
 
 

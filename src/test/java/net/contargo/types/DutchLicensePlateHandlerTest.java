@@ -29,17 +29,6 @@ public class DutchLicensePlateHandlerTest extends AbstractLicensePlateHandlerTes
     }
 
 
-    // FORMATTING ------------------------------------------------------------------------------------------------------
-
-    @Test
-    public void ensureLicensePlateIsFormattedCorrectly() {
-
-        assertIsFormattedFromTo.accept("xx-xx-99", "XX-XX-99");
-        assertIsFormattedFromTo.accept("xx-xx 99", "XX-XX-99");
-        assertIsFormattedFromTo.accept("999 xx 9", "999-XX-9");
-    }
-
-
     // VALIDATION ------------------------------------------------------------------------------------------------------
 
     @Test

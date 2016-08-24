@@ -192,23 +192,11 @@ public class GermanLicensePlateHandlerTest extends AbstractLicensePlateHandlerTe
     @Test
     public void ensureLicensePlateIsNormalizedCorrectly() {
 
-        assertIsNormalizedFromTo.accept("ka ab 123", "KA-AB-123");
-        assertIsNormalizedFromTo.accept("ka-ab 123", "KA-AB-123");
-        assertIsNormalizedFromTo.accept("KA-AB123", "KA-AB-123");
-        assertIsNormalizedFromTo.accept("KA A123", "KA-A-123");
-        assertIsNormalizedFromTo.accept("KA  A123", "KA-A-123");
-        assertIsNormalizedFromTo.accept("KA  A--123", "KA-A-123");
-    }
-
-
-    // FORMATTING ------------------------------------------------------------------------------------------------------
-
-    @Test
-    public void ensureLicensePlateIsFormattedCorrectly() {
-
-        assertIsFormattedFromTo.accept("ka ab 123", "KA AB 123");
-        assertIsFormattedFromTo.accept("ka-ab 123", "KA AB 123");
-        assertIsFormattedFromTo.accept("KA-AB123", "KA AB 123");
-        assertIsFormattedFromTo.accept("KA A123", "KA A 123");
+        assertIsNormalizedFromTo.accept("ka ab 123", "KA AB 123");
+        assertIsNormalizedFromTo.accept("ka-ab 123", "KA AB 123");
+        assertIsNormalizedFromTo.accept("KA-AB123", "KA AB 123");
+        assertIsNormalizedFromTo.accept("KA A123", "KA A 123");
+        assertIsNormalizedFromTo.accept("KA  A123", "KA A 123");
+        assertIsNormalizedFromTo.accept("KA  A--123", "KA A 123");
     }
 }

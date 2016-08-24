@@ -26,14 +26,4 @@ interface LicensePlateHandler {
      * @return  {@code true} if the given {@link LicensePlate} is valid, else {@code false}
      */
     boolean validate(String value);
-
-
-    /**
-     * Get the formatted value of the given {@link LicensePlate}.
-     *
-     * @param  value  to get the formatted value of, never {@code null}
-     *
-     * @return  the formatted license plate, never {@code null}
-     */
-    String format(String value);
 }

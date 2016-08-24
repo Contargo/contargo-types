@@ -66,7 +66,7 @@ public final class LicensePlate {
     @Override
     public String toString() {
 
-        return country.getLicensePlateHandler().format(value);
+        return country.getLicensePlateHandler().normalize(value);
     }
 
 

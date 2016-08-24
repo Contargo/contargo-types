@@ -21,32 +21,21 @@ public class SwissLicensePlateHandlerTest extends AbstractLicensePlateHandlerTes
     @Test
     public void ensureLicensePlateIsNormalizedCorrectly() {
 
-        assertIsNormalizedFromTo.accept("ag 123456", "AG123456");
-        assertIsNormalizedFromTo.accept("ag  123456", "AG123456");
-        assertIsNormalizedFromTo.accept("sh-75936", "SH75936");
-        assertIsNormalizedFromTo.accept("sh--75936", "SH75936");
-        assertIsNormalizedFromTo.accept("zh 123 456", "ZH123456");
-    }
-
-
-    // FORMATTING ------------------------------------------------------------------------------------------------------
-
-    @Test
-    public void ensureLicensePlateIsFormattedCorrectly() {
-
-        assertIsFormattedFromTo.accept("ag 123456", "AG 123456");
-        assertIsFormattedFromTo.accept("ag  123456", "AG 123456");
-        assertIsFormattedFromTo.accept("sh-75936", "SH 75936");
-        assertIsFormattedFromTo.accept("sh--75936", "SH 75936");
-        assertIsFormattedFromTo.accept("zh 123 456", "ZH 123456");
+        assertIsNormalizedFromTo.accept("ag 123456", "AG 123456");
+        assertIsNormalizedFromTo.accept("ag  123456", "AG 123456");
+        assertIsNormalizedFromTo.accept("sh-75936", "SH 75936");
+        assertIsNormalizedFromTo.accept("sh--75936", "SH 75936");
+        assertIsNormalizedFromTo.accept("zh 123 456", "ZH 123456");
     }
 
 
     @Test
-    public void ensureLicensePlateIsNotFormattedIfItHasNoValidFormat() {
+    public void ensureCrazyLicensePlateIsNormalizedCorrectly() {
 
-        assertIsFormattedFromTo.accept("agx 123456", "agx 123456");
-        assertIsFormattedFromTo.accept("a123", "a123");
+        assertIsNormalizedFromTo.accept("foo", "FO O");
+        assertIsNormalizedFromTo.accept("f", "F");
+        assertIsNormalizedFromTo.accept("99", "99");
+        assertIsNormalizedFromTo.accept("", "");
     }
 
 

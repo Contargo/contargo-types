@@ -39,6 +39,9 @@ class SwissLicensePlateHandler implements LicensePlateHandler {
     private static final List<String> CANTONS = Arrays.asList("AG", "AR", "AI", "BL", "BS", "BE", "FR", "GE", "GL",
             "GR", "JU", "LU", "NE", "NW", "OW", "SH", "SZ", "SO", "SG", "TI", "TG", "UR", "VD", "VS", "ZG", "ZH");
 
+    private static final int CANTON_CODE_INDEX_START = 0;
+    private static final int CANTON_CODE_INDEX_END = 2;
+
     /**
      * Normalizes the given {@link LicensePlate} value by upper casing it and removing separators.
      *
@@ -50,7 +53,13 @@ class SwissLicensePlateHandler implements LicensePlateHandler {
     public String normalize(String value) {
 
         // remove whitespaces and hyphens
-        String normalizedValue = value.replaceAll("\\s+", "").replaceAll("\\-+", "").toUpperCase();
+        String normalize = value.replaceAll("\\s+", "").replaceAll("\\-+", "").toUpperCase();
+        String normalizedValue = normalize;
+
+        if (normalize.length() > CANTON_CODE_INDEX_END) {
+            normalizedValue = normalize.substring(CANTON_CODE_INDEX_START, CANTON_CODE_INDEX_END) + " "
+                + normalize.substring(CANTON_CODE_INDEX_END, normalize.length());
+        }
 
         LOG.debug("Normalized '{}' to '{}'", value, normalizedValue);
 
@@ -78,43 +87,12 @@ class SwissLicensePlateHandler implements LicensePlateHandler {
 
         String normalizedValue = normalize(value);
 
-        if (!hasValidFormat(normalizedValue)) {
+        if (!normalizedValue.matches("[A-Z]{2}\\s[0-9]{1,6}")) {
             return false;
         }
 
-        String cantonCode = normalizedValue.substring(0, 2);
+        String cantonCode = normalizedValue.substring(CANTON_CODE_INDEX_START, CANTON_CODE_INDEX_END);
 
         return CANTONS.contains(cantonCode);
-    }
-
-
-    private boolean hasValidFormat(String normalizedValue) {
-
-        return normalizedValue.matches("[A-Z]{2}[0-9]{1,6}");
-    }
-
-
-    /**
-     * Formats the given {@link LicensePlate} value: separate canton code from number.
-     *
-     * @param  value  to get the formatted value for, never {@code null}
-     *
-     * @return  the formatted value, never {@code null}
-     */
-    @Override
-    public String format(String value) {
-
-        String normalizedValue = normalize(value);
-
-        if (!hasValidFormat(normalizedValue)) {
-            return value;
-        }
-
-        String formattedValue = normalizedValue.substring(0, 2) + " "
-            + normalizedValue.substring(2, normalizedValue.length());
-
-        LOG.debug("Formatted '{}' to '{}'", normalizedValue, formattedValue);
-
-        return formattedValue;
     }
 }

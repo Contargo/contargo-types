@@ -26,16 +26,18 @@ class GermanLicensePlateHandler implements LicensePlateHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(GermanLicensePlateHandler.class);
 
+    private static final String WHITESPACE = " ";
+
     /**
      * Normalizes the given {@link LicensePlate} value by executing the following steps:
      *
      * <p>1.) Upper case: "ka ab123" to "KA AB123"</p>
      *
-     * <p>2.) Use hyphen instead of whitespace: "KA AB123" to "KA-AB123"</p>
+     * <p>2.) Use whitespace as separator, remove hyphens: "KA-AB123" to "KA AB123"</p>
      *
-     * <p>3.) Ensure identification numbers are separated from identification letters: "KA-AB123" to "KA--AB-123"</p>
+     * <p>3.) Ensure identification numbers are separated from identification letters: "KA AB123" to "KA AB 123"</p>
      *
-     * <p>4.) Remove the duplicated minus separators: "KA--AB-123" to "KA-AB-123"</p>
+     * <p>4.) Remove the duplicated whitespace separators: "KA AB 123" to "KA AB 123"</p>
      *
      * @param  value  to get the normalized value for, never {@code null}
      *
@@ -45,9 +47,9 @@ class GermanLicensePlateHandler implements LicensePlateHandler {
     public String normalize(String value) {
 
         String normalizedValue = value.toUpperCase()
-                .replaceAll("\\s+", "-")
-                .replaceAll("(?<=\\D)(?=\\d)", "-")
-                .replaceAll("\\-+", "-");
+                .replaceAll("\\-+", WHITESPACE)
+                .replaceAll("(?<=\\D)(?=\\d)", WHITESPACE)
+                .replaceAll("\\s+", WHITESPACE);
 
         LOG.debug("Normalized '{}' to '{}'", value, normalizedValue);
 
@@ -90,25 +92,6 @@ class GermanLicensePlateHandler implements LicensePlateHandler {
 
         String normalizedValue = normalize(value);
 
-        return normalizedValue.matches("^[A-ZÄÖÜ]{1,3}\\-[A-Z]{0,2}\\-{0,1}[1-9]{1}[0-9]{0,3}");
-    }
-
-
-    /**
-     * Formats the given {@link LicensePlate} value by replacing hyphens by whitespaces in the normalized value.
-     *
-     * @param  value  to get the formatted value for, never {@code null}
-     *
-     * @return  the formatted value, never {@code null}
-     */
-    @Override
-    public String format(String value) {
-
-        String normalizedValue = normalize(value);
-        String formattedValue = normalizedValue.replaceAll("-", " ");
-
-        LOG.debug("Formatted '{}' to '{}'", normalizedValue, formattedValue);
-
-        return formattedValue;
+        return normalizedValue.matches("^[A-ZÄÖÜ]{1,3}\\s[A-Z]{0,2}\\s[1-9][0-9]{0,3}");
     }
 }

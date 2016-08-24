@@ -29,19 +29,6 @@ public class BelgianLicensePlateHandlerTest extends AbstractLicensePlateHandlerT
     }
 
 
-    // FORMATTING ------------------------------------------------------------------------------------------------------
-
-    @Test
-    public void ensureLicensePlateIsFormattedCorrectly() {
-
-        assertIsFormattedFromTo.accept("1-abc-123", "1-ABC-123");
-        assertIsFormattedFromTo.accept("9-xyz-456", "9-XYZ-456");
-        assertIsFormattedFromTo.accept("1 abc 123", "1-ABC-123");
-        assertIsFormattedFromTo.accept("1  abc 123", "1-ABC-123");
-        assertIsFormattedFromTo.accept("9--xyz--456", "9-XYZ-456");
-    }
-
-
     // VALIDATION ------------------------------------------------------------------------------------------------------
 
     @Test
