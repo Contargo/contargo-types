@@ -46,11 +46,22 @@ class BelgianLicensePlateHandler implements LicensePlateHandler {
     /**
      * Validates the given {@link LicensePlate} value.
      *
-     * <p>A Belgian license plate consists of a combination of seven digits and letters.</p>
+     * <p>A Belgian license plate consists of a combination of seven digits and letters. It has three groups that are
+     * separated by a hyphen:</p>
      *
-     * <p>This combination consists of three groups that are separated by a hyphen. It usually starts with one leading
-     * digit or letter and is followed by three letters and three digits. But it can also start with two leading letters
-     * followed by two digits and three letters.</p>
+     * <ul>
+     * <li>one leading digit or letter</li>
+     * <li>three letters</li>
+     * <li>three digits</li>
+     * </ul>
+     *
+     * <p>or</p>
+     *
+     * <ul>
+     * <li>two leading letters</li>
+     * <li>two digits</li>
+     * <li>three letters</li>
+     * </ul>
      *
      * <p>Structure: 1-XXX-999, 9-999-XXX, X-XXX-999, WX-16-XXX</p>
      *

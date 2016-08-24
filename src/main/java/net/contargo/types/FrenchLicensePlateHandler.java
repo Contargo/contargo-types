@@ -63,8 +63,13 @@ class FrenchLicensePlateHandler implements LicensePlateHandler {
     /**
      * Validates the given {@link LicensePlate} value.
      *
-     * <p>A French license plate consists of two letters, three digits and two letters - these three groups are
-     * separated by a hyphen.</p>
+     * <p>A French license plate consists of three groups that are separated by a hyphen:</p>
+     *
+     * <ul>
+     * <li>two letters</li>
+     * <li>three digits</li>
+     * <li>two letters</li>
+     * </ul>
      *
      * <p>Structure: XX-999-XX</p>
      *
@@ -73,10 +78,14 @@ class FrenchLicensePlateHandler implements LicensePlateHandler {
      *
      * <p>Note that these special cases are not covered by this validator!</p>
      *
-     * <p>License plates between 1950 and 2009 had a different format and are still in circulation. They consist of up
-     * to four digits (minimum two digits), up to three letters and up to three digits - these three groups are
-     * separated by a whitespace. The last group represents the department. Usually it consists of two digits, but three
-     * digits or a mix of letters and digits is possible too.</p>
+     * <p>License plates between 1950 and 2009 had a different format and are still in circulation. They consist of
+     * three groups that are separated by a whitespace:</p>
+     *
+     * <ul>
+     * <li>up to four digits, minimum two digits</li>
+     * <li>up to three letters</li>
+     * <li>the department code: up to three digits (usually two digits) or a mix of letters and digits</li>
+     * </ul>
      *
      * <p>Structure: 9999 XX 99, 999 XXX 99, 99 XXX 99, 999 XXX 999, 99 XX 9X</p>
      *

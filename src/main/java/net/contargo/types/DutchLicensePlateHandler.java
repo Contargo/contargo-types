@@ -47,8 +47,8 @@ class DutchLicensePlateHandler implements LicensePlateHandler {
     /**
      * Validates the given {@link LicensePlate} value.
      *
-     * <p>A Dutch license plate consists of three groups of one to three letters or digits that are separated by a
-     * hyphen.</p>
+     * <p>A Dutch license plate consists of three groups that are separated by a hyphen. Each group has one to three
+     * letters or digits.</p>
      *
      * <p>Structure: 999-XX-9, XXX-99-X, 99-XX-XX etc.</p>
      *

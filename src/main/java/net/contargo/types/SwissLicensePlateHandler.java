@@ -70,7 +70,12 @@ class SwissLicensePlateHandler implements LicensePlateHandler {
     /**
      * Validates the given {@link LicensePlate} value.
      *
-     * <p>A Swiss license plate consists of a two letter code for the canton followed by up to six numerical digits.</p>
+     * <p>A Swiss license plate consists of two parts:</p>
+     *
+     * <ul>
+     * <li>two letter code for the canton</li>
+     * <li>up to six digits</li>
+     * </ul>
      *
      * <p>Structure: XX 123456</p>
      *
