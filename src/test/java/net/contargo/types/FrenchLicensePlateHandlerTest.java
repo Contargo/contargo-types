@@ -27,7 +27,16 @@ public class FrenchLicensePlateHandlerTest extends AbstractLicensePlateHandlerTe
     }
 
 
-    // VALIDATION ------------------------------------------------------------------------------------------------------
+    @Test
+    public void ensureOldLicensePlateIsNormalizedCorrectly() {
+
+        assertIsNormalizedFromTo.accept("2928 tw 74", "2928 TW 74");
+        assertIsNormalizedFromTo.accept("324  ebs-91", "324 EBS 91");
+        assertIsNormalizedFromTo.accept("56-abm-13", "56 ABM 13");
+    }
+
+
+    // VALIDATION FOR LICENSE PLATES AFTER 2009 ------------------------------------------------------------------------
 
     @Test
     public void ensureLicensePlateWithThreeGroupsIsValid() {
@@ -89,5 +98,85 @@ public class FrenchLicensePlateHandlerTest extends AbstractLicensePlateHandlerTe
 
         assertIsNotValid.accept("AA-001-A1");
         assertIsNotValid.accept("AA-001-99");
+    }
+
+
+    // VALIDATION FOR LICENSE PLATES BETWEEN 1950 and 2009 -------------------------------------------------------------
+
+    @Test
+    public void ensureOldLicensePlateWithThreeGroupsIsValid() {
+
+        assertIsValid.accept("2928 TW 74");
+        assertIsValid.accept("324 EBS 91");
+        assertIsValid.accept("56 ABM 13");
+        assertIsValid.accept("654 ANY 971");
+    }
+
+
+    @Test
+    public void ensureOldLicensePlateWithMoreOrLessThanThreeGroupsIsNotValid() {
+
+        assertIsNotValid.accept("2928 TW");
+        assertIsNotValid.accept("2928 TW 74 AB");
+    }
+
+
+    @Test
+    public void ensureOldLicensePlateWithMoreThanFourDigitsInTheFirstGroupIsNotValid() {
+
+        assertIsNotValid.accept("29281 TW 74");
+    }
+
+
+    @Test
+    public void ensureOldLicensePlateWithLessThanTwoDigitsInTheFirstGroupIsNotValid() {
+
+        assertIsNotValid.accept("2 TW 74");
+    }
+
+
+    @Test
+    public void ensureOldLicensePlateWithLettersInTheFirstGroupIsNotValid() {
+
+        assertIsNotValid.accept("2X28 TW 74");
+        assertIsNotValid.accept("ABC EBS 91");
+    }
+
+
+    @Test
+    public void ensureOldLicensePlateWithMoreThanThreeLettersInTheSecondGroupIsNotValid() {
+
+        assertIsNotValid.accept("2928 ABCD 74");
+        assertIsNotValid.accept("324 ABCD 91");
+        assertIsNotValid.accept("56 ABCD 13");
+    }
+
+
+    @Test
+    public void ensureOldLicensePlateWithDigitsInTheSecondGroupIsNotValid() {
+
+        assertIsNotValid.accept("2928 AB1 74");
+        assertIsNotValid.accept("324 999 91");
+    }
+
+
+    @Test
+    public void ensureOldLicensePlateWithLessThanTwoCharactersInTheLastGroupIsNotValid() {
+
+        assertIsNotValid.accept("2928 TW 7");
+    }
+
+
+    @Test
+    public void ensureOldLicensePlateWithMoreThanThreeCharactersInTheLastGroupIsNotValid() {
+
+        assertIsNotValid.accept("654 ANY 9711");
+    }
+
+
+    @Test
+    public void ensureOldLicensePlateWithAMixOfLettersAndDigitsInTheLastGroupIsValid() {
+
+        assertIsValid.accept("11 GY 2A");
     }
 }
