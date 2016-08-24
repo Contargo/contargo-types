@@ -29,10 +29,10 @@ public class SupportedLicensePlateCountryTest {
             BelgianLicensePlateHandler.class);
         assertCorrectHandler.accept(SupportedLicensePlateCountry.SWITZERLAND.getLicensePlateHandler(),
             SwissLicensePlateHandler.class);
+        assertCorrectHandler.accept(SupportedLicensePlateCountry.FRANCE.getLicensePlateHandler(),
+            FrenchLicensePlateHandler.class);
 
         // default handler
-        assertCorrectHandler.accept(SupportedLicensePlateCountry.FRANCE.getLicensePlateHandler(),
-            DefaultLicensePlateHandler.class);
         assertCorrectHandler.accept(SupportedLicensePlateCountry.POLAND.getLicensePlateHandler(),
             DefaultLicensePlateHandler.class);
         assertCorrectHandler.accept(SupportedLicensePlateCountry.CZECH_REPUBLIC.getLicensePlateHandler(),
