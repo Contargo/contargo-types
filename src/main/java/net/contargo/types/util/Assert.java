@@ -1,11 +1,11 @@
-package net.contargo.types;
+package net.contargo.types.util;
 
 /**
  * Utility class providing assertion methods.
  *
  * @author  Aljona Murygina - murygina@synyx.de
  */
-final class Assert {
+public final class Assert {
 
     private Assert() {
 
@@ -19,7 +19,7 @@ final class Assert {
      * @param  object  the object to be checked
      * @param  message  the exception message to use if the assertion fails
      */
-    static void notNull(Object object, String message) {
+    public static void notNull(Object object, String message) {
 
         if (object == null) {
             throw new IllegalArgumentException(message);
@@ -36,7 +36,7 @@ final class Assert {
      *
      * @throws  IllegalArgumentException  if the value is {@code null} or empty
      */
-    static void notBlank(String value, String message) {
+    public static void notBlank(String value, String message) {
 
         Assert.notNull(value, message);
 

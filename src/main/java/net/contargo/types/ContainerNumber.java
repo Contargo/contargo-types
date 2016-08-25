@@ -1,5 +1,7 @@
 package net.contargo.types;
 
+import net.contargo.types.util.Assert;
+
 import java.util.Optional;
 
 

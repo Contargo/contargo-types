@@ -1,5 +1,8 @@
 package net.contargo.types;
 
+import net.contargo.types.util.Assert;
+
+
 /**
  * Each {@link net.contargo.domain.Truck} can be identified by its license plate.
  *

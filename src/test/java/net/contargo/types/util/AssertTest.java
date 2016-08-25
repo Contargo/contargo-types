@@ -1,4 +1,4 @@
-package net.contargo.types;
+package net.contargo.types.util;
 
 import org.junit.Test;
 

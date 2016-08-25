@@ -1,5 +1,8 @@
 package net.contargo.types;
 
+import net.contargo.types.util.Assert;
+
+
 /**
  * Currently supported countries for {@link LicensePlate}s.
  *
