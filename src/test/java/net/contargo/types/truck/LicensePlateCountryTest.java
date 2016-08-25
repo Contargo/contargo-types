@@ -33,10 +33,8 @@ public class LicensePlateCountryTest {
             FrenchLicensePlateHandler.class);
         assertCorrectHandler.accept(LicensePlateCountry.POLAND.getLicensePlateHandler(),
             PolishLicensePlateHandler.class);
-
-        // default handler
         assertCorrectHandler.accept(LicensePlateCountry.CZECH_REPUBLIC.getLicensePlateHandler(),
-            DefaultLicensePlateHandler.class);
+            CzechLicensePlateHandler.class);
     }
 
 

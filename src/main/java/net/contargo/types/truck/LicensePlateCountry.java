@@ -17,10 +17,10 @@ public enum LicensePlateCountry implements Country {
     SWITZERLAND("CH", new SwissLicensePlateHandler()),
     FRANCE("F", new FrenchLicensePlateHandler()),
     POLAND("PL", new PolishLicensePlateHandler()),
-    CZECH_REPUBLIC("CZ", new DefaultLicensePlateHandler());
+    CZECH_REPUBLIC("CZ", new CzechLicensePlateHandler());
 
-    private String countryCode;
-    private LicensePlateHandler licensePlateHandler;
+    private final String countryCode;
+    private final LicensePlateHandler licensePlateHandler;
 
     LicensePlateCountry(String countryCode, LicensePlateHandler licensePlateHandler) {
 
