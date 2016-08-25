@@ -68,8 +68,10 @@ class CzechLicensePlateHandler implements LicensePlateHandler {
             // if the first two or three characters are letters, consider that it is a formerly valid license plate
             if (letters.matches("[A-Z]{2,3}")) {
                 int numbersLength = numbers.length();
-                normalizedValue = letters + " " + numbers.substring(0, numbersLength / 2) + "-"
-                    + numbers.substring(numbersLength / 2, numbersLength);
+                int halfOfNumbersLength = numbersLength / 2;
+
+                normalizedValue = letters + " " + numbers.substring(0, halfOfNumbersLength) + "-"
+                    + numbers.substring(halfOfNumbersLength, numbersLength);
             }
         }
 
