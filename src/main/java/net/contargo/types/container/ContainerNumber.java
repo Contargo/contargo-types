@@ -1,4 +1,4 @@
-package net.contargo.types;
+package net.contargo.types.container;
 
 import net.contargo.types.util.Assert;
 
