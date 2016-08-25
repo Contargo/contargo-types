@@ -13,7 +13,7 @@ public enum SupportedLicensePlateCountry implements LicensePlateCountry {
     BELGIUM("B", new BelgianLicensePlateHandler()),
     SWITZERLAND("CH", new SwissLicensePlateHandler()),
     FRANCE("F", new FrenchLicensePlateHandler()),
-    POLAND("PL", new DefaultLicensePlateHandler()),
+    POLAND("PL", new PolishLicensePlateHandler()),
     CZECH_REPUBLIC("CZ", new DefaultLicensePlateHandler());
 
     private String countryCode;

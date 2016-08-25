@@ -43,7 +43,8 @@ class SwissLicensePlateHandler implements LicensePlateHandler {
     private static final int CANTON_CODE_INDEX_END = 2;
 
     /**
-     * Normalizes the given {@link LicensePlate} value by upper casing it and removing separators.
+     * Normalizes the given {@link LicensePlate} value by upper casing it and separating the canton code with a
+     * whitespace from the rest of the value.
      *
      * @param  value  to get the normalized value for, never {@code null}
      *
@@ -53,12 +54,11 @@ class SwissLicensePlateHandler implements LicensePlateHandler {
     public String normalize(String value) {
 
         // remove whitespaces and hyphens
-        String normalize = value.replaceAll("\\s+", "").replaceAll("\\-+", "").toUpperCase();
-        String normalizedValue = normalize;
+        String normalizedValue = value.replaceAll("\\s+", "").replaceAll("\\-+", "").toUpperCase();
 
-        if (normalize.length() > CANTON_CODE_INDEX_END) {
-            normalizedValue = normalize.substring(CANTON_CODE_INDEX_START, CANTON_CODE_INDEX_END) + " "
-                + normalize.substring(CANTON_CODE_INDEX_END, normalize.length());
+        if (normalizedValue.length() > CANTON_CODE_INDEX_END) {
+            normalizedValue = normalizedValue.substring(CANTON_CODE_INDEX_START, CANTON_CODE_INDEX_END) + " "
+                + normalizedValue.substring(CANTON_CODE_INDEX_END, normalizedValue.length());
         }
 
         LOG.debug("Normalized '{}' to '{}'", value, normalizedValue);
