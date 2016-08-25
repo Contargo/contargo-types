@@ -13,6 +13,7 @@ Contargo Types
   * France
   * Poland
   * Czech Republic
+* Introduce Contargo types for container type and loading state.
 
 ## v0.1.0 (Release on 2016-07-05)
 

@@ -18,7 +18,9 @@ it as a Maven dependency:
 
 ## Usage
 
-### Container number
+### Container
+
+#### Container number
 
 ```java
 ContainerNumber containerNumber = ContainerNumber.forValue(string);
@@ -27,7 +29,26 @@ ContainerNumber containerNumber = ContainerNumber.forValue(string);
 The built container number instance provides various information, such as the
 validity on `isValid()` or the formatted value on `toString()`.
 
-### License plate
+#### Container type
+
+```java
+ContainerType.FORTY_HC
+```
+
+The `ContainerType` enum provides the known container types.
+
+#### Loading state
+
+```java
+LoadingState.EMPTY
+LoadingState.FULL
+```
+
+The `LoadingState` enum provides the possible container loading states.
+
+### Truck
+
+#### License plate
 
 ```java
 // Create with default country Germany
