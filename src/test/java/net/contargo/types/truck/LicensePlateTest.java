@@ -12,7 +12,7 @@ import org.mockito.Mockito;
  */
 public class LicensePlateTest {
 
-    private LicensePlateCountry dummyCountry;
+    private Country dummyCountry;
 
     @Before
     public void setUp() {
@@ -72,7 +72,7 @@ public class LicensePlateTest {
     public void ensureHandlerForCountryIsCalledOnToString() {
 
         LicensePlateHandler handlerMock = Mockito.mock(LicensePlateHandler.class);
-        LicensePlateCountry country = new DummyCountry(handlerMock);
+        Country country = new DummyCountry(handlerMock);
 
         String value = "foo";
         String normalizedValue = "formatted";
@@ -93,7 +93,7 @@ public class LicensePlateTest {
     public void ensureHandlerForCountryIsCalledOnIsValid() {
 
         LicensePlateHandler handlerMock = Mockito.mock(LicensePlateHandler.class);
-        LicensePlateCountry country = new DummyCountry(handlerMock);
+        Country country = new DummyCountry(handlerMock);
         String value = "foo";
 
         Mockito.when(handlerMock.validate(Mockito.anyString())).thenReturn(true);
@@ -164,7 +164,7 @@ public class LicensePlateTest {
         Assert.assertFalse(value + " should not be equals to null", licensePlate.equals(null));
     }
 
-    private class DummyCountry implements LicensePlateCountry {
+    private class DummyCountry implements Country {
 
         private final LicensePlateHandler handler;
 

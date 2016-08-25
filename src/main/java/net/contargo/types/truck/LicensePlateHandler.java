@@ -1,7 +1,7 @@
 package net.contargo.types.truck;
 
 /**
- * Provides a set of functionalities for {@link LicensePlate} values depending on a {@link LicensePlateCountry}.
+ * Provides a set of functionalities for {@link LicensePlate} values depending on a {@link Country}.
  *
  * @author  Aljona Murygina - murygina@synyx.de
  * @since  0.2.0
