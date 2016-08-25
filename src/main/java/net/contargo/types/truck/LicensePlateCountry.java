@@ -1,4 +1,4 @@
-package net.contargo.types;
+package net.contargo.types.truck;
 
 /**
  * The country of a {@link LicensePlate} describes in which country a car is registered.

@@ -1,4 +1,4 @@
-package net.contargo.types;
+package net.contargo.types.truck;
 
 import org.junit.Before;
 import org.junit.Test;

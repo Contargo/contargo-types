@@ -1,4 +1,4 @@
-package net.contargo.types;
+package net.contargo.types.truck;
 
 /**
  * Provides a set of functionalities for {@link LicensePlate} values depending on a {@link LicensePlateCountry}.
