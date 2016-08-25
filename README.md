@@ -33,7 +33,7 @@ validity on `isValid()` or the formatted value on `toString()`.
 // Create with default country Germany
 LicensePlate licensePlate = LicensePlate.forValue(string);
 // Create with dedicated country
-LicensePlate licensePlateWithCountry = LicensePlate.forValue(string).withCountry(SupportedLicensePlateCountry.NETHERLANDS);
+LicensePlate licensePlateWithCountry = LicensePlate.forValue(string).withCountry(LicensePlateCountry.NETHERLANDS);
 ```
 
 The built license plate instance provides various information depending on the
@@ -41,7 +41,7 @@ bound country, such as the validity on `isValid()` or the formatted value on
 `toString()`.
 
 To find out which countries are supported, take a look at the
-`SupportedLicensePlateCountry` enum.
+`LicensePlateCountry` enum.
 
 ## Development
 

@@ -11,7 +11,7 @@ import net.contargo.types.util.Assert;
  */
 public final class LicensePlate {
 
-    private static final Country DEFAULT_COUNTRY = SupportedLicensePlateCountry.GERMANY;
+    private static final Country DEFAULT_COUNTRY = LicensePlateCountry.GERMANY;
 
     private final String value;
     private Country country;

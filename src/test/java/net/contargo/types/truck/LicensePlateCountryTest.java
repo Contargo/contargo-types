@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 /**
  * @author  Aljona Murygina - murygina@synyx.de
  */
-public class SupportedLicensePlateCountryTest {
+public class LicensePlateCountryTest {
 
     private BiConsumer<LicensePlateHandler, Class> assertCorrectHandler = (handler, clazz) -> {
         Assert.assertNotNull("Missing handler", handler);
@@ -21,21 +21,21 @@ public class SupportedLicensePlateCountryTest {
     public void ensureCorrectHandlerMatching() {
 
         // dedicated handler
-        assertCorrectHandler.accept(SupportedLicensePlateCountry.GERMANY.getLicensePlateHandler(),
+        assertCorrectHandler.accept(LicensePlateCountry.GERMANY.getLicensePlateHandler(),
             GermanLicensePlateHandler.class);
-        assertCorrectHandler.accept(SupportedLicensePlateCountry.NETHERLANDS.getLicensePlateHandler(),
+        assertCorrectHandler.accept(LicensePlateCountry.NETHERLANDS.getLicensePlateHandler(),
             DutchLicensePlateHandler.class);
-        assertCorrectHandler.accept(SupportedLicensePlateCountry.BELGIUM.getLicensePlateHandler(),
+        assertCorrectHandler.accept(LicensePlateCountry.BELGIUM.getLicensePlateHandler(),
             BelgianLicensePlateHandler.class);
-        assertCorrectHandler.accept(SupportedLicensePlateCountry.SWITZERLAND.getLicensePlateHandler(),
+        assertCorrectHandler.accept(LicensePlateCountry.SWITZERLAND.getLicensePlateHandler(),
             SwissLicensePlateHandler.class);
-        assertCorrectHandler.accept(SupportedLicensePlateCountry.FRANCE.getLicensePlateHandler(),
+        assertCorrectHandler.accept(LicensePlateCountry.FRANCE.getLicensePlateHandler(),
             FrenchLicensePlateHandler.class);
-        assertCorrectHandler.accept(SupportedLicensePlateCountry.POLAND.getLicensePlateHandler(),
+        assertCorrectHandler.accept(LicensePlateCountry.POLAND.getLicensePlateHandler(),
             PolishLicensePlateHandler.class);
 
         // default handler
-        assertCorrectHandler.accept(SupportedLicensePlateCountry.CZECH_REPUBLIC.getLicensePlateHandler(),
+        assertCorrectHandler.accept(LicensePlateCountry.CZECH_REPUBLIC.getLicensePlateHandler(),
             DefaultLicensePlateHandler.class);
     }
 
@@ -43,16 +43,16 @@ public class SupportedLicensePlateCountryTest {
     @Test
     public void ensureCanHazzCountryCode() {
 
-        Assert.assertEquals("Wrong country code", "D", SupportedLicensePlateCountry.GERMANY.getCountryCode());
+        Assert.assertEquals("Wrong country code", "D", LicensePlateCountry.GERMANY.getCountryCode());
     }
 
 
     @Test
     public void ensureCanGetCountryByCountryCode() {
 
-        Country country = SupportedLicensePlateCountry.forCountryCode("D");
+        Country country = LicensePlateCountry.forCountryCode("D");
 
-        Assert.assertEquals("Wrong country", SupportedLicensePlateCountry.GERMANY, country);
+        Assert.assertEquals("Wrong country", LicensePlateCountry.GERMANY, country);
     }
 
 
@@ -61,7 +61,7 @@ public class SupportedLicensePlateCountryTest {
 
         Consumer<String> assertNotEmpty = countryCode -> {
             try {
-                SupportedLicensePlateCountry.forCountryCode(countryCode);
+                LicensePlateCountry.forCountryCode(countryCode);
                 Assert.fail(String.format("Should throw if trying to get country by country code: '%s'", countryCode));
             } catch (IllegalArgumentException ex) {
                 // Expected
@@ -77,6 +77,6 @@ public class SupportedLicensePlateCountryTest {
     @Test(expected = IllegalArgumentException.class)
     public void ensureThrowsIfTryingToGetCountryByUnknownCountryCode() {
 
-        SupportedLicensePlateCountry.forCountryCode("XY");
+        LicensePlateCountry.forCountryCode("XY");
     }
 }

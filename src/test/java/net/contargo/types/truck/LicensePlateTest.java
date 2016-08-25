@@ -43,7 +43,7 @@ public class LicensePlateTest {
         LicensePlate licensePlate = LicensePlate.forValue("foo");
 
         Assert.assertNotNull("Should not be null", licensePlate);
-        Assert.assertEquals("Wrong default country", SupportedLicensePlateCountry.GERMANY, licensePlate.getCountry());
+        Assert.assertEquals("Wrong default country", LicensePlateCountry.GERMANY, licensePlate.getCountry());
     }
 
 
@@ -57,10 +57,10 @@ public class LicensePlateTest {
     @Test
     public void ensureCanBeBuiltWithStringValueAndCountry() {
 
-        LicensePlate licensePlate = LicensePlate.forValue("foo").withCountry(SupportedLicensePlateCountry.NETHERLANDS);
+        LicensePlate licensePlate = LicensePlate.forValue("foo").withCountry(LicensePlateCountry.NETHERLANDS);
 
         Assert.assertNotNull("Should not be null", licensePlate);
-        Assert.assertEquals("Wrong country", SupportedLicensePlateCountry.NETHERLANDS, licensePlate.getCountry());
+        Assert.assertEquals("Wrong country", LicensePlateCountry.NETHERLANDS, licensePlate.getCountry());
     }
 
 

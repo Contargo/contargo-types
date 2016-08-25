@@ -9,7 +9,7 @@ import net.contargo.types.util.Assert;
  * @author  Aljona Murygina - murygina@synyx.de
  * @since  0.2.0
  */
-public enum SupportedLicensePlateCountry implements Country {
+public enum LicensePlateCountry implements Country {
 
     GERMANY("D", new GermanLicensePlateHandler()),
     NETHERLANDS("NL", new DutchLicensePlateHandler()),
@@ -22,7 +22,7 @@ public enum SupportedLicensePlateCountry implements Country {
     private String countryCode;
     private LicensePlateHandler licensePlateHandler;
 
-    SupportedLicensePlateCountry(String countryCode, LicensePlateHandler licensePlateHandler) {
+    LicensePlateCountry(String countryCode, LicensePlateHandler licensePlateHandler) {
 
         this.countryCode = countryCode;
         this.licensePlateHandler = licensePlateHandler;
@@ -61,7 +61,7 @@ public enum SupportedLicensePlateCountry implements Country {
 
         Assert.notBlank(countryCode, "Country code must not be null or empty");
 
-        for (SupportedLicensePlateCountry country : SupportedLicensePlateCountry.values()) {
+        for (LicensePlateCountry country : LicensePlateCountry.values()) {
             if (country.getCountryCode().equals(countryCode)) {
                 return country;
             }
