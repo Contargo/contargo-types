@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
  * </a></p>
  *
  * @author  Aljona Murygina - murygina@synyx.de
+ * @since  0.2.0
  */
 class PolishLicensePlateHandler implements LicensePlateHandler {
 

@@ -50,6 +50,8 @@ public final class LicensePlate {
      * @param  country  never {@code null}
      *
      * @return  {@link LicensePlate}, never {@code null}
+     *
+     * @since  0.2.0
      */
     public LicensePlate withCountry(Country country) {
 
@@ -112,7 +114,9 @@ public final class LicensePlate {
     /**
      * Get the {@link Country} of this {@link LicensePlate}.
      *
-     * @return  country, may be empty
+     * @return  country, never {@code null}
+     *
+     * @since  0.2.0
      */
     public Country getCountry() {
 

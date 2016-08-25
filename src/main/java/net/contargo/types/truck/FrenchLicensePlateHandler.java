@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
  * License plates of France between 1950 and 2009</a></p>
  *
  * @author  Aljona Murygina - murygina@synyx.de
+ * @since  0.2.0
  */
 class FrenchLicensePlateHandler implements LicensePlateHandler {
 
