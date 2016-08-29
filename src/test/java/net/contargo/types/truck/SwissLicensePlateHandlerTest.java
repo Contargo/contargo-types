@@ -22,6 +22,8 @@ public class SwissLicensePlateHandlerTest extends AbstractLicensePlateHandlerTes
     public void ensureLicensePlateIsNormalizedCorrectly() {
 
         assertIsNormalizedFromTo.accept("ag 123456", "AG 123456");
+        assertIsNormalizedFromTo.accept(" ag 123456", "AG 123456");
+        assertIsNormalizedFromTo.accept("ag 123456 ", "AG 123456");
         assertIsNormalizedFromTo.accept("ag  123456", "AG 123456");
         assertIsNormalizedFromTo.accept("sh-75936", "SH 75936");
         assertIsNormalizedFromTo.accept("sh--75936", "SH 75936");

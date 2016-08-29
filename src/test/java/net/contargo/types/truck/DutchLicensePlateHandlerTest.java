@@ -23,6 +23,7 @@ public class DutchLicensePlateHandlerTest extends AbstractLicensePlateHandlerTes
 
         assertIsNormalizedFromTo.accept("xx-xx-99", "XX-XX-99");
         assertIsNormalizedFromTo.accept("xx-xx 99", "XX-XX-99");
+        assertIsNormalizedFromTo.accept(" xx-xx 99 ", "XX-XX-99");
         assertIsNormalizedFromTo.accept("999 xx 9", "999-XX-9");
         assertIsNormalizedFromTo.accept("999  xx 9", "999-XX-9");
         assertIsNormalizedFromTo.accept("999  xx--9", "999-XX-9");

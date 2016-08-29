@@ -22,6 +22,8 @@ public class PolishLicensePlateHandlerTest extends AbstractLicensePlateHandlerTe
     public void ensureLicensePlateIsNormalizedCorrectly() {
 
         assertIsNormalizedFromTo.accept("era 75tm", "ERA 75TM");
+        assertIsNormalizedFromTo.accept(" era 75tm", "ERA 75TM");
+        assertIsNormalizedFromTo.accept(" era 75tm  ", "ERA 75TM");
         assertIsNormalizedFromTo.accept("era  75tm", "ERA 75TM");
         assertIsNormalizedFromTo.accept("era-75tm", "ERA 75TM");
         assertIsNormalizedFromTo.accept("era--75tm", "ERA 75TM");

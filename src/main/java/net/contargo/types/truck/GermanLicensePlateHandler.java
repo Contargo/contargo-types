@@ -31,13 +31,11 @@ class GermanLicensePlateHandler implements LicensePlateHandler {
     /**
      * Normalizes the given {@link LicensePlate} value by executing the following steps:
      *
-     * <p>1.) Upper case: "ka ab123" to "KA AB123"</p>
+     * <p>1.) Trim and upper case: " ka-ab123 " to "KA-AB123"</p>
      *
      * <p>2.) Use whitespace as separator, remove hyphens: "KA-AB123" to "KA AB123"</p>
      *
      * <p>3.) Ensure identification numbers are separated from identification letters: "KA AB123" to "KA AB 123"</p>
-     *
-     * <p>4.) Remove the duplicated whitespace separators: "KA AB 123" to "KA AB 123"</p>
      *
      * @param  value  to get the normalized value for, never {@code null}
      *
@@ -46,10 +44,9 @@ class GermanLicensePlateHandler implements LicensePlateHandler {
     @Override
     public String normalize(String value) {
 
-        String normalizedValue = value.toUpperCase()
-                .replaceAll("\\-+", WHITESPACE)
-                .replaceAll("(?<=\\D)(?=\\d)", WHITESPACE)
-                .replaceAll("\\s+", WHITESPACE);
+        String normalizedValue = LicensePlateHandler.trim(value)
+                .replaceAll("\\-", WHITESPACE)
+                .replaceAll("(?<=[A-ZÄÖÜ])(?=[0-9])", WHITESPACE);
 
         LOG.debug("Normalized '{}' to '{}'", value, normalizedValue);
 

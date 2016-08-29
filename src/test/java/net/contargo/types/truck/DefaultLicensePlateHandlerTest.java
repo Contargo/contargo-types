@@ -52,6 +52,8 @@ public class DefaultLicensePlateHandlerTest extends AbstractLicensePlateHandlerT
     public void ensureLicensePlateIsNormalizedCorrectly() {
 
         assertIsNormalizedFromTo.accept("ka ab 123", "KA-AB-123");
+        assertIsNormalizedFromTo.accept(" ka ab 123", "KA-AB-123");
+        assertIsNormalizedFromTo.accept(" ka ab 123  ", "KA-AB-123");
         assertIsNormalizedFromTo.accept("ka-ab 123", "KA-AB-123");
         assertIsNormalizedFromTo.accept("ka-ab  123", "KA-AB-123");
         assertIsNormalizedFromTo.accept("ka--ab  123", "KA-AB-123");

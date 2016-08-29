@@ -54,7 +54,7 @@ class SwissLicensePlateHandler implements LicensePlateHandler {
     public String normalize(String value) {
 
         // remove whitespaces and hyphens
-        String normalizedValue = value.replaceAll("\\s+", "").replaceAll("\\-+", "").toUpperCase();
+        String normalizedValue = LicensePlateHandler.trim(value).replaceAll("\\s", "").replaceAll("\\-", "");
 
         if (normalizedValue.length() > CANTON_CODE_INDEX_END) {
             normalizedValue = normalizedValue.substring(CANTON_CODE_INDEX_START, CANTON_CODE_INDEX_END) + " "

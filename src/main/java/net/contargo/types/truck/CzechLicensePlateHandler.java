@@ -51,7 +51,7 @@ class CzechLicensePlateHandler implements LicensePlateHandler {
     @Override
     public String normalize(String value) {
 
-        String trimmedValue = value.replaceAll("\\s+", "").replaceAll("\\-+", "").toUpperCase();
+        String trimmedValue = LicensePlateHandler.trim(value).replaceAll("\\s", "").replaceAll("\\-", "");
         String normalizedValue = trimmedValue;
 
         if (trimmedValue.length() > NUMBER_OF_DIGITS) {

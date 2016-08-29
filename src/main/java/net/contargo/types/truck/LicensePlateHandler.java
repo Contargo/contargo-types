@@ -11,7 +11,7 @@ interface LicensePlateHandler {
     /**
      * Get the normalized value of the given {@link LicensePlate}.
      *
-     * @param  value  to get the normalized value of, never {@code null}
+     * @param  value  to get the normalized value for, never {@code null}
      *
      * @return  the normalized license plate, never {@code null}
      */
@@ -26,4 +26,17 @@ interface LicensePlateHandler {
      * @return  {@code true} if the given {@link LicensePlate} is valid, else {@code false}
      */
     boolean validate(String value);
+
+
+    /**
+     * Remove all leading and trailing whitespaces, remove separator (whitespace and hyphen) duplications.
+     *
+     * @param  value  to be trimmed, never {@code null}
+     *
+     * @return  the trimmed value, never {@code null}
+     */
+    static String trim(String value) {
+
+        return value.toUpperCase().trim().replaceAll("\\s+", " ").replaceAll("\\-+", "-");
+    }
 }

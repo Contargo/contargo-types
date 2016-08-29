@@ -24,7 +24,7 @@ class DefaultLicensePlateHandler implements LicensePlateHandler {
     @Override
     public String normalize(String value) {
 
-        String normalizedValue = value.replaceAll("\\s+", "-").replaceAll("\\-+", "-").toUpperCase();
+        String normalizedValue = LicensePlateHandler.trim(value).replaceAll("\\s", "-");
 
         LOG.debug("Normalized '{}' to '{}'", value, normalizedValue);
 

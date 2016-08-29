@@ -24,6 +24,8 @@ public class BelgianLicensePlateHandlerTest extends AbstractLicensePlateHandlerT
         assertIsNormalizedFromTo.accept("1-abc-123", "1-ABC-123");
         assertIsNormalizedFromTo.accept("9-xyz-456", "9-XYZ-456");
         assertIsNormalizedFromTo.accept("1 abc 123", "1-ABC-123");
+        assertIsNormalizedFromTo.accept("1 abc 123", "1-ABC-123");
+        assertIsNormalizedFromTo.accept("1 abc 123  ", "1-ABC-123");
         assertIsNormalizedFromTo.accept("1  abc 123", "1-ABC-123");
         assertIsNormalizedFromTo.accept("9--xyz--456", "9-XYZ-456");
     }

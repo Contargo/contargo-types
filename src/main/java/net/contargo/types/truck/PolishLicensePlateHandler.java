@@ -31,8 +31,7 @@ class PolishLicensePlateHandler implements LicensePlateHandler {
     private static final Logger LOG = LoggerFactory.getLogger(PolishLicensePlateHandler.class);
 
     /**
-     * Normalizes the given {@link LicensePlate} value by upper casing it and separating the powiat code with a
-     * whitespace from the rest of the value.
+     * Normalizes the given {@link LicensePlate} value by upper casing it and replacing hyphens by whitespaces.
      *
      * @param  value  to get the normalized value for, never {@code null}
      *
@@ -41,7 +40,7 @@ class PolishLicensePlateHandler implements LicensePlateHandler {
     @Override
     public String normalize(String value) {
 
-        String normalizedValue = value.replaceAll("\\s+", " ").replaceAll("\\-+", " ").toUpperCase();
+        String normalizedValue = LicensePlateHandler.trim(value).replaceAll("\\-", " ");
 
         LOG.debug("Normalized '{}' to '{}'", value, normalizedValue);
 

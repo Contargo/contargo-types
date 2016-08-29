@@ -16,6 +16,22 @@ public class GermanLicensePlateHandlerTest extends AbstractLicensePlateHandlerTe
     }
 
 
+    // NORMALIZING -----------------------------------------------------------------------------------------------------
+
+    @Test
+    public void ensureLicensePlateIsNormalizedCorrectly() {
+
+        assertIsNormalizedFromTo.accept("ka ab 123", "KA AB 123");
+        assertIsNormalizedFromTo.accept(" ka ab 123", "KA AB 123");
+        assertIsNormalizedFromTo.accept("ka ab 123 ", "KA AB 123");
+        assertIsNormalizedFromTo.accept("ka-ab 123", "KA AB 123");
+        assertIsNormalizedFromTo.accept("KA-AB123", "KA AB 123");
+        assertIsNormalizedFromTo.accept("KA A123", "KA A 123");
+        assertIsNormalizedFromTo.accept("KA  A123", "KA A 123");
+        assertIsNormalizedFromTo.accept("KA  A--123", "KA A 123");
+    }
+
+
     // VALIDATION ------------------------------------------------------------------------------------------------------
 
     // GEOGRAPHIC IDENTIFIER
@@ -184,19 +200,5 @@ public class GermanLicensePlateHandlerTest extends AbstractLicensePlateHandlerTe
     public void ensureLowerCaseLicensePlateIsValid() {
 
         assertIsValid.accept("ka ab 666");
-    }
-
-
-    // NORMALIZING -----------------------------------------------------------------------------------------------------
-
-    @Test
-    public void ensureLicensePlateIsNormalizedCorrectly() {
-
-        assertIsNormalizedFromTo.accept("ka ab 123", "KA AB 123");
-        assertIsNormalizedFromTo.accept("ka-ab 123", "KA AB 123");
-        assertIsNormalizedFromTo.accept("KA-AB123", "KA AB 123");
-        assertIsNormalizedFromTo.accept("KA A123", "KA A 123");
-        assertIsNormalizedFromTo.accept("KA  A123", "KA A 123");
-        assertIsNormalizedFromTo.accept("KA  A--123", "KA A 123");
     }
 }

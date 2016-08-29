@@ -22,6 +22,7 @@ public class FrenchLicensePlateHandlerTest extends AbstractLicensePlateHandlerTe
     public void ensureLicensePlateIsNormalizedCorrectly() {
 
         assertIsNormalizedFromTo.accept("aa 001 ab", "AA-001-AB");
+        assertIsNormalizedFromTo.accept(" aa 001 ab ", "AA-001-AB");
         assertIsNormalizedFromTo.accept("aa  001-ab", "AA-001-AB");
         assertIsNormalizedFromTo.accept("aa--001-ab", "AA-001-AB");
     }

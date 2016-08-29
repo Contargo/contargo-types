@@ -22,6 +22,8 @@ public class CzechLicensePlateHandlerTest extends AbstractLicensePlateHandlerTes
     public void ensureLicensePlateIsNormalizedCorrectly() {
 
         assertIsNormalizedFromTo.accept("1so 3690", "1SO 3690");
+        assertIsNormalizedFromTo.accept(" 1so 3690", "1SO 3690");
+        assertIsNormalizedFromTo.accept("1so 3690 ", "1SO 3690");
         assertIsNormalizedFromTo.accept("1so  3690", "1SO 3690");
         assertIsNormalizedFromTo.accept("5a6-3240", "5A6 3240");
         assertIsNormalizedFromTo.accept("5a6--3240", "5A6 3240");
