@@ -77,12 +77,32 @@ public class LicensePlateTest {
         String value = "foo";
         String normalizedValue = "formatted";
 
+        Mockito.when(handlerMock.validate(Mockito.anyString())).thenReturn(true);
         Mockito.when(handlerMock.normalize(Mockito.anyString())).thenReturn(normalizedValue);
 
         LicensePlate licensePlate = LicensePlate.forValue(value).withCountry(country);
 
         Assert.assertEquals("Wrong String representation", normalizedValue, licensePlate.toString());
+        Mockito.verify(handlerMock).validate(value);
         Mockito.verify(handlerMock).normalize(value);
+    }
+
+
+    @Test
+    public void ensureInvalidLicensePlateIsNotFormatted() {
+
+        LicensePlateHandler handlerMock = Mockito.mock(LicensePlateHandler.class);
+        Country country = new DummyCountry(handlerMock);
+
+        String value = "foo";
+
+        Mockito.when(handlerMock.validate(Mockito.anyString())).thenReturn(false);
+
+        LicensePlate licensePlate = LicensePlate.forValue(value).withCountry(country);
+
+        Assert.assertEquals("Wrong String representation", value, licensePlate.toString());
+        Mockito.verify(handlerMock).validate(value);
+        Mockito.verify(handlerMock, Mockito.never()).normalize(value);
     }
 
 

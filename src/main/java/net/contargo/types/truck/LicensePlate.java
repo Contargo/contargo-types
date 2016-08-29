@@ -71,7 +71,11 @@ public final class LicensePlate {
     @Override
     public String toString() {
 
-        return country.getLicensePlateHandler().normalize(value);
+        if (isValid()) {
+            return country.getLicensePlateHandler().normalize(value);
+        }
+
+        return value;
     }
 
 
