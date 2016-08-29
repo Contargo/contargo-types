@@ -1,7 +1,7 @@
 Contargo Types
 ===============
 
-## v0.2.0 (Release on 2016-XX-XX)
+## v0.2.0 (Release on 2016-08-29)
 
 * The license plate type is now bound to a country. Formatting and validation
   of license plates depends on the bound country.
