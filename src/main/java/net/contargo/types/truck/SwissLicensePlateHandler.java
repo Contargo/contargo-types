@@ -1,8 +1,5 @@
 package net.contargo.types.truck;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,8 +23,6 @@ import java.util.List;
  * @since  0.2.0
  */
 class SwissLicensePlateHandler implements LicensePlateHandler {
-
-    private static final Logger LOG = LoggerFactory.getLogger(SwissLicensePlateHandler.class);
 
     /**
      * The cantons of Switzerland.
@@ -60,8 +55,6 @@ class SwissLicensePlateHandler implements LicensePlateHandler {
             normalizedValue = normalizedValue.substring(CANTON_CODE_INDEX_START, CANTON_CODE_INDEX_END) + " "
                 + normalizedValue.substring(CANTON_CODE_INDEX_END, normalizedValue.length());
         }
-
-        LOG.debug("Normalized '{}' to '{}'", value, normalizedValue);
 
         return normalizedValue;
     }

@@ -1,9 +1,5 @@
 package net.contargo.types.truck;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-
 /**
  * Can handle French {@link LicensePlate}s.
  *
@@ -35,8 +31,6 @@ import org.slf4j.LoggerFactory;
  */
 class FrenchLicensePlateHandler implements LicensePlateHandler {
 
-    private static final Logger LOG = LoggerFactory.getLogger(FrenchLicensePlateHandler.class);
-
     /**
      * Normalizes the given {@link LicensePlate} value by upper casing it and replacing all whitespaces by hyphens. If
      * the value represents a license plate that has been valid between 1950 and 2009, whitespaces instead of hyphens
@@ -54,8 +48,6 @@ class FrenchLicensePlateHandler implements LicensePlateHandler {
         if (hasFormerlyValidFormat(normalizedValue)) {
             normalizedValue = normalizedValue.replaceAll("\\-", " ");
         }
-
-        LOG.debug("Normalized '{}' to '{}'", value, normalizedValue);
 
         return normalizedValue;
     }

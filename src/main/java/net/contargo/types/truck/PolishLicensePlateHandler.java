@@ -1,9 +1,5 @@
 package net.contargo.types.truck;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-
 /**
  * Can handle Polish {@link LicensePlate}s.
  *
@@ -28,8 +24,6 @@ import org.slf4j.LoggerFactory;
  */
 class PolishLicensePlateHandler implements LicensePlateHandler {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PolishLicensePlateHandler.class);
-
     /**
      * Normalizes the given {@link LicensePlate} value by upper casing it and replacing hyphens by whitespaces.
      *
@@ -40,11 +34,7 @@ class PolishLicensePlateHandler implements LicensePlateHandler {
     @Override
     public String normalize(String value) {
 
-        String normalizedValue = LicensePlateHandler.trim(value).replaceAll("\\-", " ");
-
-        LOG.debug("Normalized '{}' to '{}'", value, normalizedValue);
-
-        return normalizedValue;
+        return LicensePlateHandler.trim(value).replaceAll("\\-", " ");
     }
 
 

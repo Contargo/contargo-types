@@ -1,9 +1,5 @@
 package net.contargo.types.truck;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-
 /**
  * Default implementation for {@link LicensePlateHandler}s.
  *
@@ -11,8 +7,6 @@ import org.slf4j.LoggerFactory;
  * @since  0.2.0
  */
 class DefaultLicensePlateHandler implements LicensePlateHandler {
-
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultLicensePlateHandler.class);
 
     /**
      * Normalizes the given {@link LicensePlate} value by upper casing it and replacing all whitespaces by hyphens.
@@ -24,11 +18,7 @@ class DefaultLicensePlateHandler implements LicensePlateHandler {
     @Override
     public String normalize(String value) {
 
-        String normalizedValue = LicensePlateHandler.trim(value).replaceAll("\\s", "-");
-
-        LOG.debug("Normalized '{}' to '{}'", value, normalizedValue);
-
-        return normalizedValue;
+        return LicensePlateHandler.trim(value).replaceAll("\\s", "-");
     }
 
 

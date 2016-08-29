@@ -1,9 +1,5 @@
 package net.contargo.types.truck;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-
 /**
  * Can handle German {@link LicensePlate}s.
  *
@@ -24,8 +20,6 @@ import org.slf4j.LoggerFactory;
  */
 class GermanLicensePlateHandler implements LicensePlateHandler {
 
-    private static final Logger LOG = LoggerFactory.getLogger(GermanLicensePlateHandler.class);
-
     private static final String WHITESPACE = " ";
 
     /**
@@ -44,13 +38,9 @@ class GermanLicensePlateHandler implements LicensePlateHandler {
     @Override
     public String normalize(String value) {
 
-        String normalizedValue = LicensePlateHandler.trim(value)
-                .replaceAll("\\-", WHITESPACE)
-                .replaceAll("(?<=[A-ZÄÖÜ])(?=[0-9])", WHITESPACE);
-
-        LOG.debug("Normalized '{}' to '{}'", value, normalizedValue);
-
-        return normalizedValue;
+        return LicensePlateHandler.trim(value)
+            .replaceAll("\\-", WHITESPACE)
+            .replaceAll("(?<=[A-ZÄÖÜ])(?=[0-9])", WHITESPACE);
     }
 
 

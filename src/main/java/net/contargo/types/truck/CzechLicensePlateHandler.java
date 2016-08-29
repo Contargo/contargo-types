@@ -1,9 +1,5 @@
 package net.contargo.types.truck;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-
 /**
  * Can handle Czech {@link LicensePlate}s.
  *
@@ -34,8 +30,6 @@ import org.slf4j.LoggerFactory;
  * @since  0.2.0
  */
 class CzechLicensePlateHandler implements LicensePlateHandler {
-
-    private static final Logger LOG = LoggerFactory.getLogger(CzechLicensePlateHandler.class);
 
     private static final int NUMBER_OF_DIGITS = 4;
 
@@ -74,8 +68,6 @@ class CzechLicensePlateHandler implements LicensePlateHandler {
                     + numbers.substring(halfOfNumbersLength, numbersLength);
             }
         }
-
-        LOG.debug("Normalized '{}' to '{}'", value, normalizedValue);
 
         return normalizedValue;
     }
