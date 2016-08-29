@@ -5,9 +5,10 @@ package net.contargo.types.container;
  * {@link net.contargo.domain.Container}'s measure and weight.
  *
  * @author  Aljona Murygina - murygina@synyx.de
+ * @see  net.contargo.domain.ContainerType
  * @since  0.2.0
  */
-public enum ContainerType {
+public enum ContainerType implements net.contargo.domain.ContainerType {
 
     TWENTY_BO("20BO", "22B0"),
     TWENTY_BU("20BU", "22B0"),
