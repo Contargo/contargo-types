@@ -11,8 +11,6 @@ import net.contargo.types.util.Assert;
  */
 public final class LicensePlate {
 
-    private static final Country DEFAULT_COUNTRY = LicensePlateCountry.GERMANY;
-
     private final String value;
     private Country country;
 
@@ -31,35 +29,13 @@ public final class LicensePlate {
      *
      * @param  value  represents a license plate
      *
-     * @return  a {@link LicensePlate}, never {@code null}
+     * @return  {@link LicensePlateBuilder}, never {@code null}
      */
-    public static LicensePlate forValue(String value) {
+    public static LicensePlateBuilder forValue(String value) {
 
         Assert.notBlank(value, "Value for license plate must not be null or empty");
 
-        LicensePlate licensePlate = new LicensePlate(value);
-        licensePlate.country = DEFAULT_COUNTRY;
-
-        return licensePlate;
-    }
-
-
-    /**
-     * Set the {@link Country} for this {@link LicensePlate}.
-     *
-     * @param  country  never {@code null}
-     *
-     * @return  {@link LicensePlate}, never {@code null}
-     *
-     * @since  0.2.0
-     */
-    public LicensePlate withCountry(Country country) {
-
-        Assert.notNull(country, "Country must not be null");
-
-        this.country = country;
-
-        return this;
+        return new LicensePlateBuilder(value);
     }
 
 
@@ -125,5 +101,33 @@ public final class LicensePlate {
     public Country getCountry() {
 
         return country;
+    }
+
+    public static class LicensePlateBuilder {
+
+        private LicensePlate licensePlate;
+
+        private LicensePlateBuilder(String value) {
+
+            this.licensePlate = new LicensePlate(value);
+        }
+
+        /**
+         * Set the {@link Country} for this {@link LicensePlate}.
+         *
+         * @param  country  never {@code null}
+         *
+         * @return  {@link LicensePlate}, never {@code null}
+         *
+         * @since  0.2.0
+         */
+        public LicensePlate withCountry(Country country) {
+
+            Assert.notNull(country, "Country must not be null");
+
+            licensePlate.country = country;
+
+            return licensePlate;
+        }
     }
 }

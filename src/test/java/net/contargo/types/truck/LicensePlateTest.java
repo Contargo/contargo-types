@@ -37,16 +37,6 @@ public class LicensePlateTest {
     }
 
 
-    @Test
-    public void ensureCanBeBuiltWithoutCountry() {
-
-        LicensePlate licensePlate = LicensePlate.forValue("foo");
-
-        Assert.assertNotNull("Should not be null", licensePlate);
-        Assert.assertEquals("Wrong default country", LicensePlateCountry.GERMANY, licensePlate.getCountry());
-    }
-
-
     @Test(expected = IllegalArgumentException.class)
     public void ensureThrowsIfBuiltWithNullCountry() {
 

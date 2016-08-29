@@ -51,10 +51,7 @@ The `LoadingState` enum provides the possible container loading states.
 #### License plate
 
 ```java
-// Create with default country Germany
-LicensePlate licensePlate = LicensePlate.forValue(string);
-// Create with dedicated country
-LicensePlate licensePlateWithCountry = LicensePlate.forValue(string).withCountry(LicensePlateCountry.NETHERLANDS);
+LicensePlate licensePlateWithCountry = LicensePlate.forValue(string).withCountry(LicensePlateCountry.GERMANY);
 ```
 
 The built license plate instance provides various information depending on the
