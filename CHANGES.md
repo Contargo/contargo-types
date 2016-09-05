@@ -1,6 +1,11 @@
 Contargo Types
 ===============
 
+## v0.2.1 (Release on 2016-09-05)
+
+* Ensure that a German license plate with more than eight characters is
+  not valid.
+
 ## v0.2.0 (Release on 2016-08-29)
 
 * The license plate type is now bound to a country. Formatting and validation
