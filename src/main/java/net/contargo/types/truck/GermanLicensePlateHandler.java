@@ -21,6 +21,8 @@ package net.contargo.types.truck;
 class GermanLicensePlateHandler implements LicensePlateHandler {
 
     private static final String WHITESPACE = " ";
+    private static final int MAXIMUM_NUMBER_OF_CHARACTERS = 8;
+    private static final int NUMBER_OF_WHITESPACES = 2;
 
     /**
      * Normalizes the given {@link LicensePlate} value by executing the following steps:
@@ -79,6 +81,7 @@ class GermanLicensePlateHandler implements LicensePlateHandler {
 
         String normalizedValue = normalize(value);
 
-        return normalizedValue.matches("^[A-ZÄÖÜ]{1,3}\\s[A-Z]{0,2}\\s[1-9][0-9]{0,3}");
+        return normalizedValue.length() <= MAXIMUM_NUMBER_OF_CHARACTERS + NUMBER_OF_WHITESPACES
+            && normalizedValue.matches("^[A-ZÄÖÜ]{1,3}\\s[A-Z]{0,2}\\s[1-9][0-9]{0,3}");
     }
 }
