@@ -144,7 +144,7 @@ public class GermanLicensePlateHandlerTest extends AbstractLicensePlateHandlerTe
     public void ensureLicensePlateWithMoreThanEightCharactersIsNotValid() {
 
         // all rules are fulfilled, but number of characters is 9
-        assertIsValid.accept("GER TI 5432");
+        assertIsNotValid.accept("GER TI 5432");
     }
 
 
