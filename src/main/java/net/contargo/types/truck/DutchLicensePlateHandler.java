@@ -56,6 +56,10 @@ class DutchLicensePlateHandler implements LicensePlateHandler {
 
         String normalizedValue = normalize(value);
 
+        if (normalizedValue.length() > 8) {
+            return false;
+        }
+
         return normalizedValue.matches("[A-Z0-9]{1,3}\\-[A-Z0-9]{1,3}\\-[A-Z0-9]{1,3}");
     }
 }

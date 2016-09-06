@@ -127,4 +127,12 @@ public class DutchLicensePlateHandlerTest extends AbstractLicensePlateHandlerTes
         assertIsValid.accept("XX  999  X");
         assertIsValid.accept("X 999 XX");
     }
+
+
+    @Test
+    public void ensureLicensePlateWithMoreThenEightCharactersIsNotValid() {
+
+        assertIsNotValid.accept("XX-999-XX");
+        assertIsNotValid.accept("99-XXX-99");
+    }
 }
