@@ -20,6 +20,8 @@ package net.contargo.types.truck;
  */
 class DutchLicensePlateHandler implements LicensePlateHandler {
 
+    private static final int MAXIMUM_NUMBER_OF_CHARACTERS = 8;
+
     /**
      * Normalizes the given {@link LicensePlate} value by upper casing it and replacing all whitespaces by hyphens.
      *
@@ -56,7 +58,7 @@ class DutchLicensePlateHandler implements LicensePlateHandler {
 
         String normalizedValue = normalize(value);
 
-        if (normalizedValue.length() > 8) {
+        if (normalizedValue.length() > MAXIMUM_NUMBER_OF_CHARACTERS) {
             return false;
         }
 
