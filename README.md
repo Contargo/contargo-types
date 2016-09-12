@@ -61,6 +61,17 @@ bound country, such as the validity on `isValid()` or the formatted value on
 To find out which countries are supported, take a look at the
 `LicensePlateCountry` enum.
 
+### Transport
+
+#### Direction
+
+```java
+Direction.TURN_IN
+Direction.TURN_OUT
+```
+
+The `Direction` enum describes the direction of a unit movement regarding one location.
+
 ## Development
 
 This is a pretty straight-forward Java-project, use `mvn` to build, test and

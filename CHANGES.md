@@ -1,6 +1,11 @@
 Contargo Types
 ===============
 
+## v0.3.0
+
+* Introduce Contargo type for direction of a unit movement regarding one location.
+* Add check on maximum length for Dutch license plates.
+
 ## v0.2.0 (Release on 2016-08-29)
 
 * The license plate type is now bound to a country. Formatting and validation
