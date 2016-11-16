@@ -15,8 +15,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * Annotation to validate if the {@link net.contargo.types.container.ContainerNumber ContainerNumber} is ISO6346 valid,
  * i.e. has a valid format and a correct check digit.
  *
+ * <p>Example:</p>
+ *
  * <pre>
- Example:
  public class Container {
 
     &#064;ContainerNumber
