@@ -51,6 +51,12 @@
             <artifactId>contargo-domain</artifactId>
             <version>0.1.0</version>
         </dependency>
+        <!-- VALIDATION -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>5.2.4.Final</version>
+        </dependency>
         <!-- TEST DEPENDENCIES -->
         <dependency>
             <groupId>junit</groupId>
