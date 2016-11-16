@@ -29,6 +29,20 @@ ContainerNumber containerNumber = ContainerNumber.forValue(string);
 The built container number instance provides various information, such as the
 validity on `isValid()` or the formatted value on `toString()`.
 
+
+##### Validation
+
+```java
+ public class Container {
+
+    @ContainerNumber
+    public String containerNumber;
+    ...
+ }
+```
+
+Bean validation for container numbers via ```@ContainerNumber``` based on the ISO6346
+
 #### Container type
 
 ```java
