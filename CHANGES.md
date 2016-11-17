@@ -1,6 +1,10 @@
 Contargo Types
 ===============
 
+## v0.4.0 (Release on xxxx-xx-xx)
+
+* Introduce bean validation via annotation for container numbers (@ContainerNumber)
+
 ## v0.3.0 (Release on 2016-09-12)
 
 * Introduce Contargo type for direction of a unit movement regarding one location.
