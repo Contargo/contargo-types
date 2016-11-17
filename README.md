@@ -43,6 +43,8 @@ validity on `isValid()` or the formatted value on `toString()`.
 
 Bean validation for container numbers via ```@ContainerNumber``` based on the ISO6346
 
+Provide `validation.unit.number.error.message` in your message.properties to set the validators error message.
+
 #### Container type
 
 ```java
