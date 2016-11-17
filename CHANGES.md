@@ -1,7 +1,7 @@
 Contargo Types
 ===============
 
-## v0.4.0 (Release on xxxx-xx-xx)
+## v0.4.0 (Release on 2016-11-17)
 
 * Introduce bean validation via annotation for container numbers (@ContainerNumber)
 
