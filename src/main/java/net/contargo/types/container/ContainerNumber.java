@@ -37,7 +37,7 @@ public final class ContainerNumber {
     private ContainerNumber(String value) {
 
         this.value = value;
-        this.normalizedContainerNumber = value.replaceAll("[ -]", "").toUpperCase();
+        this.normalizedContainerNumber = value.replaceAll("[^a-zA-Z0-9]", "").toUpperCase();
     }
 
     /**
