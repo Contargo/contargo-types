@@ -93,4 +93,10 @@ The `Direction` enum describes the direction of a unit movement regarding one lo
 This is a pretty straight-forward Java-project, use `mvn` to build, test and
 deploy.
 
+## License
+
+This project is distributed under the Apache 2.0 License. The full set of
+terms and conditions can be seen in the [LICENSE](LICENSE) file.
+
+
 Happy hacking!
