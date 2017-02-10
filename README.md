@@ -1,6 +1,8 @@
 Contargo Types
 ===============
 
+[![Build Status](https://travis-ci.org/Contargo/contargo-types.svg?branch=master)](https://travis-ci.org/Contargo/contargo-types)
+
 This is a library aimed at providing a collection of re-usable Contargo objects.
 
 ## Getting started
