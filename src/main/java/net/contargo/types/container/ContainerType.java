@@ -1,5 +1,8 @@
 package net.contargo.types.container;
 
+import java.util.Arrays;
+
+
 /**
  * Describes the type of a {@link net.contargo.domain.Container}. The type specifies the
  * {@link net.contargo.domain.Container}'s measure and weight.
@@ -91,19 +94,18 @@ public enum ContainerType implements net.contargo.domain.ContainerType {
      */
     public static ContainerType byContargoHandlingCode(String contargoHandlingCode) {
 
-        for (ContainerType containerType : ContainerType.values()) {
-            if (containerType.getContargoHandlingCode().equals(contargoHandlingCode)) {
-                return containerType;
-            }
-        }
-
-        throw new IllegalArgumentException("Unknown container type Contargo handling code given: "
-            + contargoHandlingCode);
+        return Arrays.stream(ContainerType.values()).filter(containerType ->
+                        containerType.getContargoHandlingCode()
+                        .equals(contargoHandlingCode)).findFirst().orElseThrow(() ->
+                    new IllegalArgumentException(
+                        "Unknown container type Contargo handling code given: "
+                        + contargoHandlingCode));
     }
 
 
     /**
-     * Find the matching container type for the given ISO code (ISO 6346).
+     * Find the first matching container type for the given ISO code (ISO 6346) (matching from ISO code to Contargo
+     * handling code is unambiguous!).
      *
      * @param  isoCode  of the container type to find
      *
@@ -113,13 +115,11 @@ public enum ContainerType implements net.contargo.domain.ContainerType {
      */
     public static ContainerType byIsoCode(String isoCode) {
 
-        for (ContainerType containerType : ContainerType.values()) {
-            if (containerType.getIsoCode().equals(isoCode)) {
-                return containerType;
-            }
-        }
-
-        throw new IllegalArgumentException("Unknown container type ISO code given: "
-            + isoCode);
+        return Arrays.stream(ContainerType.values())
+            .filter(containerType -> containerType.getIsoCode().equals(isoCode))
+            .findFirst()
+            .orElseThrow(() ->
+                    new IllegalArgumentException("Unknown container type ISO code given: "
+                        + isoCode));
     }
 }
