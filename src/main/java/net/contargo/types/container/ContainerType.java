@@ -5,6 +5,7 @@ package net.contargo.types.container;
  * {@link net.contargo.domain.Container}'s measure and weight.
  *
  * @author  Aljona Murygina - murygina@synyx.de
+ * @author  Slaven Travar - slaven.travar@pta.de
  * @see  net.contargo.domain.ContainerType
  * @since  0.2.0
  */
@@ -47,19 +48,30 @@ public enum ContainerType implements net.contargo.domain.ContainerType {
     FORTY_TK("40TK", "42T0"),
     FORTY_VE("40VE", "42V0");
 
+    private final String contargoHandlingCode;
     private final String isoCode;
-    private final String internationalIsoCode;
 
-    ContainerType(String isoCode, String internationalIsoCode) {
+    ContainerType(String contargoHandlingCode, String isoCode) {
 
+        this.contargoHandlingCode = contargoHandlingCode;
         this.isoCode = isoCode;
-        this.internationalIsoCode = internationalIsoCode;
     }
 
     /**
-     * Get the ISO code as established and used by Contargo.
+     * Get the handling code as established and used by Contargo.
      *
-     * @return  the internal Contargo ISO code string
+     * @return  the internal Contargo handling code string
+     */
+    public String getContargoHandlingCode() {
+
+        return contargoHandlingCode;
+    }
+
+
+    /**
+     * Get the ISO code (ISO 6346).
+     *
+     * @return  the standard ISO 6346 code string
      */
     public String getIsoCode() {
 
@@ -68,18 +80,30 @@ public enum ContainerType implements net.contargo.domain.ContainerType {
 
 
     /**
-     * Get the international ISO code (ISO 6346).
+     * Find the matching container type for the given Contargo handling code.
      *
-     * @return  the international standard ISO 6346 code string
+     * @param  contargoHandlingCode  of the container type to find
+     *
+     * @return  the matching container type
+     *
+     * @throws  IllegalArgumentException  if no matching container type can be found for the given Contargo handling
+     *                                    code
      */
-    public String getInternationalIsoCode() {
+    public static ContainerType byContargoHandlingCode(String contargoHandlingCode) {
 
-        return internationalIsoCode;
+        for (ContainerType containerType : ContainerType.values()) {
+            if (containerType.getContargoHandlingCode().equals(contargoHandlingCode)) {
+                return containerType;
+            }
+        }
+
+        throw new IllegalArgumentException("Unknown container type Contargo handling code given: "
+            + contargoHandlingCode);
     }
 
 
     /**
-     * Find the matching container type for the given ISO code.
+     * Find the matching container type for the given ISO code (ISO 6346).
      *
      * @param  isoCode  of the container type to find
      *
@@ -87,7 +111,7 @@ public enum ContainerType implements net.contargo.domain.ContainerType {
      *
      * @throws  IllegalArgumentException  if no matching container type can be found for the given ISO code
      */
-    public static ContainerType byIsoSize(String isoCode) {
+    public static ContainerType byIsoCode(String isoCode) {
 
         for (ContainerType containerType : ContainerType.values()) {
             if (containerType.getIsoCode().equals(isoCode)) {
@@ -95,29 +119,7 @@ public enum ContainerType implements net.contargo.domain.ContainerType {
             }
         }
 
-        throw new IllegalArgumentException("Unknown container type ISO code given: " + isoCode);
-    }
-
-
-    /**
-     * Find the matching container type for the given international ISO code (ISO 6346).
-     *
-     * @param  internationalIsoCode  of the container type to find
-     *
-     * @return  the matching container type
-     *
-     * @throws  IllegalArgumentException  if no matching container type can be found for the given international ISO
-     *                                    code
-     */
-    public static ContainerType byInternationalIsoSize(String internationalIsoCode) {
-
-        for (ContainerType containerType : ContainerType.values()) {
-            if (containerType.getInternationalIsoCode().equals(internationalIsoCode)) {
-                return containerType;
-            }
-        }
-
-        throw new IllegalArgumentException("Unknown international container type ISO code given: "
-            + internationalIsoCode);
+        throw new IllegalArgumentException("Unknown container type ISO code given: "
+            + isoCode);
     }
 }

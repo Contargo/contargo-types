@@ -6,34 +6,35 @@ import org.junit.Test;
 
 /**
  * @author  Aljona Murygina - murygina@synyx.de
+ * @author  Slaven Travar - slaven.travar@pta.de
  */
 public class ContainerTypeTest {
 
     @Test(expected = IllegalArgumentException.class)
-    public void ensureThrowsIfProvidingInvalidIsoCode() {
+    public void ensureThrowsIfProvidingInvalidContargoHandlingCode() {
 
-        ContainerType.byIsoSize("foo");
+        ContainerType.byContargoHandlingCode("foo");
     }
 
 
     @Test(expected = IllegalArgumentException.class)
-    public void ensureThrowsIfProvidingNullIsoCode() {
+    public void ensureThrowsIfProvidingNullContargoHandlingCode() {
 
-        ContainerType.byIsoSize(null);
+        ContainerType.byContargoHandlingCode(null);
     }
 
 
     @Test(expected = IllegalArgumentException.class)
-    public void ensureThrowsIfProvidingEmptyIsoCode() {
+    public void ensureThrowsIfProvidingEmptyContargoHandlingCode() {
 
-        ContainerType.byIsoSize("");
+        ContainerType.byContargoHandlingCode("");
     }
 
 
     @Test
-    public void ensureReturnsContainerTypeForIsoCode() {
+    public void ensureReturnsContainerTypeForContargoHandlingCode() {
 
-        ContainerType containerType = ContainerType.byIsoSize("40HC");
+        ContainerType containerType = ContainerType.byContargoHandlingCode("40HC");
 
         Assert.assertNotNull("Should not be null", containerType);
         Assert.assertEquals("Wrong container type", ContainerType.FORTY_HC, containerType);
@@ -41,30 +42,30 @@ public class ContainerTypeTest {
 
 
     @Test(expected = IllegalArgumentException.class)
-    public void ensureThrowsIfProvidingInvalidInternationalIsoCode() {
+    public void ensureThrowsIfProvidingInvalidIsoCode() {
 
-        ContainerType.byInternationalIsoSize("foo");
+        ContainerType.byIsoCode("foo");
     }
 
 
     @Test(expected = IllegalArgumentException.class)
-    public void ensureThrowsIfProvidingNullInternationalIsoCode() {
+    public void ensureThrowsIfProvidingNullIsoCode() {
 
-        ContainerType.byInternationalIsoSize(null);
+        ContainerType.byIsoCode(null);
     }
 
 
     @Test(expected = IllegalArgumentException.class)
-    public void ensureThrowsIfProvidingEmptyInternationalIsoCode() {
+    public void ensureThrowsIfProvidingEmptyIsoCode() {
 
-        ContainerType.byInternationalIsoSize("");
+        ContainerType.byIsoCode("");
     }
 
 
     @Test
-    public void ensureReturnsContainerTypeForInternationalIsoCode() {
+    public void ensureReturnsContainerTypeForIsoCode() {
 
-        ContainerType containerType = ContainerType.byInternationalIsoSize("22B0");
+        ContainerType containerType = ContainerType.byIsoCode("22B0");
 
         Assert.assertNotNull("Should not be null", containerType);
         Assert.assertEquals("Wrong container type", ContainerType.TWENTY_BO, containerType);
