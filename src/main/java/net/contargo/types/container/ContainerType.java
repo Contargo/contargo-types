@@ -14,8 +14,10 @@ import java.util.Arrays;
  */
 public enum ContainerType implements net.contargo.domain.ContainerType {
 
+    TWENTY_BH("20BH", "25B1"),
     TWENTY_BO("20BO", "22B0"),
     TWENTY_BU("20BU", "22B0"),
+    TWENTY_DL("20DL", "20DL"),
     TWENTY_DV("20DV", "22G0"),
     TWENTY_FL("20FL", "22P1"),
     TWENTY_FS("20FS", "22P3"),
@@ -26,6 +28,7 @@ public enum ContainerType implements net.contargo.domain.ContainerType {
     TWENTY_IS("20IS", "22H5"),
     TWENTY_OT("20OT", "22U0"),
     TWENTY_PH("20PH", "25N0"),
+    TWENTY_PL("20PL", "29P0"),
     TWENTY_PW("20PW", "25X0"),
     TWENTY_RF("20RF", "22R0"),
     TWENTY_TK("20TK", "22T0"),
@@ -42,6 +45,7 @@ public enum ContainerType implements net.contargo.domain.ContainerType {
     FORTY_HT("40HT", "42H6"),
     FORTY_IS("40IS", "42H5"),
     FORTY_OH("40OH", "4551"),
+    FORTY_OS("40OS", "42U0"),
     FORTY_OT("40OT", "42U0"),
     FORTY_PH("40PH", "40PH"),
     FORTY_PL("40PL", "40PL"),
