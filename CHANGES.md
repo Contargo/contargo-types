@@ -3,7 +3,8 @@ Contargo Types
 
 ## v0.5.0 (Release on xxxx-xx-xx)
 
-* ...
+* Rename isoCode and internationalIsoCode in @ContainerType to contargoHandlingCode and isoCode
+* Add some more ContainerTypes
 
 ## v0.4.0 (Release on 2016-11-17)
 
