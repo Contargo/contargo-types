@@ -6,7 +6,7 @@ package net.contargo.types.truck;
  * @author  Aljona Murygina - murygina@synyx.de
  * @since  0.2.0
  */
-public class DefaultLicensePlateHandler implements LicensePlateHandler {
+class DefaultLicensePlateHandler implements LicensePlateHandler {
 
     /**
      * Normalizes the given {@link LicensePlate} value by upper casing it and replacing all whitespaces by hyphens.

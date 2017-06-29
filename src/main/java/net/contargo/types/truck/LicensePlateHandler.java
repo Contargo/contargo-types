@@ -6,7 +6,7 @@ package net.contargo.types.truck;
  * @author  Aljona Murygina - murygina@synyx.de
  * @since  0.2.0
  */
-public interface LicensePlateHandler {
+interface LicensePlateHandler {
 
     /**
      * Get the normalized value of the given {@link LicensePlate}.
