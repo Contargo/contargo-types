@@ -17,7 +17,8 @@ public enum LicensePlateCountry implements Country {
     SWITZERLAND("CH", new SwissLicensePlateHandler()),
     FRANCE("F", new FrenchLicensePlateHandler()),
     POLAND("PL", new PolishLicensePlateHandler()),
-    CZECH_REPUBLIC("CZ", new CzechLicensePlateHandler());
+    CZECH_REPUBLIC("CZ", new CzechLicensePlateHandler()),
+    UNKNOWN_COUNTRY("", new UnknownCountryLicensePlateHandler());
 
     private final String countryCode;
     private final LicensePlateHandler licensePlateHandler;
@@ -59,7 +60,7 @@ public enum LicensePlateCountry implements Country {
      */
     public static Country forCountryCode(String countryCode) {
 
-        Assert.notBlank(countryCode, "Country code must not be null or empty");
+        Assert.notNull(countryCode, "Country code must not be null");
 
         for (LicensePlateCountry country : LicensePlateCountry.values()) {
             if (country.getCountryCode().equals(countryCode)) {

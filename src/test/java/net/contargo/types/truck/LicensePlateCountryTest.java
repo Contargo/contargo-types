@@ -54,24 +54,6 @@ public class LicensePlateCountryTest {
     }
 
 
-    @Test
-    public void ensureThrowsIfTryingToGetCountryByEmptyCountryCode() {
-
-        Consumer<String> assertNotEmpty = countryCode -> {
-            try {
-                LicensePlateCountry.forCountryCode(countryCode);
-                Assert.fail(String.format("Should throw if trying to get country by country code: '%s'", countryCode));
-            } catch (IllegalArgumentException ex) {
-                // Expected
-            }
-        };
-
-        assertNotEmpty.accept(null);
-        assertNotEmpty.accept("");
-        assertNotEmpty.accept(" ");
-    }
-
-
     @Test(expected = IllegalArgumentException.class)
     public void ensureThrowsIfTryingToGetCountryByUnknownCountryCode() {
 
