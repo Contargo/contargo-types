@@ -11,21 +11,23 @@ import net.contargo.types.util.Assert;
  */
 public enum LicensePlateCountry implements Country {
 
-    GERMANY("D", new GermanLicensePlateHandler()),
-    NETHERLANDS("NL", new DutchLicensePlateHandler()),
-    BELGIUM("B", new BelgianLicensePlateHandler()),
-    SWITZERLAND("CH", new SwissLicensePlateHandler()),
-    FRANCE("F", new FrenchLicensePlateHandler()),
-    POLAND("PL", new PolishLicensePlateHandler()),
-    CZECH_REPUBLIC("CZ", new CzechLicensePlateHandler()),
-    UNKNOWN_COUNTRY("", new UnknownCountryLicensePlateHandler());
+    GERMANY("D", "KA AB 123", new GermanLicensePlateHandler()),
+    NETHERLANDS("NL", "2-VDL-52", new DutchLicensePlateHandler()),
+    BELGIUM("B", "1-ABC-555", new BelgianLicensePlateHandler()),
+    SWITZERLAND("CH", "ZH 445789", new SwissLicensePlateHandler()),
+    FRANCE("F", "AA-001-AB", new FrenchLicensePlateHandler()),
+    POLAND("PL", "XYZ 12JK", new PolishLicensePlateHandler()),
+    CZECH_REPUBLIC("CZ", "2H2 7149", new CzechLicensePlateHandler()),
+    UNKNOWN_COUNTRY("", "", new UnknownCountryLicensePlateHandler());
 
     private final String countryCode;
+    private final String example;
     private final LicensePlateHandler licensePlateHandler;
 
-    LicensePlateCountry(String countryCode, LicensePlateHandler licensePlateHandler) {
+    LicensePlateCountry(String countryCode, String example, LicensePlateHandler licensePlateHandler) {
 
         this.countryCode = countryCode;
+        this.example = example;
         this.licensePlateHandler = licensePlateHandler;
     }
 
@@ -36,6 +38,12 @@ public enum LicensePlateCountry implements Country {
     public String getCountryCode() {
 
         return countryCode;
+    }
+
+
+    public String getExample() {
+
+        return example;
     }
 
 
@@ -69,5 +77,19 @@ public enum LicensePlateCountry implements Country {
         }
 
         throw new IllegalArgumentException(String.format("No country with country code '%s' found", countryCode));
+    }
+
+
+    public static String exampleForCountry(String countryCode) {
+
+        Assert.notNull(countryCode, "Country code must not be null");
+
+        for (LicensePlateCountry country : LicensePlateCountry.values()) {
+            if (country.getCountryCode().equals(countryCode)) {
+                return country.example;
+            }
+        }
+
+        throw new IllegalArgumentException(String.format("No example with country code '%s' found", countryCode));
     }
 }
