@@ -85,7 +85,7 @@ public class ContainerNumberTest {
     @Test
     public void ensureTrimmedValidContainerNumberIsValid() {
 
-        String value = "HlXu1234567";
+        String value = "HlXA1234567";
         ContainerNumber containerNumber = ContainerNumber.forValue(value);
 
         Assert.assertTrue("Should be valid: " + value, containerNumber.isValid());
@@ -146,32 +146,6 @@ public class ContainerNumberTest {
     public void ensureContainerNumberWithMissingEquipmentCategoryIsNotValid() {
 
         String value = "HLX 123456-7";
-        ContainerNumber containerNumber = ContainerNumber.forValue(value);
-
-        Assert.assertFalse("Should not be valid: " + value, containerNumber.isValid());
-    }
-
-
-    @Test
-    public void ensureContainerNumberWithAllowedEquipmentCategoryIsValid() {
-
-        Consumer<String> assertValid = (value) -> {
-            ContainerNumber containerNumber = ContainerNumber.forValue(value);
-
-            Assert.assertTrue("Should be valid: " + value, containerNumber.isValid());
-        };
-
-        // allowed equipment categories: U, J, Z
-        assertValid.accept("HLXU 123456-7");
-        assertValid.accept("HLXJ 123456-7");
-        assertValid.accept("HLXZ 123456-7");
-    }
-
-
-    @Test
-    public void ensureContainerNumberWithNotAllowedEquipmentCategoryIsNotValid() {
-
-        String value = "HLXA 123456-7";
         ContainerNumber containerNumber = ContainerNumber.forValue(value);
 
         Assert.assertFalse("Should not be valid: " + value, containerNumber.isValid());
@@ -325,6 +299,32 @@ public class ContainerNumberTest {
 
 
     // ISO 6346 VALID ------------------------------------------------------------------------------
+
+    @Test
+    public void ensureContainerNumberWithAllowedEquipmentCategoryISO6346Valid() {
+
+        Consumer<String> assertValid = (value) -> {
+            ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+            Assert.assertTrue("Should be valid: " + value, containerNumber.isISO6346Valid());
+        };
+
+        // allowed equipment categories: U, J, Z
+        assertValid.accept("HLXU 123456-1");
+        assertValid.accept("HLXJ 123456-4");
+        assertValid.accept("HLXZ 123456-5");
+    }
+
+
+    @Test
+    public void ensureContainerNumberWithNotAllowedEquipmentCategoryIsNotISO6346Valid() {
+
+        String value = "HLXA 123456-1";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        Assert.assertFalse("Should not be valid: " + value, containerNumber.isISO6346Valid());
+    }
+
 
     @Test
     public void ensureContainerNumberWithCorrectCheckDigitIsISO6346Valid() {

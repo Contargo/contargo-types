@@ -1,7 +1,20 @@
 Contargo Types
 ===============
 
-## v0.5.0 (Release on xxxx-xx-xx)
+## v0.6.2 (Release on xxxx-xx-xx)
+
+* Fix ISO 6346 validation of container numbers: add check for equipment category and remove this
+  check in mere format validation
+
+## v0.6.1 (Release on 2017-07-04)
+
+* Add example of correct license plates for every country (extends LicensePlateCountry enum)
+
+## v0.6.0 (Release on 2017-06-29)
+
+* Introduce handler for unknown license plate countries (every license plate string is valid)
+
+## v0.5.0 (Release on 2017-06-28)
 
 * Rename isoCode and internationalIsoCode in @ContainerType to contargoHandlingCode and isoCode
 * Add some more ContainerTypes

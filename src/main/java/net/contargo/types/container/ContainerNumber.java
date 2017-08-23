@@ -17,6 +17,7 @@ import java.util.Optional;
  * <p>Further information: <a href="https://en.wikipedia.org/wiki/ISO_6346">ISO 6346 standard</a></p>
  *
  * @author  Aljona Murygina - murygina@synyx.de
+ * @author  Slaven Travar - slaven.travar@pta.de
  * @since  0.1.0
  */
 public final class ContainerNumber {
@@ -167,7 +168,8 @@ public final class ContainerNumber {
 
 
     /**
-     * Check if the {@link ContainerNumber} is valid.
+     * Check if the {@link ContainerNumber} is valid. Checks only if the format is valid, i.e. if after normalization
+     * the container number has the following structure: ABCD1234567 (four letters followed by 7 digits).
      *
      * @return  {@code true} if the {@link ContainerNumber} is valid, else {@code false}
      */
@@ -178,7 +180,7 @@ public final class ContainerNumber {
         }
 
         boolean validOwnerCode = match(getOwnerCode(), "[A-Z]{3}");
-        boolean validEquipmentCategory = match(getEquipmentCategory(), "[UJZ]{1}");
+        boolean validEquipmentCategory = match(getEquipmentCategory(), "[A-Z]{1}");
         boolean validSerialNumber = match(getSerialNumber(), "[0-9]{6}");
         boolean validCheckDigit = match(getCheckDigit(), "[0-9]{1}");
 
@@ -193,13 +195,20 @@ public final class ContainerNumber {
 
 
     /**
-     * Check if the {@link ContainerNumber} is ISO6346 valid, i.e. has a valid format and a correct check digit.
+     * Check if the {@link ContainerNumber} is ISO6346 valid, i.e. has a valid format, a valid equipment category and a
+     * correct check digit.
      *
      * @return  {@code true} if the {@link ContainerNumber} is ISO6346 valid, else {@code false}
      */
     public boolean isISO6346Valid() {
 
         if (!isValid()) {
+            return false;
+        }
+
+        boolean validEquipmentCategory = match(getEquipmentCategory(), "[UJZ]{1}");
+
+        if (!validEquipmentCategory) {
             return false;
         }
 
