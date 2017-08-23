@@ -14,6 +14,7 @@ import java.util.Arrays;
  */
 public enum ContainerType implements net.contargo.domain.ContainerType {
 
+    TEN_DV("10DV", "10G0"),
     TWENTY_BH("20BH", "25B1"),
     TWENTY_BO("20BO", "22B0"),
     TWENTY_BU("20BU", "22B0"),
@@ -33,6 +34,18 @@ public enum ContainerType implements net.contargo.domain.ContainerType {
     TWENTY_RF("20RF", "22R0"),
     TWENTY_TK("20TK", "22T0"),
     TWENTY_VE("20VE", "22V0"),
+    TWENTYTWO_TK("22TK", "22T0"),
+    TWENTYTHREE_TK("23TK", "22T0"),
+    TWENTYFOUR_TK("24TK", "22T0"),
+    TWENTYFIVE_DV("25DV", "C2G0"),
+    TWENTYSIX_TK("26TK", "22T0"),
+    THIRTY_BU("30BU", "30BU"),
+    THIRTY_DV("30DV", "32G0"),
+    THIRTY_FL("30FL", "32P1"),
+    THIRTY_FS("30FS", "32P3"),
+    THIRTY_TK("30TK", "32T0"),
+    THIRTYTHREE_TK("33TK", "32T0"),
+    THIRTYFIVE_TK("35TK", "32T0"),
     FORTY_BU("40BU", "40BU"),
     FORTY_CH("40CH", "40CH"),
     FORTY_CS("40CS", "40CS"),
@@ -53,7 +66,11 @@ public enum ContainerType implements net.contargo.domain.ContainerType {
     FORTY_RF("40RF", "42R0"),
     FORTY_SC("40SC", "40SC"),
     FORTY_TK("40TK", "42T0"),
-    FORTY_VE("40VE", "42V0");
+    FORTY_VE("40VE", "42V0"),
+    FORTYFIVE_DV("45DV", "L2G0"),
+    FORTYFIVE_HC("45HC", "L5G0"),
+    FORTYFIVE_PH("45PH", "45PH"),
+    FORTYFIVE_PW("45PW", "LNG0");
 
     private final String contargoHandlingCode;
     private final String isoCode;
