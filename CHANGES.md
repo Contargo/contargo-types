@@ -1,7 +1,9 @@
 Contargo Types
 ===============
 
-## v0.6.2 (Release on xxxx-xx-xx)
+## v0.6.3 (Release on xxxx-xx-xx)
+
+## v0.6.2 (Release on 2017-08-28)
 
 * Fix ISO 6346 validation of container numbers: add check for equipment category and remove this
   check in mere format validation
