@@ -34,6 +34,7 @@ public enum ContainerType implements net.contargo.domain.ContainerType {
     TWENTY_RF("20RF", "22R0"),
     TWENTY_TK("20TK", "22T0"),
     TWENTY_VE("20VE", "22V0"),
+    TWENTY_OH("20OH", "25UT"),
     TWENTYTWO_TK("22TK", "22T0"),
     TWENTYTHREE_TK("23TK", "22T0"),
     TWENTYFOUR_TK("24TK", "22T0"),
