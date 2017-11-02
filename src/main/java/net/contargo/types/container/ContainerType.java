@@ -64,6 +64,8 @@ public enum ContainerType implements net.contargo.domain.ContainerType {
     FORTY_PL("40PL", "40PL"),
     FORTY_PW("40PW", "4NG0"),
     FORTY_RF("40RF", "42R0"),
+    FORTYFIVE_RF("45RF", "L2R0"),
+    FORTYFIVE_HR("45HR", "L5R0"),
     FORTY_SC("40SC", "40SC"),
     FORTY_TK("40TK", "42T0"),
     FORTY_VE("40VE", "42V0"),
