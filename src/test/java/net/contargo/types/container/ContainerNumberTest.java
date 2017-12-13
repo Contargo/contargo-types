@@ -80,6 +80,17 @@ public class ContainerNumberTest {
     }
 
 
+    @Test
+    public void ensureContainerNumberIsFormattedCorrectlyWithoutDash() {
+
+        String value = "hlxu1234567";
+        ContainerNumber containerNumber = ContainerNumber.forValue(value);
+
+        Assert.assertEquals("Wrong String representation for: " + value, "HLXU 123456 7",
+            containerNumber.getFormattedWithoutDash());
+    }
+
+
     // VALID ---------------------------------------------------------------------------------------
 
     @Test

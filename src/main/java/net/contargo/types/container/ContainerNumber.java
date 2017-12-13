@@ -4,6 +4,8 @@ import net.contargo.types.util.Assert;
 
 import java.util.Optional;
 
+import static java.lang.String.format;
+
 
 /**
  * Each {@link net.contargo.domain.Container} has a worldwide unique container number.
@@ -150,6 +152,32 @@ public final class ContainerNumber {
     @Override
     public String toString() {
 
+        return getWithFormat("%s%s %s-%s");
+    }
+
+
+    /**
+     * Return the {@link ContainerNumber} in a formatted way with spaces in between.
+     *
+     * @return  formatted {@link ContainerNumber} or the initial value, never {@code null}
+     */
+    public String getFormattedWithoutDash() {
+
+        return getWithFormat("%s%s %s %s");
+    }
+
+
+    /**
+     * Returns the containernumber with the specified format. The containternumber contains four parts: The ownercode,
+     * equipmentCategory, serialNumber and checkDigit in this order. You have to reference these four part in the
+     * format, or else it is not valid.
+     *
+     * @param  format  for the containernumber like "%s%s %s-%s"
+     *
+     * @return  formatted {@link ContainerNumber} or the initial value, never {@code null}
+     */
+    private String getWithFormat(String format) {
+
         Optional<String> optionalOwnerCode = getOwnerCode();
         Optional<Character> optionalEquipmentCategory = getEquipmentCategory();
         Optional<String> optionalSerialNumber = getSerialNumber();
@@ -159,8 +187,8 @@ public final class ContainerNumber {
             && optionalSerialNumber.isPresent() && optionalCheckDigit.isPresent();
 
         if (hasValidFormat) {
-            return optionalOwnerCode.get() + optionalEquipmentCategory.get() + " " + optionalSerialNumber.get() + "-"
-                + optionalCheckDigit.get();
+            return format(format, optionalOwnerCode.get(), optionalEquipmentCategory.get(), optionalSerialNumber.get(),
+                    optionalCheckDigit.get());
         }
 
         return value;
