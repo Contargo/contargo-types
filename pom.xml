@@ -19,7 +19,7 @@
             <!-- Repository for all internal stuff -->
             <id>internal.nexus.contargo.de</id>
             <name>Internal Contargo</name>
-            <url>https://nexus-contargo.synyx.de/content/groups/internal</url>
+            <url>https://nexus.contargo.net/content/groups/internal</url>
         </repository>
     </repositories>
 
