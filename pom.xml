@@ -3,7 +3,7 @@
 
     <groupId>net.contargo</groupId>
     <artifactId>contargo-types</artifactId>
-    <version>0.6.3-SNAPSHOT</version>
+    <version>0.6.4-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Contargo Types</name>
@@ -112,6 +112,11 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
             </plugin>
         </plugins>
     </build>
