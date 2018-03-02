@@ -23,8 +23,8 @@ public class ContainerNumberValidator implements ConstraintValidator<ContainerNu
     @Override
     public boolean isValid(final String unitNumber, final ConstraintValidatorContext context) {
 
+        // default validator will check that for us
         if (unitNumber == null) {
-            // default validator will check that for us
             return true;
         }
 
