@@ -14,6 +14,12 @@
         <jdk.version>1.8</jdk.version>
     </properties>
 
+
+    <scm>
+        <connection>scm:git:https://contargo-development@github.com/Contargo/contargo-types.git</connection>
+        <developerConnection>scm:git:https://contargo-development@github.com/Contargo/contargo-types.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
     <repositories>
         <repository>
             <!-- Repository for all internal stuff -->
@@ -22,13 +28,6 @@
             <url>https://nexus.contargo.net/content/groups/internal</url>
         </repository>
     </repositories>
-
-    <scm>
-        <connection>scm:git:https://contargo-development@github.com/Contargo/contargo-types.git</connection>
-        <developerConnection>scm:git:https://contargo-development@github.com/Contargo/contargo-types.git</developerConnection>
-        <tag>HEAD</tag>
-    </scm>
-
     <distributionManagement>
         <repository>
             <id>releases.nexus.contargo.de</id>
@@ -55,7 +54,15 @@
             <artifactId>hibernate-validator</artifactId>
             <version>5.2.4.Final</version>
         </dependency>
+
+        <!-- COMMON -->
+        <dependency>
+            <groupId>com.googlecode.libphonenumber</groupId>
+            <artifactId>libphonenumber</artifactId>
+            <version>8.8.7</version>
+        </dependency>
         <!-- TEST DEPENDENCIES -->
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
