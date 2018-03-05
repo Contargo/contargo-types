@@ -3,7 +3,7 @@
 
     <groupId>net.contargo</groupId>
     <artifactId>contargo-types</artifactId>
-    <version>0.6.6-SNAPSHOT</version>
+    <version>0.6.6</version>
     <packaging>jar</packaging>
 
     <name>Contargo Types</name>
@@ -18,7 +18,7 @@
     <scm>
         <connection>scm:git:ssh://git@github.com/Contargo/contargo-types.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/Contargo/contargo-types.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>v0.6.6</tag>
     </scm>
     <repositories>
         <repository>
