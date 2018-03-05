@@ -19,6 +19,22 @@ public class ValidPhoneNumberValidatorTest {
 
 
     @Test
+    public void ensureThatEmptyStringIsHandledAsInvalid() {
+
+        final ValidPhoneNumberValidator validPhoneNumberValidator = new ValidPhoneNumberValidator();
+        Assert.assertFalse(validPhoneNumberValidator.isValid("", null));
+    }
+
+
+    @Test
+    public void ensureNullSafety() {
+
+        final ValidPhoneNumberValidator validPhoneNumberValidator = new ValidPhoneNumberValidator();
+        Assert.assertFalse(validPhoneNumberValidator.isValid(null, null));
+    }
+
+
+    @Test
     public void ensureThatValidatorFailsWhenFormatterThrows() throws NumberParseException {
 
         final ValidPhoneNumberValidator validPhoneNumberValidator = new ValidPhoneNumberValidator();
