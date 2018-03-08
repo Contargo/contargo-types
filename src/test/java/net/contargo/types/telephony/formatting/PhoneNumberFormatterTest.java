@@ -76,4 +76,14 @@ public class PhoneNumberFormatterTest {
 
         Assert.assertEquals("+49 171 1234 56", phoneNumberFormatter.parseAndFormatToDIN5008("0171/123456"));
     }
+
+
+    @Test
+    public void ensureThatFormattingWithExtensionWorks() throws PhoneNumberFormattingException {
+
+        Assert.assertEquals("+49 6222 1234 5678-89",
+            phoneNumberFormatter.parseAndFormatToDIN5008("0622212345678", "8-9"));
+        Assert.assertEquals("+49 6222 1234 5678-89",
+            phoneNumberFormatter.parseAndFormatToDIN5008("0622212345678", "89"));
+    }
 }

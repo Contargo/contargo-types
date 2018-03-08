@@ -77,6 +77,28 @@ public class PhoneNumberFormatter {
     }
 
 
+    /**
+     * Formats a given phoneNumber to the rules mentiond for parseAndFormatToDIN5008(final String phoneNumber).
+     *
+     * <p>The formatted result is appended with a dash and the supplied extension</p>
+     *
+     * @param  basePhoneNumber  the base phoneNumber to be formatted
+     * @param  extension  the extension to be added to the base number
+     *
+     * @return  the formatted base number appended with the extension
+     *
+     * @throws  PhoneNumberFormattingException  if the phoneNumber cannot be parsed
+     */
+    public String parseAndFormatToDIN5008(final String basePhoneNumber, final String extension)
+        throws PhoneNumberFormattingException {
+
+        final String formattedBaseNumber = parseAndFormatToDIN5008(basePhoneNumber);
+        final String sanitizedExtension = extension.replaceAll("\\s+", "").replaceAll("\\D+", "");
+
+        return String.format("%s-%s", formattedBaseNumber, sanitizedExtension);
+    }
+
+
     private Phonenumber.PhoneNumber parsePhoneNumber(String phoneNumber, String phoneNumberWithoutWhitespace)
         throws PhoneNumberFormattingException {
 
@@ -135,7 +157,7 @@ public class PhoneNumberFormatter {
             areaCodeAndConnectionNumber = new AreaCodeAndConnectionNumber("", preFormattedNumber);
         } else { // more than one element -> take the second as area code and the third as connection number (first is country code)
             areaCodeAndConnectionNumber = new AreaCodeAndConnectionNumber(preFormattedNumber.split(" ")[1],
-                    preFormattedNumber.split(" ")[2].replaceAll("\\D", ""));
+                    preFormattedNumber.split(" ")[2].replaceAll("\\D+", ""));
         }
 
         return areaCodeAndConnectionNumber;
