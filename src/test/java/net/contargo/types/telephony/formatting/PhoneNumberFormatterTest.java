@@ -1,7 +1,5 @@
 package net.contargo.types.telephony.formatting;
 
-import com.google.i18n.phonenumbers.NumberParseException;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
