@@ -38,21 +38,6 @@ public class PhoneNumberFormatter {
     }
 
 
-    private Phonenumber.PhoneNumber parsePhoneNumber(String phoneNumber, String phoneNumberWithoutWhitespace)
-        throws PhoneNumberFormattingException {
-
-        Phonenumber.PhoneNumber parsedNumber;
-
-        try {
-            parsedNumber = phoneNumberUtil.parse(phoneNumberWithoutWhitespace, "DE");
-        } catch (NumberParseException e) {
-            throw new PhoneNumberFormattingException(String.format("Cannot parse number %s.", phoneNumber), e);
-        }
-
-        return parsedNumber;
-    }
-
-
     /**
      * Formats a given phoneNumber to the following rules:
      *
@@ -92,44 +77,92 @@ public class PhoneNumberFormatter {
     }
 
 
+    private Phonenumber.PhoneNumber parsePhoneNumber(String phoneNumber, String phoneNumberWithoutWhitespace)
+        throws PhoneNumberFormattingException {
+
+        Phonenumber.PhoneNumber parsedNumber;
+
+        try {
+            parsedNumber = phoneNumberUtil.parse(phoneNumberWithoutWhitespace, "DE");
+        } catch (NumberParseException e) {
+            throw new PhoneNumberFormattingException(String.format("Cannot parse number %s.", phoneNumber), e);
+        }
+
+        return parsedNumber;
+    }
+
+
     private String formatDIN5008(final int countryCode, final String nationalNumber, final String preFormattedNumber,
         final boolean isFixedLine) throws PhoneNumberFormattingException {
 
-        final String numberFormat = "+%d %s %s";
+        final AreaCodeAndConnectionNumber areaCodeAndConnectionNumber;
 
-        final String areaCode;
-        final String connectionNumber;
-
-        if (isFixedLine) { // if the number is a fixed number take the area code from the preformatted number
-
-            final String[] splittedPreformattedNumber = preFormattedNumber.split(" ");
-
-            if (splittedPreformattedNumber.length == 0) { // no elements -> must not happen in theory ;)
-                throw new PhoneNumberFormattingException(String.format(
-                        "Could not extract anything from input number: %s", preFormattedNumber));
-            } else if (splittedPreformattedNumber.length == 1) { // one element -> take the whole number as connection
-                areaCode = "";
-                connectionNumber = preFormattedNumber;
-            } else { // more than one element -> take the second as area code and the third as connection number (first is country code)
-                areaCode = preFormattedNumber.split(" ")[1];
-                connectionNumber = preFormattedNumber.split(" ")[2].replaceAll("\\D", "");
-            }
+        if (isFixedLine) {
+            areaCodeAndConnectionNumber = getAreaCodeAndConnectionNumberFromFixedNumber(preFormattedNumber);
         } else {
-            if (nationalNumber.length() > 4) { // only for numbers longer than 4 digits
-                areaCode = nationalNumber.substring(0, 3); // take the first three digits
-
-                // take the rest of the number and just the digits
-                connectionNumber = nationalNumber.substring(3, nationalNumber.length()).replaceAll("\\D", "");
-            } else { // for the shorter numbers
-                areaCode = "";
-                connectionNumber = nationalNumber;
-            }
+            areaCodeAndConnectionNumber = getAreaCodeAndConnectionNumberFromMobileNumber(nationalNumber);
         }
 
+        return chunkAndFormatResult(countryCode, areaCodeAndConnectionNumber);
+    }
+
+
+    private AreaCodeAndConnectionNumber getAreaCodeAndConnectionNumberFromMobileNumber(String nationalNumber) {
+
+        AreaCodeAndConnectionNumber areaCodeAndConnectionNumber;
+
+        if (nationalNumber.length() > 4) { // only for numbers longer than 4 digits
+            areaCodeAndConnectionNumber = new AreaCodeAndConnectionNumber(nationalNumber.substring(0, 3),
+                    nationalNumber.substring(3, nationalNumber.length()).replaceAll("\\D", ""));
+        } else { // for the shorter numbers
+            areaCodeAndConnectionNumber = new AreaCodeAndConnectionNumber("", nationalNumber);
+        }
+
+        return areaCodeAndConnectionNumber;
+    }
+
+
+    private AreaCodeAndConnectionNumber getAreaCodeAndConnectionNumberFromFixedNumber(String preFormattedNumber)
+        throws PhoneNumberFormattingException {
+
+        AreaCodeAndConnectionNumber areaCodeAndConnectionNumber;
+        final String[] splittedPreformattedNumber = preFormattedNumber.split(" ");
+
+        if (splittedPreformattedNumber.length == 0) { // no elements -> must not happen in theory ;)
+            throw new PhoneNumberFormattingException(String.format("Could not extract anything from input number: %s",
+                    preFormattedNumber));
+        } else if (splittedPreformattedNumber.length == 1) { // one element -> take the whole number as connection
+            areaCodeAndConnectionNumber = new AreaCodeAndConnectionNumber("", preFormattedNumber);
+        } else { // more than one element -> take the second as area code and the third as connection number (first is country code)
+            areaCodeAndConnectionNumber = new AreaCodeAndConnectionNumber(preFormattedNumber.split(" ")[1],
+                    preFormattedNumber.split(" ")[2].replaceAll("\\D", ""));
+        }
+
+        return areaCodeAndConnectionNumber;
+    }
+
+
+    private String chunkAndFormatResult(int countryCode, AreaCodeAndConnectionNumber areaCodeAndConnectionNumber) {
+
+        final String numberFormat = "+%d %s %s";
+
         // chunk the number into blocks of 4 digits. the last block can be 1-4 digits
-        final String chunkedConnectionNumber = String.join(" ", connectionNumber.split("(?<=\\G.{4})"));
+        final String chunkedConnectionNumber = String.join(" ",
+                areaCodeAndConnectionNumber.connectionNumber.split("(?<=\\G.{4})"));
 
         // target format
-        return String.format(numberFormat, countryCode, areaCode, chunkedConnectionNumber);
+        return String.format(numberFormat, countryCode, areaCodeAndConnectionNumber.areaCode, chunkedConnectionNumber);
+    }
+
+    private class AreaCodeAndConnectionNumber {
+
+        public final String areaCode;
+        public final String connectionNumber;
+
+        private AreaCodeAndConnectionNumber(String areaCode, String connectionNumber) {
+
+            this.areaCode = areaCode;
+            this.connectionNumber = connectionNumber;
+        }
     }
 }
