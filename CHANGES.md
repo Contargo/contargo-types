@@ -1,8 +1,23 @@
 Contargo Types
 ===============
+## v0.7.0 (Release on 2018-03-08)
 
-## v0.6.3 (Release on xxxx-xx-xx)
+* Add DIN5008 compliant formatting of phone numbers
 
+## v0.6.7 (Release on 2018-03-07)
+
+* Increase robustness of phone number validation
+
+## v0.6.5 (Release on 2018-03-05)
+
+* Add validation and formatting of phone numbers using Google's libphonenumber
+
+## v0.6.3 (Release on 2017-12-14)
+
+* Add pre-computation of normalized value and validation state of LicensePlate objects.
+* Add a Container Type for ISO-Code 25UT
+* Formats container numbers without dashes
+ 
 ## v0.6.2 (Release on 2017-08-28)
 
 * Fix ISO 6346 validation of container numbers: add check for equipment category and remove this
