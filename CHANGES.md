@@ -1,5 +1,12 @@
 Contargo Types
 ===============
+## v0.8.0 (Release on 2018-03-12)
+
+* Changes phone number validation, to not assert `null` or empty string as a
+  validation failure of the phone number, and instead opt to ignore and return
+  `true`, in order to allow for composition with `@NonEmpty` or `@NonNull`
+  validators. 
+
 ## v0.7.0 (Release on 2018-03-08)
 
 * Add DIN5008 compliant formatting of phone numbers
