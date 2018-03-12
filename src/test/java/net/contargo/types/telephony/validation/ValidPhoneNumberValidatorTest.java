@@ -2,8 +2,10 @@ package net.contargo.types.telephony.validation;
 
 import com.google.i18n.phonenumbers.NumberParseException;
 
-import org.junit.Assert;
 import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 
 public class ValidPhoneNumberValidatorTest {
@@ -13,24 +15,32 @@ public class ValidPhoneNumberValidatorTest {
 
         final ValidPhoneNumberValidator validPhoneNumberValidator = new ValidPhoneNumberValidator();
 
-        Assert.assertTrue("failed to validate valid phone number successfully",
+        assertTrue("failed to validate valid phone number successfully",
             validPhoneNumberValidator.isValid("12344321", null));
     }
 
 
     @Test
-    public void ensureThatEmptyStringIsHandledAsInvalid() {
+    public void ensureThatEmptyStringIsIgnored() {
 
-        final ValidPhoneNumberValidator validPhoneNumberValidator = new ValidPhoneNumberValidator();
-        Assert.assertFalse(validPhoneNumberValidator.isValid("", null));
+        ValidPhoneNumberValidator sut = new ValidPhoneNumberValidator();
+        assertTrue("Empty phone number (whitespace) must be ignored, as valid", sut.isValid("", null));
     }
 
 
     @Test
-    public void ensureNullSafety() {
+    public void ensureOnlyWhitespaceStringIsIgnored() throws Exception {
 
-        final ValidPhoneNumberValidator validPhoneNumberValidator = new ValidPhoneNumberValidator();
-        Assert.assertFalse(validPhoneNumberValidator.isValid(null, null));
+        ValidPhoneNumberValidator sut = new ValidPhoneNumberValidator();
+        assertTrue("Empty phone number must be ignored, as valid", sut.isValid("    ", null));
+    }
+
+
+    @Test
+    public void ensureNullStringIsIgnored() {
+
+        final ValidPhoneNumberValidator sut = new ValidPhoneNumberValidator();
+        assertTrue("Missing phone number (null) must be ignored, as valid", sut.isValid(null, null));
     }
 
 
@@ -39,6 +49,6 @@ public class ValidPhoneNumberValidatorTest {
 
         final ValidPhoneNumberValidator validPhoneNumberValidator = new ValidPhoneNumberValidator();
 
-        Assert.assertFalse("failed to detect invalid phone number", validPhoneNumberValidator.isValid("&§", null));
+        assertFalse("failed to detect invalid phone number", validPhoneNumberValidator.isValid("&§", null));
     }
 }

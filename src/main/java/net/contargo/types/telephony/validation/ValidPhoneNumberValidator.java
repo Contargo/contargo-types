@@ -3,6 +3,8 @@ package net.contargo.types.telephony.validation;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 
+import java.util.Objects;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
@@ -11,6 +13,7 @@ import javax.validation.ConstraintValidatorContext;
  * Validates whether the provided string is a valid phone number.
  *
  * @author  Robin Jayasinghe - jayasinghe@synyx.de
+ * @author  Olle Törnström - toernstroem@synyx.de
  */
 public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhoneNumber, String> {
 
@@ -26,11 +29,12 @@ public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhone
     @Override
     public boolean isValid(String phoneNumber, ConstraintValidatorContext cvc) {
 
-        if (phoneNumber == null || phoneNumber.isEmpty()) {
-            return false;
+        // We must assume non-null, non-empty is validated elsewhere
+        if (Objects.isNull(phoneNumber) || phoneNumber.trim().isEmpty()) {
+            return true;
         }
 
-        final String phoneNumberWithoutWhitespace = phoneNumber.replaceAll("\\s+", "");
+        String phoneNumberWithoutWhitespace = phoneNumber.replaceAll("\\s+", "");
 
         try {
             phoneNumberUtil.parse(phoneNumberWithoutWhitespace, "DE");
