@@ -1,11 +1,15 @@
 Contargo Types
 ===============
+## v0.8.1
+
+* Update `contargo-domain` to latest Jitpack-based version v0.3.0.
+
 ## v0.8.0 (Release on 2018-03-12)
 
 * Changes phone number validation, to not assert `null` or empty string as a
   validation failure of the phone number, and instead opt to ignore and return
   `true`, in order to allow for composition with `@NonEmpty` or `@NonNull`
-  validators. 
+  validators.
 
 ## v0.7.0 (Release on 2018-03-08)
 
@@ -24,7 +28,7 @@ Contargo Types
 * Add pre-computation of normalized value and validation state of LicensePlate objects.
 * Add a Container Type for ISO-Code 25UT
 * Formats container numbers without dashes
- 
+
 ## v0.6.2 (Release on 2017-08-28)
 
 * Fix ISO 6346 validation of container numbers: add check for equipment category and remove this

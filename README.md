@@ -2,19 +2,22 @@ Contargo Types
 ===============
 
 [![Build Status](https://travis-ci.org/Contargo/contargo-types.svg?branch=master)](https://travis-ci.org/Contargo/contargo-types)
+[![](https://jitpack.io/v/Contargo/contargo-types.svg)](https://jitpack.io/#Contargo/contargo-types)
 
 This is a library aimed at providing a collection of re-usable Contargo objects.
 
 ## Getting started
 
 Using the `contargo-types` as a library in your project, means simply including
-it as a Maven dependency:
+it as a Maven dependency. We recommend using the [Jitpack](https://jitpack.io)
+repository:
 
 ```xml
 <dependency>
-    <groupId>net.contargo</groupId>
+    <!-- From Jitpack-repo -->
+    <groupId>com.github.Contargo</groupId>
     <artifactId>contargo-types</artifactId>
-    <version>LATEST</version>
+    <version>${SOME-TAG}</version>
 </dependency>
 ```
 
