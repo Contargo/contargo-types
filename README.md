@@ -1,6 +1,8 @@
 Contargo Types
 ===============
 
+[![Build Status](https://travis-ci.org/Contargo/contargo-types.svg?branch=master)](https://travis-ci.org/Contargo/contargo-types)
+
 **WIP: We're currently working on deploying to the Sonatype OSS repository. In the mean time, please consider building and deploying the project locally (mvn install).**
 
 This is a library aimed at providing a collection of re-usable Contargo objects.
