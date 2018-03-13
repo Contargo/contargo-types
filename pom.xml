@@ -26,6 +26,10 @@
             <name>Internal Contargo</name>
             <url>https://nexus.contargo.net/content/groups/internal</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
     <distributionManagement>
         <repository>
@@ -43,9 +47,9 @@
     <dependencies>
         <!-- CONTARGO -->
         <dependency>
-            <groupId>net.contargo</groupId>
+            <groupId>com.github.Contargo</groupId>
             <artifactId>contargo-domain</artifactId>
-            <version>0.2.0</version>
+            <version>v0.2.0</version>
         </dependency>
         <!-- VALIDATION -->
         <dependency>
