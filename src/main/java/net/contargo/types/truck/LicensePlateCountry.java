@@ -18,6 +18,7 @@ public enum LicensePlateCountry implements Country {
     FRANCE("F", "AA-001-AB", new FrenchLicensePlateHandler()),
     POLAND("PL", "XYZ 12JK", new PolishLicensePlateHandler()),
     CZECH_REPUBLIC("CZ", "2H2 7149", new CzechLicensePlateHandler()),
+    ROMANIA("RO", "B 183 CTL", new RomanianLicensePlateHandler()),
     UNKNOWN_COUNTRY("", "", new UnknownCountryLicensePlateHandler());
 
     private final String countryCode;

@@ -1,6 +1,10 @@
 Contargo Types
 ===============
-## v0.8.1
+## v0.9.0
+
+* Add romanian license plate
+
+## v0.8.1 (Release on 2018-03-13)
 
 * Update `contargo-domain` to latest Jitpack-based version v0.3.0.
 
