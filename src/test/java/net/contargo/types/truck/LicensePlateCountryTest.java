@@ -35,6 +35,8 @@ public class LicensePlateCountryTest {
             PolishLicensePlateHandler.class);
         assertCorrectHandler.accept(LicensePlateCountry.CZECH_REPUBLIC.getLicensePlateHandler(),
             CzechLicensePlateHandler.class);
+        assertCorrectHandler.accept(LicensePlateCountry.ROMANIA.getLicensePlateHandler(),
+                RomanianLicensePlateHandler.class);
     }
 
 
