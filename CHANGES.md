@@ -1,6 +1,6 @@
 Contargo Types
 ===============
-## v0.10.0
+## v0.10.0 W.I.P.
 
 * Add validation service that checks for valid contact options of a given COLA user
 
