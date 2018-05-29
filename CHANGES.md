@@ -1,5 +1,9 @@
 Contargo Types
 ===============
+## v0.10.0
+
+* Add validation service that checks for valid contact options of a given COLA user
+
 ## v0.9.0
 
 * Add romanian license plate
