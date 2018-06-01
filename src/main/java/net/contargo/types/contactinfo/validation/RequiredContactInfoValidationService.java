@@ -9,7 +9,7 @@ import java.util.*;
 
 public class RequiredContactInfoValidationService implements Loggable, ContactInfoConsumer {
 
-    enum ValidationResult {
+    public enum ValidationResult {
 
         MISSING_PHONE,
         MISSING_MOBILE,
