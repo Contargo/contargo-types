@@ -11,13 +11,15 @@ public class ContactInformation {
     private final String mobile;
     private final String phone;
     private final String email;
+    private final String communicationEmail;
 
-    public ContactInformation(String userUuid, String mobile, String phone, String email) {
+    public ContactInformation(String userUuid, String mobile, String phone, String email, String communicationEmail) {
 
         this.userUuid = userUuid;
         this.mobile = mobile;
         this.phone = phone;
         this.email = email;
+        this.communicationEmail = communicationEmail;
     }
 
     public String getUserUuid() {
@@ -35,6 +37,12 @@ public class ContactInformation {
     public String getPhone() {
 
         return phone;
+    }
+
+
+    public String getCommunicationEmail() {
+
+        return communicationEmail;
     }
 
 

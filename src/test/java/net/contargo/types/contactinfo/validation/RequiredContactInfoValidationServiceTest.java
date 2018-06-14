@@ -19,16 +19,18 @@ public class RequiredContactInfoValidationServiceTest {
 
         List<ContactInformation> allProfiles = new ArrayList<>();
 
-        ContactInformation contactInformation1 = new ContactInformation("uuid1", "1234", "4567", "foo@bar");
+        ContactInformation contactInformation1 = new ContactInformation("uuid1", "1234", "4567", "foo@bar", "bar@foo");
         allProfiles.add(contactInformation1);
 
-        ContactInformation contactInformation2 = new ContactInformation("uuid2", "1233", "4567", "foo@bar");
+        ContactInformation contactInformation2 = new ContactInformation("uuid2", "1233", "4567", "foo@bar", "bar@foo");
         allProfiles.add(contactInformation2);
 
-        ContactInformation contactInformation3 = new ContactInformation("uuid3", "171789987", "4567", "foo@baz");
+        ContactInformation contactInformation3 = new ContactInformation("uuid3", "171789987", "4567", "foo@baz",
+                "bar@foo");
         allProfiles.add(contactInformation3);
 
-        ContactInformation contactInformation4 = new ContactInformation("uuid4", "171789987", "4567", "foo@bazl");
+        ContactInformation contactInformation4 = new ContactInformation("uuid4", "171789987", "4567", "foo@bazl",
+                "bar@foo");
         allProfiles.add(contactInformation4);
 
         colaProfileConsumer.consume(allProfiles);
@@ -37,49 +39,49 @@ public class RequiredContactInfoValidationServiceTest {
 
     private ContactInformation contactInformationWithAllData() {
 
-        return new ContactInformation("uuid1", "171789987", "721321451", "foo@bar");
+        return new ContactInformation("uuid1", "171789987", "721321451", "foo@bar", "bar@foo");
     }
 
 
     private ContactInformation contactInformationWithDuplicateMailAfterNormalization() {
 
-        return new ContactInformation("uuid1", "171789987", "721321451", "foo@BAR");
+        return new ContactInformation("uuid1", "171789987", "721321451", "foo@BAR", "bar@foo");
     }
 
 
     private ContactInformation contactInformationWithAllDataAndDistinctMail() {
 
-        return new ContactInformation("uuid3", "171789987", "721321451", "foo@baz");
+        return new ContactInformation("uuid3", "171789987", "721321451", "foo@baz", "bar@foo");
     }
 
 
     private ContactInformation contactInformationWithAllDataAndDistinctMobile() {
 
-        return new ContactInformation("uuid4", "171789988", "721321451", "foo@barz");
+        return new ContactInformation("uuid4", "171789988", "721321451", "foo@barz", "bar@foo");
     }
 
 
     private ContactInformation contactInformationWithDuplicateMobileAfterNormalization() {
 
-        return new ContactInformation("uuid5", "+49171789987", "721321451", null);
+        return new ContactInformation("uuid5", "+49171789987", "721321451", null, "bar@foo");
     }
 
 
     private ContactInformation contactInformationWithDuplicateMobile() {
 
-        return new ContactInformation("uuid5", "171789987", "721321451", null);
+        return new ContactInformation("uuid5", "171789987", "721321451", null, "bar@foo");
     }
 
 
     private ContactInformation contactInformationWithoutPhoneNumbers() {
 
-        return new ContactInformation("uuid1", null, null, "foo@bar");
+        return new ContactInformation("uuid1", null, null, "foo@bar", "bar@foo");
     }
 
 
     private ContactInformation contactInformationWithoutEmailAndMobile() {
 
-        return new ContactInformation("uuid1", null, "1728092174", null);
+        return new ContactInformation("uuid1", null, "1728092174", null, "bar@foo");
     }
 
 
