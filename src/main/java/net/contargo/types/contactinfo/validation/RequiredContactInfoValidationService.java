@@ -145,11 +145,14 @@ public class RequiredContactInfoValidationService implements Loggable, ContactIn
             Set<String> values = dataToCheck.get(key);
 
             // only one presence and mapped to the requester's userUuid
-            if (values.size() == 1 && values.contains(value)) {
-                return true;
-            } else if (values.size() > 1) { // value set contains more than one value -> not unique
-                return false;
-            } else { // value set is empty -> unique
+            if (!values.isEmpty()) { // there are values for this key
+
+                if (values.size() == 1 && values.contains(value)) { // only one value equals to the requested value: unique
+                    return true;
+                } else { // more values or one not equal to the requested one: not unique
+                    return false;
+                }
+            } else {
                 return true;
             }
         } else { // no mappings yet -> unique

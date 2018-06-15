@@ -43,6 +43,12 @@ public class RequiredContactInfoValidationServiceTest {
     }
 
 
+    private ContactInformation contactInformationWithAllDataAndDuplicateMailOfOtherUser() {
+
+        return new ContactInformation("uuid1", "171789987", "721321451", "foo@baz", "bar@foo");
+    }
+
+
     private ContactInformation contactInformationWithDuplicateMailAfterNormalization() {
 
         return new ContactInformation("uuid1", "171789987", "721321451", "foo@BAR", "bar@foo");
@@ -146,7 +152,7 @@ public class RequiredContactInfoValidationServiceTest {
         consumeColaProfiles(requiredContactInfoValidationService);
 
         List<RequiredContactInfoValidationService.ValidationResult> validationResults = new ArrayList<>();
-        ContactInformation contactInfoWithAllData = contactInformationWithAllData();
+        ContactInformation contactInfoWithAllData = contactInformationWithAllDataAndDuplicateMailOfOtherUser();
         boolean isValid = requiredContactInfoValidationService.validate(contactInfoWithAllData, validationResults);
         assertFalse(isValid);
         assertEquals(1, validationResults.size());
