@@ -5,6 +5,8 @@ import net.contargo.types.contactinfo.ContactInformation;
 import net.contargo.types.util.Loggable;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 
 public class RequiredContactInfoValidationService implements Loggable, ContactInfoConsumer {
@@ -19,10 +21,10 @@ public class RequiredContactInfoValidationService implements Loggable, ContactIn
         NON_UNIQUE_EMAIL
     }
 
-    private final Map<String, String> userUuidToMail;
-    private final Map<String, String> userUuidToMobile;
-    private final Map<String, Set<String>> mobileToUserUuids;
-    private final Map<String, Set<String>> mailToUserUuids;
+    private final ConcurrentMap<String, String> userUuidToMail;
+    private final ConcurrentMap<String, String> userUuidToMobile;
+    private final ConcurrentMap<String, Set<String>> mobileToUserUuids;
+    private final ConcurrentMap<String, Set<String>> mailToUserUuids;
     private final PhoneNumberNormalizer phoneNumberNormalizer;
     private final EmailAddressNormalizer emailAddressNormalizer;
 
@@ -32,10 +34,10 @@ public class RequiredContactInfoValidationService implements Loggable, ContactIn
         this.phoneNumberNormalizer = phoneNumberNormalizer;
         this.emailAddressNormalizer = emailAddressNormalizer;
 
-        this.userUuidToMail = new HashMap<>();
-        this.userUuidToMobile = new HashMap<>();
-        this.mailToUserUuids = new HashMap<>();
-        this.mobileToUserUuids = new HashMap<>();
+        this.userUuidToMail = new ConcurrentHashMap<>();
+        this.userUuidToMobile = new ConcurrentHashMap<>();
+        this.mailToUserUuids = new ConcurrentHashMap<>();
+        this.mobileToUserUuids = new ConcurrentHashMap<>();
     }
 
     @Override
@@ -60,29 +62,89 @@ public class RequiredContactInfoValidationService implements Loggable, ContactIn
 
         final String userUuid = contactInformation.getUserUuid();
 
-        if (hasText(contactInformation.getEmail())) {
-            final String mail = emailAddressNormalizer.normalizeEmailAddress(contactInformation.getEmail());
-            userUuidToMail.put(contactInformation.getUserUuid(), contactInformation.getEmail());
+        final String oldMail = emailAddressNormalizer.normalizeEmailAddress(userUuidToMail.get(userUuid));
+        final String newMail = emailAddressNormalizer.normalizeEmailAddress(contactInformation.getEmail());
 
-            // add reverse mapping
-            if (!mailToUserUuids.containsKey(mail)) {
-                mailToUserUuids.put(mail, new HashSet<>());
+        if (hasText(newMail) && !hasText(oldMail)) {
+            handleNewMailAddress(newMail, userUuid);
+        } else if (hasText(oldMail) && !hasText(newMail)) {
+            handleRemovedMailAddress(userUuid, oldMail);
+        } else {
+            if (!oldMail.equals(newMail)) {
+                handleChangedMailAddress(newMail, userUuid, oldMail);
             }
-
-            mailToUserUuids.get(mail).add(userUuid);
         }
 
-        if (hasText(contactInformation.getMobile())) {
-            final String mobile = phoneNumberNormalizer.normalizeNumber(contactInformation.getMobile()).orElse("");
-            userUuidToMobile.put(contactInformation.getUserUuid(), contactInformation.getMobile());
+        final String oldMobile = phoneNumberNormalizer.normalizeNumber(userUuidToMobile.get(userUuid)).orElse("");
+        final String newMobile = phoneNumberNormalizer.normalizeNumber(contactInformation.getMobile()).orElse("");
 
-            // add reverse mapping
-            if (!mobileToUserUuids.containsKey(mobile)) {
-                mobileToUserUuids.put(mobile, new HashSet<>());
+        if (hasText(newMobile) && !hasText(oldMobile)) {
+            handleNewMobile(newMobile, userUuid);
+        } else if (!hasText(newMobile) && hasText(oldMobile)) {
+            handleRemovedMobile(userUuid, oldMobile);
+        } else {
+            if (!oldMobile.equals(newMobile)) {
+                handleChangedMobile(newMobile, userUuid);
             }
-
-            mobileToUserUuids.get(mobile).add(userUuid);
         }
+    }
+
+
+    private void handleChangedMobile(final String newMobile, final String userUuid) {
+
+        userUuidToMobile.put(userUuid, newMobile);
+        mobileToUserUuids.getOrDefault(newMobile, Collections.emptySet()).remove(userUuid);
+        mobileToUserUuids.putIfAbsent(newMobile, new HashSet<>());
+        mobileToUserUuids.get(newMobile).add(userUuid);
+    }
+
+
+    private void handleChangedMailAddress(final String newMail, final String userUuid, final String oldMail) {
+
+        userUuidToMail.put(userUuid, newMail);
+        mailToUserUuids.getOrDefault(oldMail, Collections.emptySet()).remove(userUuid);
+        mailToUserUuids.putIfAbsent(newMail, new HashSet<>());
+        mailToUserUuids.get(newMail).add(userUuid);
+    }
+
+
+    private void handleRemovedMobile(final String userUuid, final String oldMobile) {
+
+        userUuidToMobile.remove(userUuid);
+        mobileToUserUuids.getOrDefault(oldMobile, Collections.emptySet()).remove(userUuid);
+    }
+
+
+    private void handleNewMobile(final String newMobile, final String userUuid) {
+
+        userUuidToMobile.put(userUuid, newMobile);
+
+        // add reverse mapping
+        if (!mobileToUserUuids.containsKey(newMobile)) {
+            mobileToUserUuids.putIfAbsent(newMobile, new HashSet<>());
+        }
+
+        mobileToUserUuids.get(newMobile).add(userUuid);
+    }
+
+
+    private void handleRemovedMailAddress(final String userUuid, final String oldMail) {
+
+        userUuidToMail.remove(userUuid);
+        mailToUserUuids.getOrDefault(oldMail, Collections.emptySet()).remove(userUuid);
+    }
+
+
+    private void handleNewMailAddress(final String newMail, String userUuid) {
+
+        userUuidToMail.put(userUuid, newMail);
+
+        // add reverse mapping
+        if (!mailToUserUuids.containsKey(newMail)) {
+            mailToUserUuids.putIfAbsent(newMail, new HashSet<>());
+        }
+
+        mailToUserUuids.get(newMail).add(userUuid);
     }
 
 
@@ -158,6 +220,14 @@ public class RequiredContactInfoValidationService implements Loggable, ContactIn
         } else { // no mappings yet -> unique
             return true;
         }
+    }
+
+
+    @Override
+    public void remove(ContactInformation contactInformation) {
+
+        handleRemovedMailAddress(contactInformation.getUserUuid(), contactInformation.getEmail());
+        handleRemovedMobile(contactInformation.getUserUuid(), contactInformation.getMobile());
     }
 
 

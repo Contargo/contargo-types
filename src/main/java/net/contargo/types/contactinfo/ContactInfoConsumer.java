@@ -9,4 +9,10 @@ public interface ContactInfoConsumer {
 
 
     void consume(ContactInformation contactInformation);
+
+
+    default void remove(ContactInformation contactInformation) {
+
+        // OK
+    }
 }
