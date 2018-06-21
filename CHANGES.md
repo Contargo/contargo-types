@@ -1,6 +1,11 @@
 Contargo Types
 ===============
-## v0.10.0 
+## v0.11.0
+
+* Add support for removal of users and change of contact options for existing users
+  to the RequiredContactInfoValidationService.
+
+## v0.10.x
 
 * Add validation service that checks for valid contact options of a given COLA user
 
