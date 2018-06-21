@@ -19,7 +19,8 @@ public class RequiredContactInfoValidationServiceTest {
 
         List<ContactInformation> allProfiles = new ArrayList<>();
 
-        ContactInformation contactInformation1 = new ContactInformation("uuid1", "1234", "4567", "foo@bar", "bar@foo");
+        ContactInformation contactInformation1 = new ContactInformation("uuid1", "1234", "4567", "foo1@bar",
+                "bar@foo");
         allProfiles.add(contactInformation1);
 
         ContactInformation contactInformation2 = new ContactInformation("uuid2", "1233", "4567", "foo@bar", "bar@foo");
@@ -51,7 +52,7 @@ public class RequiredContactInfoValidationServiceTest {
 
     private ContactInformation contactInformationWithDuplicateMailAfterNormalization() {
 
-        return new ContactInformation("uuid1", "171789987", "721321451", "foo@BAR", "bar@foo");
+        return new ContactInformation("uuid1-1", "171789987", "721321451", "foo1@BAR", "bar@foo");
     }
 
 
@@ -117,14 +118,124 @@ public class RequiredContactInfoValidationServiceTest {
             new RequiredContactInfoValidationService(new PhoneNumberNormalizer(), new EmailAddressNormalizer());
         consumeColaProfiles(requiredContactInfoValidationService);
 
+        assertDetectionOfDuplicateMobile(requiredContactInfoValidationService,
+            contactInformationWithDuplicateMobile());
+    }
+
+
+    @Test
+    public void ensureThatDuplicateMobileIsDetectedAndNotDetectedAfterConflictingUserChangedMobile() {
+
+        RequiredContactInfoValidationService requiredContactInfoValidationService =
+            new RequiredContactInfoValidationService(new PhoneNumberNormalizer(), new EmailAddressNormalizer());
+        consumeColaProfiles(requiredContactInfoValidationService);
+
+        assertDetectionOfDuplicateMobile(requiredContactInfoValidationService,
+            contactInformationWithDuplicateMobile());
+
+        final ContactInformation contactInfoToBeChanged = new ContactInformation("uuid2", "12345", "4567",
+                "foo-uuid2@bar", "bar@foo");
+        final ContactInformation contactInfoToBeValidated = new ContactInformation("uuid8", "1233", "4567",
+                "foo-uuid8@bar", "bar@foo");
+
+        requiredContactInfoValidationService.consume(contactInfoToBeChanged);
+        assertThatNoValidationErrorIsReported(requiredContactInfoValidationService, contactInfoToBeValidated);
+    }
+
+
+    @Test
+    public void ensureThatDuplicateMailIsDetectedAndNotDetectedAfterConflictingUserChangedMail() {
+
+        final ContactInformation contactInfoToBeChanged = new ContactInformation("uuid4", "12345", "4567", "foo@bazk",
+                "bar@foo");
+        final ContactInformation contactInfoToBeValidated = new ContactInformation("uuid8", "1233", "4567", "foo@bazl",
+                "bar@foo");
+
+        final RequiredContactInfoValidationService requiredContactInfoValidationService =
+            new RequiredContactInfoValidationService(new PhoneNumberNormalizer(), new EmailAddressNormalizer());
+
+        consumeColaProfiles(requiredContactInfoValidationService);
+
+        assertDetectionOfDuplicateMail(requiredContactInfoValidationService, contactInfoToBeValidated);
+
+        requiredContactInfoValidationService.consume(contactInfoToBeChanged);
+        assertThatNoValidationErrorIsReported(requiredContactInfoValidationService, contactInfoToBeValidated);
+    }
+
+
+    @Test
+    public void ensureThatDuplicateMobileIsDetectedAndNotDetectedAfterRemoval() {
+
+        RequiredContactInfoValidationService requiredContactInfoValidationService =
+            new RequiredContactInfoValidationService(new PhoneNumberNormalizer(), new EmailAddressNormalizer());
+        consumeColaProfiles(requiredContactInfoValidationService);
+
+        assertDetectionOfDuplicateMobile(requiredContactInfoValidationService,
+            contactInformationWithDuplicateMobile());
+
+        ContactInformation contactInfoToBeRemoved = new ContactInformation("uuid2", "1233", "4567", "foo@bar",
+                "bar@foo");
+        ContactInformation contactInfoToBeValidated = new ContactInformation("uuid8", "1233", "4567", "foo@bar",
+                "bar@foo");
+        requiredContactInfoValidationService.remove(contactInfoToBeRemoved);
+        assertThatNoValidationErrorIsReported(requiredContactInfoValidationService, contactInfoToBeValidated);
+    }
+
+
+    @Test
+    public void ensureThatDuplicateMailIsDetectedAndNotDetectedAfterRemoval() {
+
+        RequiredContactInfoValidationService requiredContactInfoValidationService =
+            new RequiredContactInfoValidationService(new PhoneNumberNormalizer(), new EmailAddressNormalizer());
+        consumeColaProfiles(requiredContactInfoValidationService);
+
+        assertDetectionOfDuplicateMail(requiredContactInfoValidationService,
+            contactInformationWithDuplicateMailAfterNormalization());
+
+        ContactInformation contactInfoToBeRemoved = new ContactInformation("uuid3", "1233", "4567", "foo@baz",
+                "bar@foo");
+        ContactInformation contactInfoToBeValidated = new ContactInformation("uuid8", "1233123", "4567", "foo@baz",
+                "bar@foo");
+        requiredContactInfoValidationService.remove(contactInfoToBeRemoved);
+        assertThatNoValidationErrorIsReported(requiredContactInfoValidationService, contactInfoToBeValidated);
+    }
+
+
+    private void assertDetectionOfDuplicateMail(
+        final RequiredContactInfoValidationService requiredContactInfoValidationService,
+        final ContactInformation contactInformationWithDuplicateMail) {
+
         List<RequiredContactInfoValidationService.ValidationResult> validationResults = new ArrayList<>();
-        ContactInformation contactInformationWithDuplicateMobile = contactInformationWithDuplicateMobile();
+        boolean isValid = requiredContactInfoValidationService.validate(contactInformationWithDuplicateMail,
+                validationResults);
+        assertFalse(isValid);
+        assertEquals(1, validationResults.size());
+        assertEquals(RequiredContactInfoValidationService.ValidationResult.NON_UNIQUE_EMAIL, validationResults.get(0));
+    }
+
+
+    private void assertDetectionOfDuplicateMobile(
+        final RequiredContactInfoValidationService requiredContactInfoValidationService,
+        final ContactInformation contactInformationWithDuplicateMobile) {
+
+        List<RequiredContactInfoValidationService.ValidationResult> validationResults = new ArrayList<>();
         boolean isValid = requiredContactInfoValidationService.validate(contactInformationWithDuplicateMobile,
                 validationResults);
         assertFalse(isValid);
         assertEquals(1, validationResults.size());
         assertEquals(RequiredContactInfoValidationService.ValidationResult.NON_UNIQUE_MOBILE,
             validationResults.get(0));
+    }
+
+
+    private void assertThatNoValidationErrorIsReported(
+        RequiredContactInfoValidationService requiredContactInfoValidationService,
+        final ContactInformation contactInfoToBeCheckedForDuplicate) {
+
+        List<RequiredContactInfoValidationService.ValidationResult> validationResults = new ArrayList<>();
+        requiredContactInfoValidationService.validate(contactInfoToBeCheckedForDuplicate, validationResults);
+        assertTrue("after the conflicting entry has been removed, no duplicate shall be detected",
+            validationResults.size() == 0);
     }
 
 
