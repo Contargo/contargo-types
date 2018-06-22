@@ -112,6 +112,25 @@ public class RequiredContactInfoValidationServiceTest {
 
 
     @Test
+    public void ensureThatContactInfoWithNullValuesCanBeHandled() {
+
+        RequiredContactInfoValidationService requiredContactInfoValidationService =
+            new RequiredContactInfoValidationService(new PhoneNumberNormalizer(), new EmailAddressNormalizer());
+
+        ContactInformation contactInfoWithNullValue1 = new ContactInformation("uuid1", "1234", null, null, "");
+        ContactInformation contactInfoWithNullValue2 = new ContactInformation("uuid2", "1234", null, null, "");
+
+        requiredContactInfoValidationService.consume(contactInfoWithNullValue1);
+
+        assertDetectionOfDuplicateMobile(requiredContactInfoValidationService, contactInfoWithNullValue2);
+
+        requiredContactInfoValidationService.remove(contactInfoWithNullValue1);
+
+        assertThatNoValidationErrorIsReported(requiredContactInfoValidationService, contactInfoWithNullValue2);
+    }
+
+
+    @Test
     public void ensureThatDuplicateMobileIsDetected() {
 
         RequiredContactInfoValidationService requiredContactInfoValidationService =
