@@ -346,4 +346,17 @@ public class RequiredContactInfoValidationServiceTest {
         assertTrue(validationResults.contains(RequiredContactInfoValidationService.ValidationResult.MISSING_MOBILE));
         assertTrue(validationResults.contains(RequiredContactInfoValidationService.ValidationResult.MISSING_EMAIL));
     }
+
+
+    @Test
+    public void ensureThatConsumesRegistrationsIsSetAndReportedCorrectly() {
+
+        RequiredContactInfoValidationService requiredContactInfoValidationService1 =
+            new RequiredContactInfoValidationService(new PhoneNumberNormalizer(), new EmailAddressNormalizer());
+        assertTrue(requiredContactInfoValidationService1.consumesRegistrations());
+
+        RequiredContactInfoValidationService requiredContactInfoValidationService2 =
+            new RequiredContactInfoValidationService(new PhoneNumberNormalizer(), new EmailAddressNormalizer(), false);
+        assertFalse(requiredContactInfoValidationService2.consumesRegistrations());
+    }
 }

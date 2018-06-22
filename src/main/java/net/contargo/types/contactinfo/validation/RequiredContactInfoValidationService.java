@@ -27,6 +27,7 @@ public class RequiredContactInfoValidationService implements Loggable, ContactIn
     private final ConcurrentMap<String, Set<String>> mailToUserUuids;
     private final PhoneNumberNormalizer phoneNumberNormalizer;
     private final EmailAddressNormalizer emailAddressNormalizer;
+    private boolean isConsumingRegistrations = true;
 
     public RequiredContactInfoValidationService(PhoneNumberNormalizer phoneNumberNormalizer,
         EmailAddressNormalizer emailAddressNormalizer) {
@@ -38,6 +39,14 @@ public class RequiredContactInfoValidationService implements Loggable, ContactIn
         this.userUuidToMobile = new ConcurrentHashMap<>();
         this.mailToUserUuids = new ConcurrentHashMap<>();
         this.mobileToUserUuids = new ConcurrentHashMap<>();
+    }
+
+
+    public RequiredContactInfoValidationService(PhoneNumberNormalizer phoneNumberNormalizer,
+        EmailAddressNormalizer emailAddressNormalizer, final boolean isConsumingRegistrations) {
+
+        this(phoneNumberNormalizer, emailAddressNormalizer);
+        this.isConsumingRegistrations = isConsumingRegistrations;
     }
 
     @Override
@@ -220,6 +229,13 @@ public class RequiredContactInfoValidationService implements Loggable, ContactIn
         } else { // no mappings yet -> unique
             return true;
         }
+    }
+
+
+    @Override
+    public boolean consumesRegistrations() {
+
+        return this.isConsumingRegistrations;
     }
 
 

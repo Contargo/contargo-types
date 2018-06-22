@@ -5,6 +5,13 @@ import java.util.List;
 
 public interface ContactInfoConsumer {
 
+
+    default boolean consumesRegistrations() {
+
+        return true;
+    }
+
+
     void consume(final List<ContactInformation> allContactInformation);
 
 
