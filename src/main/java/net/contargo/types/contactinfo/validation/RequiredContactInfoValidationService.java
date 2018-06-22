@@ -120,7 +120,10 @@ public class RequiredContactInfoValidationService implements Loggable, ContactIn
     private void handleRemovedMobile(final String userUuid, final String oldMobile) {
 
         userUuidToMobile.remove(userUuid);
-        mobileToUserUuids.getOrDefault(oldMobile, Collections.emptySet()).remove(userUuid);
+
+        if (hasText(oldMobile)) {
+            mobileToUserUuids.getOrDefault(oldMobile, Collections.emptySet()).remove(userUuid);
+        }
     }
 
 
@@ -140,7 +143,10 @@ public class RequiredContactInfoValidationService implements Loggable, ContactIn
     private void handleRemovedMailAddress(final String userUuid, final String oldMail) {
 
         userUuidToMail.remove(userUuid);
-        mailToUserUuids.getOrDefault(oldMail, Collections.emptySet()).remove(userUuid);
+
+        if (hasText(oldMail)) {
+            mailToUserUuids.getOrDefault(oldMail, Collections.emptySet()).remove(userUuid);
+        }
     }
 
 
@@ -242,8 +248,10 @@ public class RequiredContactInfoValidationService implements Loggable, ContactIn
     @Override
     public void remove(ContactInformation contactInformation) {
 
-        handleRemovedMailAddress(contactInformation.getUserUuid(), contactInformation.getEmail());
-        handleRemovedMobile(contactInformation.getUserUuid(), contactInformation.getMobile());
+        handleRemovedMailAddress(contactInformation.getUserUuid(),
+            emailAddressNormalizer.normalizeEmailAddress(contactInformation.getEmail()));
+        handleRemovedMobile(contactInformation.getUserUuid(),
+            phoneNumberNormalizer.normalizeNumber(contactInformation.getMobile()).orElse(""));
     }
 
 
