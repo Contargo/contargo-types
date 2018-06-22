@@ -247,7 +247,7 @@ public class RequiredContactInfoValidationService implements Loggable, ContactIn
     }
 
 
-    private boolean isEmailUnique(final String userUuid, final String email) {
+    public boolean isEmailUnique(final String userUuid, final String email) {
 
         final String normalizedEmail = emailAddressNormalizer.normalizeEmailAddress(email);
 
@@ -255,7 +255,7 @@ public class RequiredContactInfoValidationService implements Loggable, ContactIn
     }
 
 
-    private boolean isMobileUnique(final String userUuid, final String mobile) {
+    public boolean isMobileUnique(final String userUuid, final String mobile) {
 
         final String normalizedMobileNumber = phoneNumberNormalizer.normalizeNumber(mobile).orElse("");
 
