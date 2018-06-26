@@ -18,7 +18,7 @@ public class PhoneNumberNormalizer implements Loggable {
         try {
             return Optional.of(new PhoneNumberFormatter().parseAndFormatToE164Format(phoneNumber));
         } catch (PhoneNumberFormattingException e) {
-            logger().warn("Failed to parse and format number", e);
+            logger().warn("Failed to parse and format number {}: {}", phoneNumber, e.getMessage());
 
             return Optional.empty();
         }

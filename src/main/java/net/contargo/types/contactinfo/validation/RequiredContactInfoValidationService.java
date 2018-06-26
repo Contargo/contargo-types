@@ -215,7 +215,7 @@ public class RequiredContactInfoValidationService implements Loggable, ContactIn
     }
 
 
-    private static boolean isValueUniqueForKey(final String key, final String value,
+    private boolean isValueUniqueForKey(final String key, final String value,
         final Map<String, Set<String>> dataToCheck) {
 
         if (dataToCheck.containsKey(key)) {
@@ -227,6 +227,9 @@ public class RequiredContactInfoValidationService implements Loggable, ContactIn
                 if (values.size() == 1 && values.contains(value)) { // only one value equals to the requested value: unique
                     return true;
                 } else { // more values or one not equal to the requested one: not unique
+                    logger().info("detected non-unique value {}. claimed by {} but already taken by ", key, value,
+                        String.join(",", values));
+
                     return false;
                 }
             } else {
