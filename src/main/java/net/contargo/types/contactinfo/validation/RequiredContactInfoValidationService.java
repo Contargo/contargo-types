@@ -227,7 +227,7 @@ public class RequiredContactInfoValidationService implements Loggable, ContactIn
                 if (values.size() == 1 && values.contains(value)) { // only one value equals to the requested value: unique
                     return true;
                 } else { // more values or one not equal to the requested one: not unique
-                    logger().info("detected non-unique value {}. claimed by {} but already taken by ", key, value,
+                    logger().info("detected non-unique value {}. claimed by {} but already taken by {}.", key, value,
                         String.join(",", values));
 
                     return false;
