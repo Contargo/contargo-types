@@ -7,7 +7,7 @@ package net.contargo.types.truck;
  *
  * <ul>
  *   <li>A-1234-BB</li>
- *   <li>AAQ-1234-BB</li>
+ *   <li>AA-1234-BB</li>
  * </ul>
  *
  * <p>Further information: <a href="https://en.wikipedia.org/wiki/Vehicle_registration_plates_of_Bulgaria#Format">
@@ -70,10 +70,10 @@ class BulgarianLicensePlateHandler implements LicensePlateHandler {
         String normalizedValue = normalize(value);
 
         // A-1234-AA
-        boolean leadingLetter = normalizedValue.matches("[A-Z]\\-[1-9]{4}\\-[A-Z]{2}");
+        boolean leadingLetter = normalizedValue.matches("[A-Z]\\-[0-9]{4}\\-[A-Z]{2}");
 
         // AA-1234-AA
-        boolean leadingLetters = normalizedValue.matches("[A-Z]{2}\\-[1-9]{4}\\-[A-Z]{2}");
+        boolean leadingLetters = normalizedValue.matches("[A-Z]{2}\\-[0-9]{4}\\-[A-Z]{2}");
 
         return leadingLetter || leadingLetters;
     }

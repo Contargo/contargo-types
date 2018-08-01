@@ -83,4 +83,20 @@ public class BulgarianLicensePlateHandlerTest extends AbstractLicensePlateHandle
         assertIsNotValid.accept("G-AB3D-42");
         assertIsNotValid.accept("G-ABCD-4A");
     }
+
+
+    @Test
+    public void ensureLicensePlateWithAllDigitsIsValid() {
+
+        assertIsValid.accept("X-0123-AA");
+        assertIsValid.accept("X-1234-AA");
+        assertIsValid.accept("X-2345-AA");
+        assertIsValid.accept("X-3456-AA");
+        assertIsValid.accept("X-4567-AA");
+        assertIsValid.accept("X-5678-AA");
+        assertIsValid.accept("X-6789-AA");
+        assertIsValid.accept("X-7890-AA");
+        assertIsValid.accept("X-8901-AA");
+        assertIsValid.accept("X-9012-AA");
+    }
 }

@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 
 /**
@@ -12,7 +11,7 @@ import java.util.function.Consumer;
  */
 public class LicensePlateCountryTest {
 
-    private BiConsumer<LicensePlateHandler, Class> assertCorrectHandler = (handler, clazz) -> {
+    private final BiConsumer<LicensePlateHandler, Class> assertCorrectHandler = (handler, clazz) -> {
         Assert.assertNotNull("Missing handler", handler);
         Assert.assertEquals("Wrong handler implementation", clazz, handler.getClass());
     };
@@ -36,7 +35,9 @@ public class LicensePlateCountryTest {
         assertCorrectHandler.accept(LicensePlateCountry.CZECH_REPUBLIC.getLicensePlateHandler(),
             CzechLicensePlateHandler.class);
         assertCorrectHandler.accept(LicensePlateCountry.ROMANIA.getLicensePlateHandler(),
-                RomanianLicensePlateHandler.class);
+            RomanianLicensePlateHandler.class);
+        assertCorrectHandler.accept(LicensePlateCountry.BULGARIA.getLicensePlateHandler(),
+            BulgarianLicensePlateHandler.class);
     }
 
 
