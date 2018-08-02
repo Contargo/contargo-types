@@ -21,12 +21,12 @@ public class BulgarianLicensePlateHandlerTest extends AbstractLicensePlateHandle
     @Test
     public void ensureLicensePlateIsNormalizedCorrectly() {
 
-        assertIsNormalizedFromTo.accept("a-1234-mm", "A-1234-MM");
-        assertIsNormalizedFromTo.accept("b-1234-fa", "B-1234-FA");
-        assertIsNormalizedFromTo.accept("a 1234 mm", "A-1234-MM");
-        assertIsNormalizedFromTo.accept("a 1234 mm  ", "A-1234-MM");
-        assertIsNormalizedFromTo.accept("a  1234 mm", "A-1234-MM");
-        assertIsNormalizedFromTo.accept("a--1234--mm", "A-1234-MM");
+        assertIsNormalizedFromTo.accept("a-1234-mm", "A 1234 MM");
+        assertIsNormalizedFromTo.accept("b-1234-fa", "B 1234 FA");
+        assertIsNormalizedFromTo.accept("a 1234 mm", "A 1234 MM");
+        assertIsNormalizedFromTo.accept("a 1234 mm  ", "A 1234 MM");
+        assertIsNormalizedFromTo.accept("a  1234 mm", "A 1234 MM");
+        assertIsNormalizedFromTo.accept("a--1234--mm", "A 1234 MM");
     }
 
 
@@ -35,8 +35,8 @@ public class BulgarianLicensePlateHandlerTest extends AbstractLicensePlateHandle
     @Test
     public void ensureLicensePlateWithThreeGroupsIsValid() {
 
-        assertIsValid.accept("X-1234-AA");
-        assertIsValid.accept("AB-5678-XZ");
+        assertIsValid.accept("X 1234 CH");
+        assertIsValid.accept("CH 5678 TM");
     }
 
 
@@ -63,40 +63,40 @@ public class BulgarianLicensePlateHandlerTest extends AbstractLicensePlateHandle
     @Test
     public void ensureLicensePlateWithOnlyDigitsIsNotValid() {
 
-        assertIsNotValid.accept("1-2345-67");
+        assertIsNotValid.accept("1 2345 67");
     }
 
 
     @Test
     public void ensureLicensePlateWithOnlyLettersIsNotValid() {
 
-        assertIsNotValid.accept("A-BCDE-FG");
-        assertIsNotValid.accept("AB-CDEF-GH");
+        assertIsNotValid.accept("A BCDE FG");
+        assertIsNotValid.accept("AB CDEF GH");
     }
 
 
     @Test
     public void ensureLicensePlateWithMixedUpGroupsIsNotValid() {
 
-        assertIsNotValid.accept("1-A2SV-14");
-        assertIsNotValid.accept("9-123B-9Z");
-        assertIsNotValid.accept("G-AB3D-42");
-        assertIsNotValid.accept("G-ABCD-4A");
+        assertIsNotValid.accept("1 A2SV 14");
+        assertIsNotValid.accept("9 123B 9Z");
+        assertIsNotValid.accept("G AB3D 42");
+        assertIsNotValid.accept("G-ABCD 4A");
     }
 
 
     @Test
     public void ensureLicensePlateWithAllDigitsIsValid() {
 
-        assertIsValid.accept("X-0123-AA");
-        assertIsValid.accept("X-1234-AA");
-        assertIsValid.accept("X-2345-AA");
-        assertIsValid.accept("X-3456-AA");
-        assertIsValid.accept("X-4567-AA");
-        assertIsValid.accept("X-5678-AA");
-        assertIsValid.accept("X-6789-AA");
-        assertIsValid.accept("X-7890-AA");
-        assertIsValid.accept("X-8901-AA");
-        assertIsValid.accept("X-9012-AA");
+        assertIsValid.accept("X 0123 CH");
+        assertIsValid.accept("X 1234 CH");
+        assertIsValid.accept("X 2345 CH");
+        assertIsValid.accept("X 3456 CH");
+        assertIsValid.accept("X 4567 CH");
+        assertIsValid.accept("X 5678 CH");
+        assertIsValid.accept("X 6789 CH");
+        assertIsValid.accept("X 7890 CH");
+        assertIsValid.accept("X 8901 CH");
+        assertIsValid.accept("X 9012 CH");
     }
 }
