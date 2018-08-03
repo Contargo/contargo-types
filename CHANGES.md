@@ -1,6 +1,10 @@
 Contargo Types
 ===============
-## v0.11.0
+## v0.12.0
+
+* Add bulgrian license plate
+
+## v0.11.x
 
 * Add support for removal of users and change of contact options for existing users
   to the RequiredContactInfoValidationService.
