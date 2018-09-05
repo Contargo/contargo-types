@@ -1,5 +1,11 @@
 Contargo Types
 ===============
+
+## v0.13.0
+
+* ContactInfoValidator: Report ContactInformation with duplicate mobile number as violation even 
+  if an email address is present (previously this was not the case).
+
 ## v0.12.0
 
 * Add bulgrian license plate

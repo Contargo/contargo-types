@@ -46,19 +46,19 @@ public class RequiredContactInfoValidationServiceTest {
 
     private ContactInformation contactInformationWithAllDataAndDuplicateMailOfOtherUser() {
 
-        return new ContactInformation("uuid1", "171789987", "721321451", "foo@baz", "bar@foo");
+        return new ContactInformation("uuid1", "", "721321451", "foo@baz", "bar@foo");
     }
 
 
     private ContactInformation contactInformationWithDuplicateMailAfterNormalization() {
 
-        return new ContactInformation("uuid1-1", "171789987", "721321451", "foo1@BAR", "bar@foo");
+        return new ContactInformation("uuid1-1", "", "721321451", "foo1@BAR", "bar@foo");
     }
 
 
     private ContactInformation contactInformationWithAllDataAndDistinctMail() {
 
-        return new ContactInformation("uuid3", "171789987", "721321451", "foo@baz", "bar@foo");
+        return new ContactInformation("uuid3", "", "721321451", "foo@baz", "bar@foo");
     }
 
 
@@ -167,7 +167,7 @@ public class RequiredContactInfoValidationServiceTest {
 
         final ContactInformation contactInfoToBeChanged = new ContactInformation("uuid4", "12345", "4567", "foo@bazk",
                 "bar@foo");
-        final ContactInformation contactInfoToBeValidated = new ContactInformation("uuid8", "1233", "4567", "foo@bazl",
+        final ContactInformation contactInfoToBeValidated = new ContactInformation("uuid8", "", "4567", "foo@bazl",
                 "bar@foo");
 
         final RequiredContactInfoValidationService requiredContactInfoValidationService =

@@ -93,16 +93,16 @@ public class RequiredContactInfoValidationService implements Loggable, ContactIn
             handleRemovedMobile(userUuid, oldMobile);
         } else {
             if (!oldMobile.equals(newMobile)) {
-                handleChangedMobile(newMobile, userUuid);
+                handleChangedMobile(newMobile, userUuid, oldMobile);
             }
         }
     }
 
 
-    private void handleChangedMobile(final String newMobile, final String userUuid) {
+    private void handleChangedMobile(final String newMobile, final String userUuid, final String oldMobile) {
 
         userUuidToMobile.put(userUuid, newMobile);
-        mobileToUserUuids.getOrDefault(newMobile, Collections.emptySet()).remove(userUuid);
+        mobileToUserUuids.getOrDefault(oldMobile, Collections.emptySet()).remove(userUuid);
         mobileToUserUuids.putIfAbsent(newMobile, new HashSet<>());
         mobileToUserUuids.get(newMobile).add(userUuid);
     }
@@ -183,16 +183,12 @@ public class RequiredContactInfoValidationService implements Loggable, ContactIn
             return false;
         }
 
-        if (missingEmail) {
-            // only unique mobile numbers allowed when no email is given
-            final boolean mobileUnique = isMobileUnique(contactInformation.getUserUuid(),
-                    contactInformation.getMobile());
+        final boolean mobileUnique = isMobileUnique(contactInformation.getUserUuid(), contactInformation.getMobile());
 
-            if (!mobileUnique) {
-                messages.add(ValidationResult.NON_UNIQUE_MOBILE);
-            }
+        if (!mobileUnique) {
+            messages.add(ValidationResult.NON_UNIQUE_MOBILE);
 
-            return mobileUnique;
+            return false;
         }
 
         final boolean uniqueEmail = isEmailUnique(contactInformation.getUserUuid(), contactInformation.getEmail());
