@@ -1,6 +1,16 @@
 Contargo Types
 ===============
-## v0.11.0
+
+## v0.13.0
+
+* ContactInfoValidator: Report ContactInformation with duplicate mobile number as violation even 
+  if an email address is present (previously this was not the case).
+
+## v0.12.0
+
+* Add bulgrian license plate
+
+## v0.11.x
 
 * Add support for removal of users and change of contact options for existing users
   to the RequiredContactInfoValidationService.
