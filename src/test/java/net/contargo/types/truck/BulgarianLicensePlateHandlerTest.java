@@ -123,6 +123,9 @@ public class BulgarianLicensePlateHandlerTest extends AbstractLicensePlateHandle
         assertIsValid.accept("A 9012 AB");
         assertIsNotValid.accept("A 9012 CD");
         assertIsNotValid.accept("A 9012 FG");
-        assertIsValid.accept("A 9012 MH");
+        assertIsNotValid.accept("A 9012 EF");
+        assertIsValid.accept("A 9012 ME");
+        assertIsValid.accept("A 9012 MK");
+        assertIsValid.accept("A 9012 MO");
     }
 }

@@ -35,7 +35,8 @@ class BulgarianLicensePlateHandler implements LicensePlateHandler {
             "M", "H", "OB", "P", "PA", "PB", "PK", "PP", "C", "CA", "CB", "CH", "CM", "CO", "CC", "CT", "T", "TX", "Y",
             "X");
 
-    private static final List<String> ACCEPTED_LETTERS = Arrays.asList("A", "B", "M", "H", "P", "C", "T", "Y", "X");
+    private static final List<String> ACCEPTED_LETTERS = Arrays.asList("A", "B", "E", "K", "M", "H", "O", "P", "C",
+            "T", "Y", "X");
 
     /**
      * Normalizes the given {@link LicensePlate} value by upper casing it and replacing all hyphens by whitespaces, and
