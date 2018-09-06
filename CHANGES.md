@@ -1,6 +1,10 @@
 Contargo Types
 ===============
 
+## v0.14.0
+
+* BulgarianLicensePlateHandler: Adds missing letters to validation string.
+
 ## v0.13.0
 
 * ContactInfoValidator: Report ContactInformation with duplicate mobile number as violation even 
