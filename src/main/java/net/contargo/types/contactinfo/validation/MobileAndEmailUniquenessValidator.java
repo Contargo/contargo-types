@@ -9,17 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 
-public class RequiredContactInfoValidationService implements Loggable, ContactInfoConsumer {
-
-    public enum ValidationResult {
-
-        MISSING_PHONE,
-        MISSING_MOBILE,
-        MISSING_EMAIL,
-        NON_UNIQUE_PHONE, // TODO: implement this case
-        NON_UNIQUE_MOBILE,
-        NON_UNIQUE_EMAIL
-    }
+public class MobileAndEmailUniquenessValidator implements ContactInfoConsumer, Loggable, UniquenessValidator {
 
     private final ConcurrentMap<String, String> userUuidToMail;
     private final ConcurrentMap<String, String> userUuidToMobile;
@@ -29,7 +19,7 @@ public class RequiredContactInfoValidationService implements Loggable, ContactIn
     private final EmailAddressNormalizer emailAddressNormalizer;
     private boolean isConsumingRegistrations = true;
 
-    public RequiredContactInfoValidationService(PhoneNumberNormalizer phoneNumberNormalizer,
+    public MobileAndEmailUniquenessValidator(PhoneNumberNormalizer phoneNumberNormalizer,
         EmailAddressNormalizer emailAddressNormalizer) {
 
         this.phoneNumberNormalizer = phoneNumberNormalizer;
@@ -42,7 +32,7 @@ public class RequiredContactInfoValidationService implements Loggable, ContactIn
     }
 
 
-    public RequiredContactInfoValidationService(PhoneNumberNormalizer phoneNumberNormalizer,
+    public MobileAndEmailUniquenessValidator(PhoneNumberNormalizer phoneNumberNormalizer,
         EmailAddressNormalizer emailAddressNormalizer, final boolean isConsumingRegistrations) {
 
         this(phoneNumberNormalizer, emailAddressNormalizer);
@@ -150,6 +140,12 @@ public class RequiredContactInfoValidationService implements Loggable, ContactIn
     }
 
 
+    private static boolean hasText(final String value) {
+
+        return value != null && value.length() > 0;
+    }
+
+
     private void handleNewMailAddress(final String newMail, String userUuid) {
 
         userUuidToMail.put(userUuid, newMail);
@@ -163,51 +159,59 @@ public class RequiredContactInfoValidationService implements Loggable, ContactIn
     }
 
 
-    private static boolean hasText(final String value) {
+    @Override
+    public boolean consumesRegistrations() {
 
-        return value != null && value.length() > 0;
+        return this.isConsumingRegistrations;
     }
 
 
-    public boolean validate(final ContactInformation contactInformation, List<ValidationResult> messages) {
+    @Override
+    public void remove(ContactInformation contactInformation) {
 
-        final boolean missingEmail = !hasText(contactInformation.getEmail());
-        final boolean missingMobile = !hasText(contactInformation.getMobile());
-        final boolean missingPhone = !hasText(contactInformation.getPhone());
+        handleRemovedMailAddress(contactInformation.getUserUuid(),
+            emailAddressNormalizer.normalizeEmailAddress(contactInformation.getEmail()));
+        handleRemovedMobile(contactInformation.getUserUuid(),
+            phoneNumberNormalizer.normalizeNumber(contactInformation.getMobile()).orElse(""));
+    }
 
-        if (missingEmail && missingMobile) {
-            messages.add(ValidationResult.MISSING_EMAIL);
-            messages.add(ValidationResult.MISSING_MOBILE);
 
-            // will trigger default message without messages on mail or mobile property since they are empty
-            return false;
-        }
+    @Override
+    public List<ValidationResult> checkUniqueness(final ContactInformation contactInformation) {
 
         final boolean mobileUnique = isMobileUnique(contactInformation.getUserUuid(), contactInformation.getMobile());
 
+        List<ValidationResult> messages = new ArrayList<>();
+
         if (!mobileUnique) {
             messages.add(ValidationResult.NON_UNIQUE_MOBILE);
-
-            return false;
         }
 
         final boolean uniqueEmail = isEmailUnique(contactInformation.getUserUuid(), contactInformation.getEmail());
 
         if (!uniqueEmail) {
             messages.add(ValidationResult.NON_UNIQUE_EMAIL);
-
-            return false;
         }
 
-        // Communication with unique mobile requires some phone number
-        if (missingPhone && missingMobile) {
-            messages.add(ValidationResult.MISSING_PHONE);
-            messages.add(ValidationResult.MISSING_MOBILE);
+        return messages;
+    }
 
-            return false;
-        }
 
-        return true;
+    @Override
+    public boolean isEmailUnique(final String userUuid, final String email) {
+
+        final String normalizedEmail = emailAddressNormalizer.normalizeEmailAddress(email);
+
+        return isValueUniqueForKey(normalizedEmail, userUuid, mailToUserUuids);
+    }
+
+
+    @Override
+    public boolean isMobileUnique(final String userUuid, final String mobile) {
+
+        final String normalizedMobileNumber = phoneNumberNormalizer.normalizeNumber(mobile).orElse("");
+
+        return isValueUniqueForKey(normalizedMobileNumber, userUuid, mobileToUserUuids);
     }
 
 
@@ -234,38 +238,5 @@ public class RequiredContactInfoValidationService implements Loggable, ContactIn
         } else { // no mappings yet -> unique
             return true;
         }
-    }
-
-
-    @Override
-    public boolean consumesRegistrations() {
-
-        return this.isConsumingRegistrations;
-    }
-
-
-    @Override
-    public void remove(ContactInformation contactInformation) {
-
-        handleRemovedMailAddress(contactInformation.getUserUuid(),
-            emailAddressNormalizer.normalizeEmailAddress(contactInformation.getEmail()));
-        handleRemovedMobile(contactInformation.getUserUuid(),
-            phoneNumberNormalizer.normalizeNumber(contactInformation.getMobile()).orElse(""));
-    }
-
-
-    public boolean isEmailUnique(final String userUuid, final String email) {
-
-        final String normalizedEmail = emailAddressNormalizer.normalizeEmailAddress(email);
-
-        return isValueUniqueForKey(normalizedEmail, userUuid, mailToUserUuids);
-    }
-
-
-    public boolean isMobileUnique(final String userUuid, final String mobile) {
-
-        final String normalizedMobileNumber = phoneNumberNormalizer.normalizeNumber(mobile).orElse("");
-
-        return isValueUniqueForKey(normalizedMobileNumber, userUuid, mobileToUserUuids);
     }
 }
