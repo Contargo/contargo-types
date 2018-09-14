@@ -1,4 +1,4 @@
-package net.contargo.types.util;
+package net.contargo.types;
 
 /**
  * Utility class providing assertion methods.

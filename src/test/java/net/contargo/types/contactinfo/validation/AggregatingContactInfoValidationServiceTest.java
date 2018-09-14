@@ -2,6 +2,8 @@ package net.contargo.types.contactinfo.validation;
 
 import net.contargo.types.contactinfo.ContactInfoConsumer;
 import net.contargo.types.contactinfo.ContactInformation;
+import net.contargo.types.contactinfo.normalization.EmailAddressNormalizer;
+import net.contargo.types.contactinfo.normalization.PhoneNumberNormalizer;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +16,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 
-public class ContactInfoValidationServiceTest {
+public class AggregatingContactInfoValidationServiceTest {
 
     private MobileAndEmailUniquenessValidator uniquenessValidator;
     private CompletenessValidator completenessValidator;
@@ -24,7 +26,7 @@ public class ContactInfoValidationServiceTest {
 
         uniquenessValidator = new MobileAndEmailUniquenessValidator(new PhoneNumberNormalizer(),
                 new EmailAddressNormalizer());
-        completenessValidator = new ExternalUserRequiredFieldsValidator();
+        completenessValidator = new ExternalUserCompletenessValidator();
     }
 
 
@@ -108,13 +110,13 @@ public class ContactInfoValidationServiceTest {
     @Test
     public void ensureThatDuplicateMobileIsDetectedAfterNormalization() {
 
-        ContactInfoValidationService contactInfoValidationService = new ContactInfoValidationService(
-                uniquenessValidator, completenessValidator);
+        AggregatingContactInfoValidationService aggregatingContactInfoValidationService =
+            new AggregatingContactInfoValidationService(uniquenessValidator, completenessValidator);
         consumeColaProfiles(uniquenessValidator);
 
         ContactInformation contactInformationWithDuplicateMobile =
             contactInformationWithDuplicateMobileAfterNormalization();
-        List<ValidationResult> validationResults = contactInfoValidationService.validate(
+        List<ValidationResult> validationResults = aggregatingContactInfoValidationService.validate(
                 contactInformationWithDuplicateMobile);
 
         assertEquals(1, validationResults.size());
@@ -125,41 +127,43 @@ public class ContactInfoValidationServiceTest {
     @Test
     public void ensureThatContactInfoWithNullValuesCanBeHandled() {
 
-        ContactInfoValidationService contactInfoValidationService = new ContactInfoValidationService(
-                uniquenessValidator, completenessValidator);
+        AggregatingContactInfoValidationService aggregatingContactInfoValidationService =
+            new AggregatingContactInfoValidationService(uniquenessValidator, completenessValidator);
 
         ContactInformation contactInfoWithNullValue1 = new ContactInformation("uuid1", "1234", null, null, "");
         ContactInformation contactInfoWithNullValue2 = new ContactInformation("uuid2", "1234", null, null, "");
 
         uniquenessValidator.consume(contactInfoWithNullValue1);
 
-        assertDetectionOfDuplicateMobile(contactInfoValidationService, contactInfoWithNullValue2);
+        assertDetectionOfDuplicateMobile(aggregatingContactInfoValidationService, contactInfoWithNullValue2);
 
         uniquenessValidator.remove(contactInfoWithNullValue1);
 
-        assertThatNoValidationErrorIsReported(contactInfoValidationService, contactInfoWithNullValue2);
+        assertThatNoValidationErrorIsReported(aggregatingContactInfoValidationService, contactInfoWithNullValue2);
     }
 
 
     @Test
     public void ensureThatDuplicateMobileIsDetected() {
 
-        ContactInfoValidationService contactInfoValidationService = new ContactInfoValidationService(
-                uniquenessValidator, completenessValidator);
+        AggregatingContactInfoValidationService aggregatingContactInfoValidationService =
+            new AggregatingContactInfoValidationService(uniquenessValidator, completenessValidator);
         consumeColaProfiles(uniquenessValidator);
 
-        assertDetectionOfDuplicateMobile(contactInfoValidationService, contactInformationWithDuplicateMobile());
+        assertDetectionOfDuplicateMobile(aggregatingContactInfoValidationService,
+            contactInformationWithDuplicateMobile());
     }
 
 
     @Test
     public void ensureThatDuplicateMobileIsDetectedAndNotDetectedAfterConflictingUserChangedMobile() {
 
-        ContactInfoValidationService contactInfoValidationService = new ContactInfoValidationService(
-                uniquenessValidator, completenessValidator);
+        AggregatingContactInfoValidationService aggregatingContactInfoValidationService =
+            new AggregatingContactInfoValidationService(uniquenessValidator, completenessValidator);
         consumeColaProfiles(uniquenessValidator);
 
-        assertDetectionOfDuplicateMobile(contactInfoValidationService, contactInformationWithDuplicateMobile());
+        assertDetectionOfDuplicateMobile(aggregatingContactInfoValidationService,
+            contactInformationWithDuplicateMobile());
 
         final ContactInformation contactInfoToBeChanged = new ContactInformation("uuid2", "12345", "4567",
                 "foo-uuid2@bar", "bar@foo");
@@ -167,7 +171,7 @@ public class ContactInfoValidationServiceTest {
                 "foo-uuid8@bar", "bar@foo");
 
         uniquenessValidator.consume(contactInfoToBeChanged);
-        assertThatNoValidationErrorIsReported(contactInfoValidationService, contactInfoToBeValidated);
+        assertThatNoValidationErrorIsReported(aggregatingContactInfoValidationService, contactInfoToBeValidated);
     }
 
 
@@ -179,44 +183,45 @@ public class ContactInfoValidationServiceTest {
         final ContactInformation contactInfoToBeValidated = new ContactInformation("uuid8", "", "4567", "foo@bazl",
                 "bar@foo");
 
-        final ContactInfoValidationService contactInfoValidationService = new ContactInfoValidationService(
-                uniquenessValidator, completenessValidator);
+        final AggregatingContactInfoValidationService aggregatingContactInfoValidationService =
+            new AggregatingContactInfoValidationService(uniquenessValidator, completenessValidator);
 
         consumeColaProfiles(uniquenessValidator);
 
-        assertDetectionOfDuplicateMail(contactInfoValidationService, contactInfoToBeValidated);
+        assertDetectionOfDuplicateMail(aggregatingContactInfoValidationService, contactInfoToBeValidated);
 
         uniquenessValidator.consume(contactInfoToBeChanged);
-        assertThatNoValidationErrorIsReported(contactInfoValidationService, contactInfoToBeValidated);
+        assertThatNoValidationErrorIsReported(aggregatingContactInfoValidationService, contactInfoToBeValidated);
     }
 
 
     @Test
     public void ensureThatDuplicateMobileIsDetectedAndNotDetectedAfterRemoval() {
 
-        ContactInfoValidationService contactInfoValidationService = new ContactInfoValidationService(
-                uniquenessValidator, completenessValidator);
+        AggregatingContactInfoValidationService aggregatingContactInfoValidationService =
+            new AggregatingContactInfoValidationService(uniquenessValidator, completenessValidator);
         consumeColaProfiles(uniquenessValidator);
 
-        assertDetectionOfDuplicateMobile(contactInfoValidationService, contactInformationWithDuplicateMobile());
+        assertDetectionOfDuplicateMobile(aggregatingContactInfoValidationService,
+            contactInformationWithDuplicateMobile());
 
         ContactInformation contactInfoToBeRemoved = new ContactInformation("uuid2", "1233", "4567", "foo@bar",
                 "bar@foo");
         ContactInformation contactInfoToBeValidated = new ContactInformation("uuid8", "1233", "4567", "foo@bar",
                 "bar@foo");
         uniquenessValidator.remove(contactInfoToBeRemoved);
-        assertThatNoValidationErrorIsReported(contactInfoValidationService, contactInfoToBeValidated);
+        assertThatNoValidationErrorIsReported(aggregatingContactInfoValidationService, contactInfoToBeValidated);
     }
 
 
     @Test
     public void ensureThatDuplicateMailIsDetectedAndNotDetectedAfterRemoval() {
 
-        ContactInfoValidationService contactInfoValidationService = new ContactInfoValidationService(
-                uniquenessValidator, completenessValidator);
+        AggregatingContactInfoValidationService aggregatingContactInfoValidationService =
+            new AggregatingContactInfoValidationService(uniquenessValidator, completenessValidator);
         consumeColaProfiles(uniquenessValidator);
 
-        assertDetectionOfDuplicateMail(contactInfoValidationService,
+        assertDetectionOfDuplicateMail(aggregatingContactInfoValidationService,
             contactInformationWithDuplicateMailAfterNormalization());
 
         ContactInformation contactInfoToBeRemoved = new ContactInformation("uuid3", "1233", "4567", "foo@baz",
@@ -224,34 +229,37 @@ public class ContactInfoValidationServiceTest {
         ContactInformation contactInfoToBeValidated = new ContactInformation("uuid8", "1233123", "4567", "foo@baz",
                 "bar@foo");
         uniquenessValidator.remove(contactInfoToBeRemoved);
-        assertThatNoValidationErrorIsReported(contactInfoValidationService, contactInfoToBeValidated);
+        assertThatNoValidationErrorIsReported(aggregatingContactInfoValidationService, contactInfoToBeValidated);
     }
 
 
-    private void assertDetectionOfDuplicateMail(final ContactInfoValidationService contactInfoValidationService,
+    private void assertDetectionOfDuplicateMail(
+        final AggregatingContactInfoValidationService aggregatingContactInfoValidationService,
         final ContactInformation contactInformationWithDuplicateMail) {
 
-        List<ValidationResult> validationResults = contactInfoValidationService.validate(
+        List<ValidationResult> validationResults = aggregatingContactInfoValidationService.validate(
                 contactInformationWithDuplicateMail);
         assertEquals(1, validationResults.size());
         assertEquals(ValidationResult.NON_UNIQUE_EMAIL, validationResults.get(0));
     }
 
 
-    private void assertDetectionOfDuplicateMobile(final ContactInfoValidationService contactInfoValidationService,
+    private void assertDetectionOfDuplicateMobile(
+        final AggregatingContactInfoValidationService aggregatingContactInfoValidationService,
         final ContactInformation contactInformationWithDuplicateMobile) {
 
-        List<ValidationResult> validationResults = contactInfoValidationService.validate(
+        List<ValidationResult> validationResults = aggregatingContactInfoValidationService.validate(
                 contactInformationWithDuplicateMobile);
         assertEquals(1, validationResults.size());
         assertEquals(ValidationResult.NON_UNIQUE_MOBILE, validationResults.get(0));
     }
 
 
-    private void assertThatNoValidationErrorIsReported(ContactInfoValidationService contactInfoValidationService,
+    private void assertThatNoValidationErrorIsReported(
+        AggregatingContactInfoValidationService aggregatingContactInfoValidationService,
         final ContactInformation contactInfoToBeCheckedForDuplicate) {
 
-        List<ValidationResult> validationResults = contactInfoValidationService.validate(
+        List<ValidationResult> validationResults = aggregatingContactInfoValidationService.validate(
                 contactInfoToBeCheckedForDuplicate);
         assertTrue("after the conflicting entry has been removed, no duplicate shall be detected",
             validationResults.size() == 0);
@@ -261,12 +269,13 @@ public class ContactInfoValidationServiceTest {
     @Test
     public void ensureThatDuplicateMailIsDetectedAfterNormalization() {
 
-        ContactInfoValidationService contactInfoValidationService = new ContactInfoValidationService(
-                uniquenessValidator, completenessValidator);
+        AggregatingContactInfoValidationService aggregatingContactInfoValidationService =
+            new AggregatingContactInfoValidationService(uniquenessValidator, completenessValidator);
         consumeColaProfiles(uniquenessValidator);
 
         ContactInformation contactInfoWithAllData = contactInformationWithDuplicateMailAfterNormalization();
-        List<ValidationResult> validationResults = contactInfoValidationService.validate(contactInfoWithAllData);
+        List<ValidationResult> validationResults = aggregatingContactInfoValidationService.validate(
+                contactInfoWithAllData);
         assertEquals(1, validationResults.size());
         assertEquals(ValidationResult.NON_UNIQUE_EMAIL, validationResults.get(0));
     }
@@ -275,12 +284,13 @@ public class ContactInfoValidationServiceTest {
     @Test
     public void ensureThatDuplicateMailIsDetected() {
 
-        ContactInfoValidationService contactInfoValidationService = new ContactInfoValidationService(
-                uniquenessValidator, completenessValidator);
+        AggregatingContactInfoValidationService aggregatingContactInfoValidationService =
+            new AggregatingContactInfoValidationService(uniquenessValidator, completenessValidator);
         consumeColaProfiles(uniquenessValidator);
 
         ContactInformation contactInfoWithAllData = contactInformationWithAllDataAndDuplicateMailOfOtherUser();
-        List<ValidationResult> validationResults = contactInfoValidationService.validate(contactInfoWithAllData);
+        List<ValidationResult> validationResults = aggregatingContactInfoValidationService.validate(
+                contactInfoWithAllData);
         assertEquals(1, validationResults.size());
         assertEquals(ValidationResult.NON_UNIQUE_EMAIL, validationResults.get(0));
     }
@@ -289,12 +299,13 @@ public class ContactInfoValidationServiceTest {
     @Test
     public void ensureThatUserOwnMobileIsNotHandledAsDuplicate() {
 
-        ContactInfoValidationService contactInfoValidationService = new ContactInfoValidationService(
-                uniquenessValidator, completenessValidator);
+        AggregatingContactInfoValidationService aggregatingContactInfoValidationService =
+            new AggregatingContactInfoValidationService(uniquenessValidator, completenessValidator);
         consumeColaProfiles(uniquenessValidator);
 
         ContactInformation contactInfoWithAllData = contactInformationWithAllDataAndDistinctMobile();
-        List<ValidationResult> validationResults = contactInfoValidationService.validate(contactInfoWithAllData);
+        List<ValidationResult> validationResults = aggregatingContactInfoValidationService.validate(
+                contactInfoWithAllData);
         assertEquals(0, validationResults.size());
     }
 
@@ -302,12 +313,13 @@ public class ContactInfoValidationServiceTest {
     @Test
     public void ensureThatUserOwnMailIsNotHandledAsDuplicate() {
 
-        ContactInfoValidationService contactInfoValidationService = new ContactInfoValidationService(
-                uniquenessValidator, completenessValidator);
+        AggregatingContactInfoValidationService aggregatingContactInfoValidationService =
+            new AggregatingContactInfoValidationService(uniquenessValidator, completenessValidator);
         consumeColaProfiles(uniquenessValidator);
 
         ContactInformation contactInfoWithAllData = contactInformationWithAllDataAndDistinctMail();
-        List<ValidationResult> validationResults = contactInfoValidationService.validate(contactInfoWithAllData);
+        List<ValidationResult> validationResults = aggregatingContactInfoValidationService.validate(
+                contactInfoWithAllData);
         assertTrue(validationResults.isEmpty());
     }
 
@@ -315,11 +327,12 @@ public class ContactInfoValidationServiceTest {
     @Test
     public void ensureThatContactInfoWithAllDataIsValid() {
 
-        ContactInfoValidationService contactInfoValidationService = new ContactInfoValidationService(
-                uniquenessValidator, completenessValidator);
+        AggregatingContactInfoValidationService aggregatingContactInfoValidationService =
+            new AggregatingContactInfoValidationService(uniquenessValidator, completenessValidator);
 
         ContactInformation contactInfoWithAllData = contactInformationWithAllData();
-        List<ValidationResult> validationResults = contactInfoValidationService.validate(contactInfoWithAllData);
+        List<ValidationResult> validationResults = aggregatingContactInfoValidationService.validate(
+                contactInfoWithAllData);
         assertTrue(validationResults.isEmpty());
     }
 
@@ -327,11 +340,11 @@ public class ContactInfoValidationServiceTest {
     @Test
     public void ensureThatContactInfoWithoutPhoneNumberIsInvalid() {
 
-        ContactInfoValidationService contactInfoValidationService = new ContactInfoValidationService(
-                uniquenessValidator, completenessValidator);
+        AggregatingContactInfoValidationService aggregatingContactInfoValidationService =
+            new AggregatingContactInfoValidationService(uniquenessValidator, completenessValidator);
 
         ContactInformation contactInformationWithoutPhoneNumbers = contactInformationWithoutPhoneNumbers();
-        List<ValidationResult> validationResults = contactInfoValidationService.validate(
+        List<ValidationResult> validationResults = aggregatingContactInfoValidationService.validate(
                 contactInformationWithoutPhoneNumbers);
 
         assertEquals(2, validationResults.size());
@@ -343,11 +356,11 @@ public class ContactInfoValidationServiceTest {
     @Test
     public void ensureThatContactInfoWithoutMailAndMobileIsInvalid() {
 
-        ContactInfoValidationService contactInfoValidationService = new ContactInfoValidationService(
-                uniquenessValidator, completenessValidator);
+        AggregatingContactInfoValidationService aggregatingContactInfoValidationService =
+            new AggregatingContactInfoValidationService(uniquenessValidator, completenessValidator);
 
         ContactInformation contactInfoWithoutEmailAndMobile = contactInformationWithoutEmailAndMobile();
-        List<ValidationResult> validationResults = contactInfoValidationService.validate(
+        List<ValidationResult> validationResults = aggregatingContactInfoValidationService.validate(
                 contactInfoWithoutEmailAndMobile);
 
         assertEquals(2, validationResults.size());

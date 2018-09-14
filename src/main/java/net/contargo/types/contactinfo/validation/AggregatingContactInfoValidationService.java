@@ -1,17 +1,17 @@
 package net.contargo.types.contactinfo.validation;
 
+import net.contargo.types.Loggable;
 import net.contargo.types.contactinfo.ContactInformation;
-import net.contargo.types.util.Loggable;
 
 import java.util.*;
 
 
-public class ContactInfoValidationService implements Loggable {
+public class AggregatingContactInfoValidationService implements Loggable {
 
     private final UniquenessValidator uniquenessValidator;
     private final CompletenessValidator completenessValidator;
 
-    public ContactInfoValidationService(UniquenessValidator uniquenessValidator,
+    public AggregatingContactInfoValidationService(UniquenessValidator uniquenessValidator,
         CompletenessValidator completenessValidator) {
 
         this.uniquenessValidator = uniquenessValidator;

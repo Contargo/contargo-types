@@ -2,26 +2,22 @@ package net.contargo.types.contactinfo.validation;
 
 import net.contargo.types.contactinfo.ContactInformation;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class ExternalUserRequiredFieldsValidator implements CompletenessValidator {
-
-    private static boolean hasText(final String value) {
-
-        return value != null && value.length() > 0;
-    }
-
+public class ExternalUserCompletenessValidator implements CompletenessValidator {
 
     @Override
     public List<ValidationResult> checkCompleteness(final ContactInformation contactInformation) {
 
         List<ValidationResult> messages = new ArrayList<>();
 
-        final boolean missingEmail = !hasText(contactInformation.getEmail());
-        final boolean missingMobile = !hasText(contactInformation.getMobile());
-        final boolean missingPhone = !hasText(contactInformation.getPhone());
+        final boolean missingEmail = StringUtils.isEmpty(contactInformation.getEmail());
+        final boolean missingMobile = StringUtils.isEmpty(contactInformation.getMobile());
+        final boolean missingPhone = StringUtils.isEmpty(contactInformation.getPhone());
 
         if (missingEmail && missingMobile) {
             messages.add(ValidationResult.MISSING_EMAIL);

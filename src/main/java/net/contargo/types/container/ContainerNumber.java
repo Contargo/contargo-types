@@ -1,6 +1,6 @@
 package net.contargo.types.container;
 
-import net.contargo.types.util.Assert;
+import net.contargo.types.Assert;
 
 import java.util.Optional;
 
@@ -14,7 +14,8 @@ import static java.lang.String.format;
  *
  * <p>A container number is valid, if it consists of four letters, of which the first three indicate the worldwide
  * unique owner code according to 'Bureau International des Conteneurs' in Paris, and the forth the equipment category
- * (U for all freight containers, J for detachable freight container-related equipment, Z for trailers and chassis).</p>
+ * (U for all freight containers, J for detachable freight container-related equipment, Z for trailers and chassis).
+ * </p>
  *
  * <p>Further information: <a href="https://en.wikipedia.org/wiki/ISO_6346">ISO 6346 standard</a></p>
  *
@@ -64,8 +65,8 @@ public final class ContainerNumber {
      * <p>The owner code is worldwide unique and indicates the principal operator of the
      * {@link net.contargo.domain.Container}.</p>
      *
-     * @return  optional owner code consisting of three capital letters, may be empty if the normalized container number
-     *          has less or more {@value VALID_LENGTH} characters
+     * @return  optional owner code consisting of three capital letters, may be empty if the normalized container
+     *          number has less or more {@value VALID_LENGTH} characters
      */
     public Optional<String> getOwnerCode() {
 
@@ -128,8 +129,8 @@ public final class ContainerNumber {
     /**
      * Get the check digit of this {@link ContainerNumber}.
      *
-     * <p>The check digit provides a means of validating the recording and transmission accuracies of the owner code and
-     * serial number.</p>
+     * <p>The check digit provides a means of validating the recording and transmission accuracies of the owner code
+     * and serial number.</p>
      *
      * @return  optional check digit consisting of one numeric digit, may be empty if the normalized container number
      *          has less or more {@value VALID_LENGTH} characters

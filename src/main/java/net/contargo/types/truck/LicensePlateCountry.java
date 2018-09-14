@@ -1,6 +1,6 @@
 package net.contargo.types.truck;
 
-import net.contargo.types.util.Assert;
+import net.contargo.types.Assert;
 
 
 /**

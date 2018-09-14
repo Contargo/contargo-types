@@ -1,8 +1,12 @@
 package net.contargo.types.contactinfo.validation;
 
+import net.contargo.types.Loggable;
 import net.contargo.types.contactinfo.ContactInfoConsumer;
 import net.contargo.types.contactinfo.ContactInformation;
-import net.contargo.types.util.Loggable;
+import net.contargo.types.contactinfo.normalization.EmailAddressNormalizer;
+import net.contargo.types.contactinfo.normalization.PhoneNumberNormalizer;
+
+import org.apache.commons.lang.StringUtils;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -64,9 +68,9 @@ public class MobileAndEmailUniquenessValidator implements ContactInfoConsumer, L
         final String oldMail = emailAddressNormalizer.normalizeEmailAddress(userUuidToMail.get(userUuid));
         final String newMail = emailAddressNormalizer.normalizeEmailAddress(contactInformation.getEmail());
 
-        if (hasText(newMail) && !hasText(oldMail)) {
+        if (StringUtils.isNotBlank(newMail) && StringUtils.isBlank(oldMail)) {
             handleNewMailAddress(newMail, userUuid);
-        } else if (hasText(oldMail) && !hasText(newMail)) {
+        } else if (StringUtils.isNotBlank(oldMail) && StringUtils.isBlank(newMail)) {
             handleRemovedMailAddress(userUuid, oldMail);
         } else {
             if (!oldMail.equals(newMail)) {
@@ -77,9 +81,9 @@ public class MobileAndEmailUniquenessValidator implements ContactInfoConsumer, L
         final String oldMobile = phoneNumberNormalizer.normalizeNumber(userUuidToMobile.get(userUuid)).orElse("");
         final String newMobile = phoneNumberNormalizer.normalizeNumber(contactInformation.getMobile()).orElse("");
 
-        if (hasText(newMobile) && !hasText(oldMobile)) {
+        if (StringUtils.isNotBlank(newMobile) && StringUtils.isBlank(oldMobile)) {
             handleNewMobile(newMobile, userUuid);
-        } else if (!hasText(newMobile) && hasText(oldMobile)) {
+        } else if (StringUtils.isBlank(newMobile) && StringUtils.isNotBlank(oldMobile)) {
             handleRemovedMobile(userUuid, oldMobile);
         } else {
             if (!oldMobile.equals(newMobile)) {
@@ -111,7 +115,7 @@ public class MobileAndEmailUniquenessValidator implements ContactInfoConsumer, L
 
         userUuidToMobile.remove(userUuid);
 
-        if (hasText(oldMobile)) {
+        if (StringUtils.isNotBlank(oldMobile)) {
             mobileToUserUuids.getOrDefault(oldMobile, Collections.emptySet()).remove(userUuid);
         }
     }
@@ -134,15 +138,9 @@ public class MobileAndEmailUniquenessValidator implements ContactInfoConsumer, L
 
         userUuidToMail.remove(userUuid);
 
-        if (hasText(oldMail)) {
+        if (StringUtils.isNotBlank(oldMail)) {
             mailToUserUuids.getOrDefault(oldMail, Collections.emptySet()).remove(userUuid);
         }
-    }
-
-
-    private static boolean hasText(final String value) {
-
-        return value != null && value.length() > 0;
     }
 
 
