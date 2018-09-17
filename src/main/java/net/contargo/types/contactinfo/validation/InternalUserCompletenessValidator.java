@@ -8,6 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * Checks the completeness of a {@link net.contargo.types.contactinfo.ContactInfoConsumer} object according to the
+ * rules for internal COLA users:
+ *
+ * <ul>
+ *   <li>Must have a e-mail address.</li>
+ * </ul>
+ */
 public class InternalUserCompletenessValidator implements CompletenessValidator {
 
     @Override

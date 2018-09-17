@@ -8,6 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * Checks the completeness of a {@link net.contargo.types.contactinfo.ContactInfoConsumer} object according to the
+ * rules for external COLA users:
+ *
+ * <ul>
+ *   <li>Must be contactable via text message; This is either an e-mail address or a mobile number for SMS
+ *     messages.</li>
+ *   <li>Must be callable via phone; This is either a mobule number or a fixed number.</li>
+ * </ul>
+ */
 public class ExternalUserCompletenessValidator implements CompletenessValidator {
 
     @Override
