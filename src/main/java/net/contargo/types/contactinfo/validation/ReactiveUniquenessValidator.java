@@ -13,7 +13,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 
-public class MobileAndEmailUniquenessValidator implements ContactInfoConsumer, Loggable, UniquenessValidator {
+/**
+ * A UniquenessValidator implementation that consumes ContactInfo objects that are usually provided by async listeners
+ * of COLA system events.
+ */
+public class ReactiveUniquenessValidator implements ContactInfoConsumer, Loggable, UniquenessValidator {
 
     private final ConcurrentMap<String, String> userUuidToMail;
     private final ConcurrentMap<String, String> userUuidToMobile;
@@ -23,7 +27,7 @@ public class MobileAndEmailUniquenessValidator implements ContactInfoConsumer, L
     private final EmailAddressNormalizer emailAddressNormalizer;
     private boolean isConsumingRegistrations = true;
 
-    public MobileAndEmailUniquenessValidator(PhoneNumberNormalizer phoneNumberNormalizer,
+    public ReactiveUniquenessValidator(PhoneNumberNormalizer phoneNumberNormalizer,
         EmailAddressNormalizer emailAddressNormalizer) {
 
         this.phoneNumberNormalizer = phoneNumberNormalizer;
@@ -36,7 +40,7 @@ public class MobileAndEmailUniquenessValidator implements ContactInfoConsumer, L
     }
 
 
-    public MobileAndEmailUniquenessValidator(PhoneNumberNormalizer phoneNumberNormalizer,
+    public ReactiveUniquenessValidator(PhoneNumberNormalizer phoneNumberNormalizer,
         EmailAddressNormalizer emailAddressNormalizer, final boolean isConsumingRegistrations) {
 
         this(phoneNumberNormalizer, emailAddressNormalizer);
