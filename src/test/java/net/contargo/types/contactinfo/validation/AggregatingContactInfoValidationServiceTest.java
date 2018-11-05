@@ -10,7 +10,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.verify;
@@ -27,7 +26,7 @@ public class AggregatingContactInfoValidationServiceTest {
 
     @Test
     public void ensureThatCompletenessAndUniquenessValidatorsAreCalled() {
-        ContactInformation contactInformation = new ContactInformation("userUUID", "mobile", "phone", "email", "communicationEmail");
+        ContactInformation contactInformation = new ContactInformation("userUUID", "mobile", "phone", "email");
         AggregatingContactInfoValidationService sut = new AggregatingContactInfoValidationService(uniquenessValidator, completenessValidator);
         sut.validate(contactInformation);
         verify(completenessValidator).checkCompleteness(isA(ContactInformation.class));
@@ -36,7 +35,7 @@ public class AggregatingContactInfoValidationServiceTest {
 
     @Test
     public void ensureThatValidationResultsAreAggregated() {
-        ContactInformation contactInformation = new ContactInformation("userUUID", "mobile", "phone", "email", "communicationEmail");
+        ContactInformation contactInformation = new ContactInformation("userUUID", "mobile", "phone", "email");
         AggregatingContactInfoValidationService sut = new AggregatingContactInfoValidationService(uniquenessValidator, completenessValidator);
         List<ValidationResult> validationResults1 = new ArrayList<>();
         validationResults1.add(ValidationResult.MISSING_MOBILE);

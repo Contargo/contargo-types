@@ -21,19 +21,19 @@ public class ReactiveUniquenessValidatorTest {
 
         List<ContactInformation> allProfiles = new ArrayList<>();
 
-        ContactInformation contactInformation1 = new ContactInformation("uuid1", "1234", "4567", "foo1@bar",
-                "bar@foo");
+        ContactInformation contactInformation1 = new ContactInformation("uuid1", "1234", "4567", "foo1@bar"
+        );
         allProfiles.add(contactInformation1);
 
-        ContactInformation contactInformation2 = new ContactInformation("uuid2", "1233", "4567", "foo@bar", "bar@foo");
+        ContactInformation contactInformation2 = new ContactInformation("uuid2", "1233", "4567", "foo@bar");
         allProfiles.add(contactInformation2);
 
-        ContactInformation contactInformation3 = new ContactInformation("uuid3", "171789987", "4567", "foo@baz",
-                "bar@foo");
+        ContactInformation contactInformation3 = new ContactInformation("uuid3", "171789987", "4567", "foo@baz"
+        );
         allProfiles.add(contactInformation3);
 
-        ContactInformation contactInformation4 = new ContactInformation("uuid4", "171789987", "4567", "foo@bazl",
-                "bar@foo");
+        ContactInformation contactInformation4 = new ContactInformation("uuid4", "171789987", "4567", "foo@bazl"
+        );
         allProfiles.add(contactInformation4);
 
         colaProfileConsumer.consume(allProfiles);
@@ -42,55 +42,55 @@ public class ReactiveUniquenessValidatorTest {
 
     private ContactInformation contactInformationWithAllData() {
 
-        return new ContactInformation("uuid1", "171789987", "721321451", "foo@bar", "bar@foo");
+        return new ContactInformation("uuid1", "171789987", "721321451", "foo@bar");
     }
 
 
     private ContactInformation contactInformationWithAllDataAndDuplicateMailOfOtherUser() {
 
-        return new ContactInformation("uuid1", "", "721321451", "foo@baz", "bar@foo");
+        return new ContactInformation("uuid1", "", "721321451", "foo@baz");
     }
 
 
     private ContactInformation contactInformationWithDuplicateMailAfterNormalization() {
 
-        return new ContactInformation("uuid1-1", "", "721321451", "foo1@BAR", "bar@foo");
+        return new ContactInformation("uuid1-1", "", "721321451", "foo1@BAR");
     }
 
 
     private ContactInformation contactInformationWithAllDataAndDistinctMail() {
 
-        return new ContactInformation("uuid3", "", "721321451", "foo@baz", "bar@foo");
+        return new ContactInformation("uuid3", "", "721321451", "foo@baz");
     }
 
 
     private ContactInformation contactInformationWithAllDataAndDistinctMobile() {
 
-        return new ContactInformation("uuid4", "171789988", "721321451", "foo@barz", "bar@foo");
+        return new ContactInformation("uuid4", "171789988", "721321451", "foo@barz");
     }
 
 
     private ContactInformation contactInformationWithDuplicateMobileAfterNormalization() {
 
-        return new ContactInformation("uuid5", "+49171789987", "721321451", null, "bar@foo");
+        return new ContactInformation("uuid5", "+49171789987", "721321451", null);
     }
 
 
     private ContactInformation contactInformationWithDuplicateMobile() {
 
-        return new ContactInformation("uuid5", "171789987", "721321451", null, "bar@foo");
+        return new ContactInformation("uuid5", "171789987", "721321451", null);
     }
 
 
     private ContactInformation contactInformationWithoutPhoneNumbers() {
 
-        return new ContactInformation("uuid1", null, null, "foo@bar", "bar@foo");
+        return new ContactInformation("uuid1", null, null, "foo@bar");
     }
 
 
     private ContactInformation contactInformationWithoutEmailAndMobile() {
 
-        return new ContactInformation("uuid1", null, "1728092174", null, "bar@foo");
+        return new ContactInformation("uuid1", null, "1728092174", null);
     }
 
 
@@ -127,8 +127,8 @@ public class ReactiveUniquenessValidatorTest {
         ReactiveUniquenessValidator reactiveUniquenessValidator = new ReactiveUniquenessValidator(
                 new PhoneNumberNormalizer(), new EmailAddressNormalizer());
 
-        ContactInformation contactInfoWithNullValue1 = new ContactInformation("uuid1", "1234", null, null, "");
-        ContactInformation contactInfoWithNullValue2 = new ContactInformation("uuid2", "1234", null, null, "");
+        ContactInformation contactInfoWithNullValue1 = new ContactInformation("uuid1", "1234", null, null);
+        ContactInformation contactInfoWithNullValue2 = new ContactInformation("uuid2", "1234", null, null);
 
         reactiveUniquenessValidator.consume(contactInfoWithNullValue1);
 
@@ -154,9 +154,9 @@ public class ReactiveUniquenessValidatorTest {
     public void ensureThatDuplicateMobileIsDetectedAndNotDetectedAfterConflictingUserRemovedMobile() {
 
         final ContactInformation contactInfoToBeChanged = new ContactInformation("uuid2", "", "4567",
-                "foo-uuid2@bar", "bar@foo");
+                "foo-uuid2@bar");
         final ContactInformation contactInfoToBeValidated = new ContactInformation("uuid8", "1233", "4567",
-                "foo-uuid8@bar", "bar@foo");
+                "foo-uuid8@bar");
 
         ensureDuplicateMobileIsDetectedAndNotDetected(contactInfoToBeChanged, contactInfoToBeValidated);
     }
@@ -165,9 +165,9 @@ public class ReactiveUniquenessValidatorTest {
     public void ensureThatDuplicateMobileIsDetectedAndNotDetectedAfterConflictingUserChangedMobile() {
 
         final ContactInformation contactInfoToBeChanged = new ContactInformation("uuid2", "12345", "4567",
-                "foo-uuid2@bar", "bar@foo");
+                "foo-uuid2@bar");
         final ContactInformation contactInfoToBeValidated = new ContactInformation("uuid8", "1233", "4567",
-                "foo-uuid8@bar", "bar@foo");
+                "foo-uuid8@bar");
 
 
         ensureDuplicateMobileIsDetectedAndNotDetected(contactInfoToBeChanged, contactInfoToBeValidated);
@@ -187,10 +187,10 @@ public class ReactiveUniquenessValidatorTest {
     @Test
     public void ensureThatDuplicateMailIsDetectedAndNotDetectedAfterConflictingUserRemovedMail() {
 
-        final ContactInformation contactInfoToBeChanged = new ContactInformation("uuid4", "12345", "4567", "",
-                "bar@foo");
-        final ContactInformation contactInfoToBeValidated = new ContactInformation("uuid8", "", "4567", "foo@bazl",
-                "bar@foo");
+        final ContactInformation contactInfoToBeChanged = new ContactInformation("uuid4", "12345", "4567", ""
+        );
+        final ContactInformation contactInfoToBeValidated = new ContactInformation("uuid8", "", "4567", "foo@bazl"
+        );
 
         ensureDuplicateMailIsDetectedAndNotDected(contactInfoToBeChanged, contactInfoToBeValidated);
     }
@@ -198,10 +198,10 @@ public class ReactiveUniquenessValidatorTest {
     @Test
     public void ensureThatDuplicateMailIsDetectedAndNotDetectedAfterConflictingUserChangedMail() {
 
-        final ContactInformation contactInfoToBeChanged = new ContactInformation("uuid4", "12345", "4567", "foo@bazk",
-                "bar@foo");
-        final ContactInformation contactInfoToBeValidated = new ContactInformation("uuid8", "", "4567", "foo@bazl",
-                "bar@foo");
+        final ContactInformation contactInfoToBeChanged = new ContactInformation("uuid4", "12345", "4567", "foo@bazk"
+        );
+        final ContactInformation contactInfoToBeValidated = new ContactInformation("uuid8", "", "4567", "foo@bazl"
+        );
 
         ensureDuplicateMailIsDetectedAndNotDected(contactInfoToBeChanged, contactInfoToBeValidated);
     }
@@ -228,10 +228,10 @@ public class ReactiveUniquenessValidatorTest {
 
         assertDetectionOfDuplicateMobile(reactiveUniquenessValidator, contactInformationWithDuplicateMobile());
 
-        ContactInformation contactInfoToBeRemoved = new ContactInformation("uuid2", "1233", "4567", "foo@bar",
-                "bar@foo");
-        ContactInformation contactInfoToBeValidated = new ContactInformation("uuid8", "1233", "4567", "foo@bar",
-                "bar@foo");
+        ContactInformation contactInfoToBeRemoved = new ContactInformation("uuid2", "1233", "4567", "foo@bar"
+        );
+        ContactInformation contactInfoToBeValidated = new ContactInformation("uuid8", "1233", "4567", "foo@bar"
+        );
         reactiveUniquenessValidator.remove(contactInfoToBeRemoved);
         assertThatNoValidationErrorIsReported(reactiveUniquenessValidator, contactInfoToBeValidated);
     }
@@ -247,10 +247,10 @@ public class ReactiveUniquenessValidatorTest {
         assertDetectionOfDuplicateMail(reactiveUniquenessValidator,
             contactInformationWithDuplicateMailAfterNormalization());
 
-        ContactInformation contactInfoToBeRemoved = new ContactInformation("uuid3", "1233", "4567", "foo@baz",
-                "bar@foo");
-        ContactInformation contactInfoToBeValidated = new ContactInformation("uuid8", "1233123", "4567", "foo@baz",
-                "bar@foo");
+        ContactInformation contactInfoToBeRemoved = new ContactInformation("uuid3", "1233", "4567", "foo@baz"
+        );
+        ContactInformation contactInfoToBeValidated = new ContactInformation("uuid8", "1233123", "4567", "foo@baz"
+        );
         reactiveUniquenessValidator.remove(contactInfoToBeRemoved);
         assertThatNoValidationErrorIsReported(reactiveUniquenessValidator, contactInfoToBeValidated);
     }

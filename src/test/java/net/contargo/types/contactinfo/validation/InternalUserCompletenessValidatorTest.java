@@ -1,8 +1,6 @@
 package net.contargo.types.contactinfo.validation;
 
 import net.contargo.types.contactinfo.ContactInformation;
-import net.contargo.types.contactinfo.normalization.EmailAddressNormalizer;
-import net.contargo.types.contactinfo.normalization.PhoneNumberNormalizer;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +26,7 @@ public class InternalUserCompletenessValidatorTest {
     public void ensureThatContactInfoWithoutMailIsInvalid() {
 
         ContactInformation incompleteContactInformation = new ContactInformation(UUID.randomUUID().toString(),
-                "mobile", "phone", "", "communicationemail");
+                "mobile", "phone", "");
         List<ValidationResult> results = internalUserCompletenessValidator.checkCompleteness(
                 incompleteContactInformation);
         assertTrue(results.size() == 1);
@@ -40,7 +38,7 @@ public class InternalUserCompletenessValidatorTest {
     public void ensureThatCompleteContactInfoIsValid() {
 
         ContactInformation incompleteContactInformation = new ContactInformation(UUID.randomUUID().toString(),
-                "mobile", "phone", "email", "communicationemail");
+                "mobile", "phone", "email");
         List<ValidationResult> results = internalUserCompletenessValidator.checkCompleteness(
                 incompleteContactInformation);
         assertTrue(results.isEmpty());
@@ -51,7 +49,7 @@ public class InternalUserCompletenessValidatorTest {
     public void ensureThatContactInfoWithJustEMailIsValid() {
 
         ContactInformation incompleteContactInformation = new ContactInformation(UUID.randomUUID().toString(), "", "",
-                "email", "");
+                "email");
         List<ValidationResult> results = internalUserCompletenessValidator.checkCompleteness(
                 incompleteContactInformation);
         assertTrue(results.isEmpty());

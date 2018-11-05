@@ -19,7 +19,7 @@ public class ExternalUserContactInfoCompletenessValidatorTest {
         ExternalUserCompletenessValidator externalUserCompletenessValidator = new ExternalUserCompletenessValidator();
 
         ContactInformation contactInfoWithAllData = new ContactInformation(UUID.randomUUID().toString(), "mobile",
-                "phone", "email", "commEmail");
+                "phone", "email");
         List<ValidationResult> validationResults = externalUserCompletenessValidator.checkCompleteness(
                 contactInfoWithAllData);
         assertTrue(validationResults.isEmpty());
@@ -32,7 +32,7 @@ public class ExternalUserContactInfoCompletenessValidatorTest {
         ExternalUserCompletenessValidator externalUserCompletenessValidator = new ExternalUserCompletenessValidator();
 
         ContactInformation contactInfoWithoutEmailAndMobile = new ContactInformation(UUID.randomUUID().toString(), "",
-                "phone", "", "commEmail");
+                "phone", "");
         List<ValidationResult> validationResults = externalUserCompletenessValidator.checkCompleteness(
                 contactInfoWithoutEmailAndMobile);
 
@@ -48,7 +48,7 @@ public class ExternalUserContactInfoCompletenessValidatorTest {
         ExternalUserCompletenessValidator externalUserCompletenessValidator = new ExternalUserCompletenessValidator();
 
         ContactInformation contactInformationWithoutPhoneNumbers = new ContactInformation(UUID.randomUUID()
-                .toString(), "", "", "email", "commEmail");
+                .toString(), "", "", "email");
         List<ValidationResult> validationResults = externalUserCompletenessValidator.checkCompleteness(
                 contactInformationWithoutPhoneNumbers);
 
