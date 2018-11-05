@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * Implementations of this interface check the completeness of a
- * {@link net.contargo.types.contactinfo.ContactInfoConsumer}.
+ * contact information object.
  */
 public interface CompletenessValidator {
 

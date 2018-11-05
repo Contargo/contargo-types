@@ -9,7 +9,7 @@ import java.util.List;
 
 
 /**
- * Checks the completeness of a {@link net.contargo.types.contactinfo.ContactInfoConsumer} object according to the
+ * Checks the completeness of a contact information object according to the
  * rules for external COLA users:
  *
  * <ul>
