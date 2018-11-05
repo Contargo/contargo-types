@@ -1,6 +1,11 @@
 Contargo Types
 ===============
 
+## v0.15.0
+
+* Separated uniqueness- and completeness validators in order to support use cases where only one of the checks
+  is needed.
+
 ## v0.14.0
 
 * BulgarianLicensePlateHandler: Adds missing letters to validation string.
