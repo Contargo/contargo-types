@@ -14,7 +14,7 @@ public interface UniquenessValidator {
     List<ValidationResult> checkUniqueness(ContactInformation contactInformation);
 
 
-    boolean isEmailUnique(String userUuid, String email);
+    boolean isEmailUnique(String userUUID, String email);
 
 
     boolean isMobileUnique(String userUuid, String mobile);

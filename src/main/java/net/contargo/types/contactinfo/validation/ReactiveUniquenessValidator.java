@@ -19,10 +19,12 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class ReactiveUniquenessValidator implements ContactInfoConsumer, Loggable, UniquenessValidator {
 
-    private final ConcurrentMap<String, String> userUuidToMail;
-    private final ConcurrentMap<String, String> userUuidToMobile;
-    private final ConcurrentMap<String, Set<String>> mobileToUserUuids;
-    private final ConcurrentMap<String, Set<String>> mailToUserUuids;
+    private final ConcurrentMap<String, String> userUUIDToMail;
+    private final ConcurrentMap<String, String> userUUIDToMobile;
+    private final ConcurrentMap<String, Set<String>> mobileToUserUUIDs;
+
+
+    private final ConcurrentMap<String, Set<String>> mailToUserUUIDs;
     private final PhoneNumberNormalizer phoneNumberNormalizer;
     private final EmailAddressNormalizer emailAddressNormalizer;
     private boolean isConsumingRegistrations = true;
@@ -33,10 +35,10 @@ public class ReactiveUniquenessValidator implements ContactInfoConsumer, Loggabl
         this.phoneNumberNormalizer = phoneNumberNormalizer;
         this.emailAddressNormalizer = emailAddressNormalizer;
 
-        this.userUuidToMail = new ConcurrentHashMap<>();
-        this.userUuidToMobile = new ConcurrentHashMap<>();
-        this.mailToUserUuids = new ConcurrentHashMap<>();
-        this.mobileToUserUuids = new ConcurrentHashMap<>();
+        this.userUUIDToMail = new ConcurrentHashMap<>();
+        this.userUUIDToMobile = new ConcurrentHashMap<>();
+        this.mailToUserUUIDs = new ConcurrentHashMap<>();
+        this.mobileToUserUUIDs = new ConcurrentHashMap<>();
     }
 
 
@@ -67,97 +69,97 @@ public class ReactiveUniquenessValidator implements ContactInfoConsumer, Loggabl
             return;
         }
 
-        final String userUuid = contactInformation.getUserUuid();
+        final String userUUID = contactInformation.getUserUUID();
 
-        final String oldMail = emailAddressNormalizer.normalizeEmailAddress(userUuidToMail.get(userUuid));
+        final String oldMail = emailAddressNormalizer.normalizeEmailAddress(userUUIDToMail.get(userUUID));
         final String newMail = emailAddressNormalizer.normalizeEmailAddress(contactInformation.getEmail());
 
         if (StringUtils.isNotBlank(newMail) && StringUtils.isBlank(oldMail)) {
-            handleNewMailAddress(newMail, userUuid);
+            handleNewMailAddress(newMail, userUUID);
         } else if (StringUtils.isNotBlank(oldMail) && StringUtils.isBlank(newMail)) {
-            handleRemovedMailAddress(userUuid, oldMail);
+            handleRemovedMailAddress(userUUID, oldMail);
         } else {
             if (!oldMail.equals(newMail)) {
-                handleChangedMailAddress(newMail, userUuid, oldMail);
+                handleChangedMailAddress(newMail, userUUID, oldMail);
             }
         }
 
-        final String oldMobile = phoneNumberNormalizer.normalizeNumber(userUuidToMobile.get(userUuid)).orElse("");
+        final String oldMobile = phoneNumberNormalizer.normalizeNumber(userUUIDToMobile.get(userUUID)).orElse("");
         final String newMobile = phoneNumberNormalizer.normalizeNumber(contactInformation.getMobile()).orElse("");
 
         if (StringUtils.isNotBlank(newMobile) && StringUtils.isBlank(oldMobile)) {
-            handleNewMobile(newMobile, userUuid);
+            handleNewMobile(newMobile, userUUID);
         } else if (StringUtils.isBlank(newMobile) && StringUtils.isNotBlank(oldMobile)) {
-            handleRemovedMobile(userUuid, oldMobile);
+            handleRemovedMobile(userUUID, oldMobile);
         } else {
             if (!oldMobile.equals(newMobile)) {
-                handleChangedMobile(newMobile, userUuid, oldMobile);
+                handleChangedMobile(newMobile, userUUID, oldMobile);
             }
         }
     }
 
 
-    private void handleChangedMobile(final String newMobile, final String userUuid, final String oldMobile) {
+    private void handleChangedMobile(final String newMobile, final String userUUID, final String oldMobile) {
 
-        userUuidToMobile.put(userUuid, newMobile);
-        mobileToUserUuids.getOrDefault(oldMobile, Collections.emptySet()).remove(userUuid);
-        mobileToUserUuids.putIfAbsent(newMobile, new HashSet<>());
-        mobileToUserUuids.get(newMobile).add(userUuid);
+        userUUIDToMobile.put(userUUID, newMobile);
+        mobileToUserUUIDs.getOrDefault(oldMobile, Collections.emptySet()).remove(userUUID);
+        mobileToUserUUIDs.putIfAbsent(newMobile, new HashSet<>());
+        mobileToUserUUIDs.get(newMobile).add(userUUID);
     }
 
 
-    private void handleChangedMailAddress(final String newMail, final String userUuid, final String oldMail) {
+    private void handleChangedMailAddress(final String newMail, final String userUUID, final String oldMail) {
 
-        userUuidToMail.put(userUuid, newMail);
-        mailToUserUuids.getOrDefault(oldMail, Collections.emptySet()).remove(userUuid);
-        mailToUserUuids.putIfAbsent(newMail, new HashSet<>());
-        mailToUserUuids.get(newMail).add(userUuid);
+        userUUIDToMail.put(userUUID, newMail);
+        mailToUserUUIDs.getOrDefault(oldMail, Collections.emptySet()).remove(userUUID);
+        mailToUserUUIDs.putIfAbsent(newMail, new HashSet<>());
+        mailToUserUUIDs.get(newMail).add(userUUID);
     }
 
 
-    private void handleRemovedMobile(final String userUuid, final String oldMobile) {
+    private void handleRemovedMobile(final String userUUID, final String oldMobile) {
 
-        userUuidToMobile.remove(userUuid);
+        userUUIDToMobile.remove(userUUID);
 
         if (StringUtils.isNotBlank(oldMobile)) {
-            mobileToUserUuids.getOrDefault(oldMobile, Collections.emptySet()).remove(userUuid);
+            mobileToUserUUIDs.getOrDefault(oldMobile, Collections.emptySet()).remove(userUUID);
         }
     }
 
 
-    private void handleNewMobile(final String newMobile, final String userUuid) {
+    private void handleNewMobile(final String newMobile, final String userUUID) {
 
-        userUuidToMobile.put(userUuid, newMobile);
+        userUUIDToMobile.put(userUUID, newMobile);
 
         // add reverse mapping
-        if (!mobileToUserUuids.containsKey(newMobile)) {
-            mobileToUserUuids.putIfAbsent(newMobile, new HashSet<>());
+        if (!mobileToUserUUIDs.containsKey(newMobile)) {
+            mobileToUserUUIDs.putIfAbsent(newMobile, new HashSet<>());
         }
 
-        mobileToUserUuids.get(newMobile).add(userUuid);
+        mobileToUserUUIDs.get(newMobile).add(userUUID);
     }
 
 
-    private void handleRemovedMailAddress(final String userUuid, final String oldMail) {
+    private void handleRemovedMailAddress(final String userUUID, final String oldMail) {
 
-        userUuidToMail.remove(userUuid);
+        userUUIDToMail.remove(userUUID);
 
         if (StringUtils.isNotBlank(oldMail)) {
-            mailToUserUuids.getOrDefault(oldMail, Collections.emptySet()).remove(userUuid);
+            mailToUserUUIDs.getOrDefault(oldMail, Collections.emptySet()).remove(userUUID);
         }
     }
 
 
-    private void handleNewMailAddress(final String newMail, String userUuid) {
+    private void handleNewMailAddress(final String newMail, String userUUID) {
 
-        userUuidToMail.put(userUuid, newMail);
+        userUUIDToMail.put(userUUID, newMail);
 
         // add reverse mapping
-        if (!mailToUserUuids.containsKey(newMail)) {
-            mailToUserUuids.putIfAbsent(newMail, new HashSet<>());
+        if (!mailToUserUUIDs.containsKey(newMail)) {
+            mailToUserUUIDs.putIfAbsent(newMail, new HashSet<>());
         }
 
-        mailToUserUuids.get(newMail).add(userUuid);
+        mailToUserUUIDs.get(newMail).add(userUUID);
     }
 
 
@@ -171,9 +173,9 @@ public class ReactiveUniquenessValidator implements ContactInfoConsumer, Loggabl
     @Override
     public void remove(ContactInformation contactInformation) {
 
-        handleRemovedMailAddress(contactInformation.getUserUuid(),
+        handleRemovedMailAddress(contactInformation.getUserUUID(),
             emailAddressNormalizer.normalizeEmailAddress(contactInformation.getEmail()));
-        handleRemovedMobile(contactInformation.getUserUuid(),
+        handleRemovedMobile(contactInformation.getUserUUID(),
             phoneNumberNormalizer.normalizeNumber(contactInformation.getMobile()).orElse(""));
     }
 
@@ -181,7 +183,7 @@ public class ReactiveUniquenessValidator implements ContactInfoConsumer, Loggabl
     @Override
     public List<ValidationResult> checkUniqueness(final ContactInformation contactInformation) {
 
-        final boolean mobileUnique = isMobileUnique(contactInformation.getUserUuid(), contactInformation.getMobile());
+        final boolean mobileUnique = isMobileUnique(contactInformation.getUserUUID(), contactInformation.getMobile());
 
         List<ValidationResult> messages = new ArrayList<>();
 
@@ -189,7 +191,7 @@ public class ReactiveUniquenessValidator implements ContactInfoConsumer, Loggabl
             messages.add(ValidationResult.NON_UNIQUE_MOBILE);
         }
 
-        final boolean uniqueEmail = isEmailUnique(contactInformation.getUserUuid(), contactInformation.getEmail());
+        final boolean uniqueEmail = isEmailUnique(contactInformation.getUserUUID(), contactInformation.getEmail());
 
         if (!uniqueEmail) {
             messages.add(ValidationResult.NON_UNIQUE_EMAIL);
@@ -200,20 +202,20 @@ public class ReactiveUniquenessValidator implements ContactInfoConsumer, Loggabl
 
 
     @Override
-    public boolean isEmailUnique(final String userUuid, final String email) {
+    public boolean isEmailUnique(final String userUUID, final String email) {
 
         final String normalizedEmail = emailAddressNormalizer.normalizeEmailAddress(email);
 
-        return isValueUniqueForKey(normalizedEmail, userUuid, mailToUserUuids);
+        return isValueUniqueForKey(normalizedEmail, userUUID, mailToUserUUIDs);
     }
 
 
     @Override
-    public boolean isMobileUnique(final String userUuid, final String mobile) {
+    public boolean isMobileUnique(final String userUUID, final String mobile) {
 
         final String normalizedMobileNumber = phoneNumberNormalizer.normalizeNumber(mobile).orElse("");
 
-        return isValueUniqueForKey(normalizedMobileNumber, userUuid, mobileToUserUuids);
+        return isValueUniqueForKey(normalizedMobileNumber, userUUID, mobileToUserUUIDs);
     }
 
 
@@ -223,7 +225,7 @@ public class ReactiveUniquenessValidator implements ContactInfoConsumer, Loggabl
         if (dataToCheck.containsKey(key)) {
             Set<String> values = dataToCheck.get(key);
 
-            // only one presence and mapped to the requester's userUuid
+            // only one presence and mapped to the requester's userUUID
             if (!values.isEmpty()) { // there are values for this key
 
                 if (values.size() == 1 && values.contains(value)) { // only one value equals to the requested value: unique
