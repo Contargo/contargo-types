@@ -111,6 +111,15 @@ public class ReactiveUniquenessValidatorTest {
         assertEquals(ValidationResult.NON_UNIQUE_MOBILE, validationResults.get(0));
     }
 
+    @Test
+    public void ensureThatConsumingNullProfileDoesNotThrow() {
+
+        ReactiveUniquenessValidator reactiveUniquenessValidator = new ReactiveUniquenessValidator(
+                new PhoneNumberNormalizer(), new EmailAddressNormalizer());
+        reactiveUniquenessValidator.consume((ContactInformation) null);
+        reactiveUniquenessValidator.consume((List<ContactInformation>) null);
+    }
+
 
     @Test
     public void ensureThatContactInfoWithNullValuesCanBeHandled() {
@@ -141,25 +150,50 @@ public class ReactiveUniquenessValidatorTest {
         assertDetectionOfDuplicateMobile(reactiveUniquenessValidator, contactInformationWithDuplicateMobile());
     }
 
+    @Test
+    public void ensureThatDuplicateMobileIsDetectedAndNotDetectedAfterConflictingUserRemovedMobile() {
+
+        final ContactInformation contactInfoToBeChanged = new ContactInformation("uuid2", "", "4567",
+                "foo-uuid2@bar", "bar@foo");
+        final ContactInformation contactInfoToBeValidated = new ContactInformation("uuid8", "1233", "4567",
+                "foo-uuid8@bar", "bar@foo");
+
+        ensureDuplicateMobileIsDetectedAndNotDetected(contactInfoToBeChanged, contactInfoToBeValidated);
+    }
 
     @Test
     public void ensureThatDuplicateMobileIsDetectedAndNotDetectedAfterConflictingUserChangedMobile() {
-
-        ReactiveUniquenessValidator reactiveUniquenessValidator = new ReactiveUniquenessValidator(
-                new PhoneNumberNormalizer(), new EmailAddressNormalizer());
-        consumeColaProfiles(reactiveUniquenessValidator);
-
-        assertDetectionOfDuplicateMobile(reactiveUniquenessValidator, contactInformationWithDuplicateMobile());
 
         final ContactInformation contactInfoToBeChanged = new ContactInformation("uuid2", "12345", "4567",
                 "foo-uuid2@bar", "bar@foo");
         final ContactInformation contactInfoToBeValidated = new ContactInformation("uuid8", "1233", "4567",
                 "foo-uuid8@bar", "bar@foo");
 
+
+        ensureDuplicateMobileIsDetectedAndNotDetected(contactInfoToBeChanged, contactInfoToBeValidated);
+    }
+
+    private void ensureDuplicateMobileIsDetectedAndNotDetected(ContactInformation contactInfoToBeChanged, ContactInformation contactInfoToBeValidated) {
+        ReactiveUniquenessValidator reactiveUniquenessValidator = new ReactiveUniquenessValidator(
+                new PhoneNumberNormalizer(), new EmailAddressNormalizer());
+        consumeColaProfiles(reactiveUniquenessValidator);
+
+        assertDetectionOfDuplicateMobile(reactiveUniquenessValidator, contactInformationWithDuplicateMobile());
+
         reactiveUniquenessValidator.consume(contactInfoToBeChanged);
         assertThatNoValidationErrorIsReported(reactiveUniquenessValidator, contactInfoToBeValidated);
     }
 
+    @Test
+    public void ensureThatDuplicateMailIsDetectedAndNotDetectedAfterConflictingUserRemovedMail() {
+
+        final ContactInformation contactInfoToBeChanged = new ContactInformation("uuid4", "12345", "4567", "",
+                "bar@foo");
+        final ContactInformation contactInfoToBeValidated = new ContactInformation("uuid8", "", "4567", "foo@bazl",
+                "bar@foo");
+
+        ensureDuplicateMailIsDetectedAndNotDected(contactInfoToBeChanged, contactInfoToBeValidated);
+    }
 
     @Test
     public void ensureThatDuplicateMailIsDetectedAndNotDetectedAfterConflictingUserChangedMail() {
@@ -169,6 +203,10 @@ public class ReactiveUniquenessValidatorTest {
         final ContactInformation contactInfoToBeValidated = new ContactInformation("uuid8", "", "4567", "foo@bazl",
                 "bar@foo");
 
+        ensureDuplicateMailIsDetectedAndNotDected(contactInfoToBeChanged, contactInfoToBeValidated);
+    }
+
+    private void ensureDuplicateMailIsDetectedAndNotDected(ContactInformation contactInfoToBeChanged, ContactInformation contactInfoToBeValidated) {
         ReactiveUniquenessValidator reactiveUniquenessValidator = new ReactiveUniquenessValidator(
                 new PhoneNumberNormalizer(), new EmailAddressNormalizer());
 

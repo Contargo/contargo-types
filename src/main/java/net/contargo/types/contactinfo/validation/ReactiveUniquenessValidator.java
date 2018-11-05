@@ -52,6 +52,9 @@ public class ReactiveUniquenessValidator implements ContactInfoConsumer, Loggabl
     @Override
     public void consume(final List<ContactInformation> allContactInformation) {
 
+        if(allContactInformation == null) {
+            return;
+        }
         allContactInformation.forEach(this::extractMobileAndMailFromProfile);
     }
 
