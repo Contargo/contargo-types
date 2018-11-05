@@ -7,24 +7,22 @@ package net.contargo.types.contactinfo;
  */
 public class ContactInformation {
 
-    private final String userUuid;
+    private final String userUUID;
     private final String mobile;
     private final String phone;
     private final String email;
-    private final String communicationEmail;
 
-    public ContactInformation(String userUuid, String mobile, String phone, String email, String communicationEmail) {
+    public ContactInformation(String userUUID, String mobile, String phone, String email) {
 
-        this.userUuid = userUuid;
+        this.userUUID = userUUID;
         this.mobile = mobile;
         this.phone = phone;
         this.email = email;
-        this.communicationEmail = communicationEmail;
     }
 
-    public String getUserUuid() {
+    public String getUserUUID() {
 
-        return userUuid;
+        return userUUID;
     }
 
 
@@ -38,13 +36,6 @@ public class ContactInformation {
 
         return phone;
     }
-
-
-    public String getCommunicationEmail() {
-
-        return communicationEmail;
-    }
-
 
     public String getEmail() {
 

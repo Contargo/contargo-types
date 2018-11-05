@@ -1,5 +1,7 @@
 package net.contargo.types.util;
 
+import net.contargo.types.Assert;
+
 import org.junit.Test;
 
 

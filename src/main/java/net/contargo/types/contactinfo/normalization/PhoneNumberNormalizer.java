@@ -1,8 +1,8 @@
-package net.contargo.types.contactinfo.validation;
+package net.contargo.types.contactinfo.normalization;
 
+import net.contargo.types.Loggable;
 import net.contargo.types.telephony.formatting.PhoneNumberFormatter;
 import net.contargo.types.telephony.formatting.PhoneNumberFormattingException;
-import net.contargo.types.util.Loggable;
 
 import java.util.Optional;
 

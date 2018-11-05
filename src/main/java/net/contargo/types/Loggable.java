@@ -1,4 +1,4 @@
-package net.contargo.types.util;
+package net.contargo.types;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

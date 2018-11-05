@@ -1,4 +1,4 @@
-package net.contargo.types.contactinfo.validation;
+package net.contargo.types.contactinfo.normalization;
 
 import java.util.Locale;
 
