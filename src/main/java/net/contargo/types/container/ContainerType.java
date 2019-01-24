@@ -27,6 +27,7 @@ public enum ContainerType implements net.contargo.domain.ContainerType {
     TWENTY_HR("20HR", "20HR"),
     TWENTY_HT("20HT", "22U6"),
     TWENTY_IS("20IS", "22H5"),
+    TWENTY_OS("20OS", "22U0"),
     TWENTY_OT("20OT", "22U0"),
     TWENTY_PH("20PH", "25N0"),
     TWENTY_PL("20PL", "29P0"),
@@ -119,8 +120,8 @@ public enum ContainerType implements net.contargo.domain.ContainerType {
     public static ContainerType byContargoHandlingCode(String contargoHandlingCode) {
 
         return Arrays.stream(ContainerType.values()).filter(containerType ->
-                        containerType.getContargoHandlingCode()
-                        .equals(contargoHandlingCode)).findFirst().orElseThrow(() ->
+                        containerType.getContargoHandlingCode().equals(contargoHandlingCode)).findFirst()
+            .orElseThrow(() ->
                     new IllegalArgumentException(
                         "Unknown container type Contargo handling code given: "
                         + contargoHandlingCode));
@@ -139,10 +140,9 @@ public enum ContainerType implements net.contargo.domain.ContainerType {
      */
     public static ContainerType byIsoCode(String isoCode) {
 
-        return Arrays.stream(ContainerType.values())
-            .filter(containerType -> containerType.getIsoCode().equals(isoCode))
-            .findFirst()
-            .orElseThrow(() ->
+        return Arrays.stream(ContainerType.values()).filter(containerType ->
+                        containerType.getIsoCode()
+                        .equals(isoCode)).findFirst().orElseThrow(() ->
                     new IllegalArgumentException("Unknown container type ISO code given: "
                         + isoCode));
     }
