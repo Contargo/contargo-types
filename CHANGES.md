@@ -1,5 +1,8 @@
 Contargo Types
 ===============
+## v0.16.1
+
+* Adds handlingcode 20OS with ISO-Code 22G2
 
 ## v0.15.0
 
