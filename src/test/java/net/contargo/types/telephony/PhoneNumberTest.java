@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 
 /**
@@ -72,5 +72,23 @@ public class PhoneNumberTest {
         final PhoneNumber phoneNumber = new PhoneNumber("00124278364736");
 
         Assert.assertEquals("24278364736", phoneNumber.getNationalSignificantNumber());
+    }
+
+    @Test
+    public void ensureGermanNumberToInternationalPhoneNumber() throws PhoneNumberFormattingException {
+
+        final PhoneNumber phoneNumber = new PhoneNumber("02342323523423");
+
+        Assert.assertEquals("+49 234 2323 5234 23", phoneNumber.getInternationalFormattedPhoneNumber());
+    }
+
+
+    @Test
+    public void ensureGettingCorrectNumberWithPhoneExtension() throws PhoneNumberFormattingException {
+
+        final PhoneNumber phoneNumber = new PhoneNumber("02342323523423");
+        phoneNumber.setPhoneExtension("56");
+
+        Assert.assertEquals("+49 234 2323 5234 2356", phoneNumber.getInternationalFormattedPhoneNumber());
     }
 }

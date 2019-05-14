@@ -47,6 +47,16 @@ public final class PhoneNumber implements Loggable {
         this(country, nationalSignificantNumber, null);
     }
 
+    public String getPhoneExtension() {
+        return phoneExtension;
+    }
+
+
+    public void setPhoneExtension(String phoneExtension) {
+        this.phoneExtension = phoneExtension;
+    }
+
+
     public Country getCountry() {
 
         return country;
@@ -73,9 +83,9 @@ public final class PhoneNumber implements Loggable {
 
     public String getInternationalFormattedPhoneNumber() throws PhoneNumberFormattingException {
 
-        logger().info("formatting phone number: {} into international phone number.", getphoneNumber());
+        logger().info("formatting phone number: {} into international phone number.", getPhoneNumber());
 
-        String format = phoneNumberFormatter.parseAndFormatToDIN5008(getphoneNumber());
+        String format = phoneNumberFormatter.parseAndFormatToDIN5008(getPhoneNumber());
 
         return format.replaceAll("/", "").replaceAll("-", "");
     }
@@ -83,11 +93,11 @@ public final class PhoneNumber implements Loggable {
 
     public String getPhoneNumberInE164Format() throws PhoneNumberFormattingException {
 
-        return phoneNumberFormatter.parseAndFormatToE164Format(getphoneNumber());
+        return phoneNumberFormatter.parseAndFormatToE164Format(getPhoneNumber());
     }
 
 
-    private String getphoneNumber() {
+    private String getPhoneNumber() {
 
         if (StringUtils.isNotBlank(phoneExtension)) {
             return String.format("%s%s%s", country.getCountryCallingCode(), nationalSignificantNumber, phoneExtension);
@@ -101,7 +111,7 @@ public final class PhoneNumber implements Loggable {
     public String toString() {
 
         return "PhoneNumber {"
-            + "phoneNumber='" + getphoneNumber() + '\''
+            + "phoneNumber='" + getPhoneNumber() + '\''
             + ", country='" + country + '\''
             + ", nationalSignificantNumber='" + nationalSignificantNumber + '\''
             + ", phoneExtension='" + phoneExtension + '\'' + '}';
