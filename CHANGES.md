@@ -1,5 +1,11 @@
 Contargo Types
 ===============
+## v0.17.0
+
+* Adds PhoneNumber to formate phone numbers and get information to a spezific phone number, 
+like the country code or country calling code.
+* Change the amount of characters for license plates to max. 15 characters.
+
 ## v0.16.1
 
 * Adds handlingcode 20OS with ISO-Code 22G2
