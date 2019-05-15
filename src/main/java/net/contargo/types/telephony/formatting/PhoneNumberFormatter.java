@@ -9,10 +9,23 @@ import com.google.i18n.phonenumbers.Phonenumber;
  * Handles the formatting of telephone numbers.
  *
  * @author  Robin Jayasinghe - jayasinghe@synyx.de
+ * @author  Julia Dasch - dasch@synyx.de
  */
 public class PhoneNumberFormatter {
 
+    private static PhoneNumberFormatter instance = null;
+
     private final PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
+
+    public static PhoneNumberFormatter getInstance() {
+
+        if (instance == null) {
+            return new PhoneNumberFormatter();
+        }
+
+        return instance;
+    }
+
 
     /**
      * Formats a given phoneNumber according to the rules defined in the E164 standard:
@@ -26,15 +39,9 @@ public class PhoneNumberFormatter {
      */
     public String parseAndFormatToE164Format(final String phoneNumber) throws PhoneNumberFormattingException {
 
-        final String phoneNumberWithoutWhitespace = phoneNumber.replaceAll("\\s+", "");
+        final Phonenumber.PhoneNumber parsedNumber = parsePhoneNumber(phoneNumber, trimPhoneNumber(phoneNumber));
 
-        final Phonenumber.PhoneNumber parsedNumber;
-
-        parsedNumber = parsePhoneNumber(phoneNumber, phoneNumberWithoutWhitespace);
-
-        final String formattedNumber = phoneNumberUtil.format(parsedNumber, PhoneNumberUtil.PhoneNumberFormat.E164);
-
-        return formattedNumber;
+        return phoneNumberUtil.format(parsedNumber, PhoneNumberUtil.PhoneNumberFormat.E164);
     }
 
 
@@ -57,8 +64,8 @@ public class PhoneNumberFormatter {
      */
     public String parseAndFormatToDIN5008(final String phoneNumber) throws PhoneNumberFormattingException {
 
-        // strip all whitespace from input
-        final String phoneNumberWithoutWhitespace = phoneNumber.replaceAll("\\s+", "");
+        // strip all whitespace and line breaks from input
+        final String phoneNumberWithoutWhitespace = trimPhoneNumber(phoneNumber);
 
         // pre-validation and formatting with libphonenumber
         final Phonenumber.PhoneNumber parsedNumber = parsePhoneNumber(phoneNumber, phoneNumberWithoutWhitespace);
@@ -96,6 +103,59 @@ public class PhoneNumberFormatter {
         final String sanitizedExtension = extension.replaceAll("\\s+", "").replaceAll("\\D+", "");
 
         return String.format("%s-%s", formattedBaseNumber, sanitizedExtension);
+    }
+
+
+    /**
+     * Returns the region code of a number. It is needed to check the whole number to return the region/country code.
+     * It will not only check the country calling code. example for +1 242 = 'BS'
+     *
+     * @param  phoneNumber  the phoneNumber to get the region code/country code from
+     *
+     * @return  the country code from formatted number
+     *
+     * @throws  PhoneNumberFormattingException  if the phoneNumber cannot be parsed
+     */
+    public String getRegionCode(final String phoneNumber) throws PhoneNumberFormattingException {
+
+        Phonenumber.PhoneNumber parsedNumber = parsePhoneNumber(phoneNumber, trimPhoneNumber(phoneNumber));
+
+        return phoneNumberUtil.getRegionCodeForNumber(parsedNumber);
+    }
+
+
+    /**
+     * Returns the national significant number of a phone number.
+     *
+     * @param  phoneNumber  the phoneNumber to get the national significant number from
+     *
+     * @return  the national significant number
+     *
+     * @throws  PhoneNumberFormattingException  if the phoneNumber cannot be parsed
+     */
+    public String getNationalSignificantNumber(final String phoneNumber) throws PhoneNumberFormattingException {
+
+        Phonenumber.PhoneNumber parsedNumber = parsePhoneNumber(phoneNumber, trimPhoneNumber(phoneNumber));
+
+        return phoneNumberUtil.getNationalSignificantNumber(parsedNumber);
+    }
+
+
+    /**
+     * Returns the type of a number.
+     *
+     * @param  phoneNumber  the phoneNumber to get the type from
+     *
+     * @return  phone number type
+     *
+     * @throws  PhoneNumberFormattingException  if the phoneNumber cannot be parsed
+     */
+    public PhoneNumberUtil.PhoneNumberType getPhoneNumberType(final String phoneNumber)
+        throws PhoneNumberFormattingException {
+
+        Phonenumber.PhoneNumber parsedNumber = parsePhoneNumber(phoneNumber, trimPhoneNumber(phoneNumber));
+
+        return phoneNumberUtil.getNumberType(parsedNumber);
     }
 
 
@@ -174,6 +234,19 @@ public class PhoneNumberFormatter {
 
         // target format
         return String.format(numberFormat, countryCode, areaCodeAndConnectionNumber.areaCode, chunkedConnectionNumber);
+    }
+
+
+    /**
+     * removes all whitespaces and line breaks.
+     *
+     * @param  phoneNumber  the number to be trimed
+     *
+     * @return  the trimed number
+     */
+    private String trimPhoneNumber(String phoneNumber) {
+
+        return phoneNumber.replaceAll("\\s+", "").replaceAll("\n", "");
     }
 
     private class AreaCodeAndConnectionNumber {
