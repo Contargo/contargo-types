@@ -93,6 +93,16 @@ Direction.TURN_OUT
 
 The `Direction` enum describes the direction of a unit movement regarding one location.
 
+### Phone numbers
+
+```java
+PhoneNumber phoneNumber = new PhoneNumber(string);
+```
+The built phone number instance provides various information about the phone number, such as the country code or country calling code or the regional phone number. 
+
+#### Format
+The phone number instance can return the phone number in a international phone number formate.
+
 ## Development
 
 This is a pretty straight-forward Java-project, use `mvn` to build, test and
