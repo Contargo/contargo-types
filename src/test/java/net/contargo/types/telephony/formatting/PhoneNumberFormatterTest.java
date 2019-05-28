@@ -81,9 +81,9 @@ public class PhoneNumberFormatterTest {
     @Test
     public void ensureThatFormattingWithExtensionWorks() throws PhoneNumberFormattingException {
 
-        Assert.assertEquals("+49 6222 1234 5678-89",
+        Assert.assertEquals("+49 6222 1234 5678 89",
             phoneNumberFormatter.parseAndFormatToDIN5008("0622212345678", "8-9"));
-        Assert.assertEquals("+49 6222 1234 5678-89",
+        Assert.assertEquals("+49 6222 1234 5678 89",
             phoneNumberFormatter.parseAndFormatToDIN5008("0622212345678", "89"));
     }
 }

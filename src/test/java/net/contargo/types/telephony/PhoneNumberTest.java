@@ -2,14 +2,15 @@ package net.contargo.types.telephony;
 
 import net.contargo.types.telephony.formatting.PhoneNumberFormattingException;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import org.junit.runner.RunWith;
 
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.assertEquals;
+import java.util.Optional;
+
+import static org.junit.Assert.*;
 
 
 /**
@@ -19,40 +20,41 @@ import static org.junit.Assert.assertEquals;
 public class PhoneNumberTest {
 
     @Test
-    public void ensureInternationalFormattingPhoneNumberFromValid() throws PhoneNumberFormattingException {
+    public void ensureInternationalFormattingPhoneNumberFromValid() {
 
         final PhoneNumber phoneNumber = new PhoneNumber("00492342323523423");
 
-        String formattedPhoneNumber = phoneNumber.getInternationalFormattedPhoneNumber();
+        Optional<String> formattedPhoneNumber = phoneNumber.getInternationalFormatOfPhoneNumber();
 
-        assertEquals("+49 234 2323 5234 23", formattedPhoneNumber);
+        assertTrue(formattedPhoneNumber.isPresent());
+        assertEquals("+49 234 2323 5234 23", formattedPhoneNumber.get());
     }
 
 
-    @Test(expected = PhoneNumberFormattingException.class)
+    @Test
     public void ensureInternationalFormattingPhoneNumberFromInvalidInputThrows()
         throws PhoneNumberFormattingException {
 
         final PhoneNumber phoneNumber = new PhoneNumber("i321%6&_-?`");
-        phoneNumber.getInternationalFormattedPhoneNumber();
+        assertFalse(phoneNumber.getInternationalFormatOfPhoneNumber().isPresent());
     }
 
 
     @Test
-    public void ensureFormatsRussianMobile() throws PhoneNumberFormattingException {
+    public void ensureFormatsRussianMobile() {
 
         final PhoneNumber phoneNumber = new PhoneNumber("+7 (922) 555-1234");
 
-        Assert.assertEquals("+7 922 5551 234", phoneNumber.getInternationalFormattedPhoneNumber());
+        assertEquals("+7 922 5551 234", phoneNumber.getInternationalFormatOfPhoneNumber().get());
     }
 
 
     @Test
-    public void ensureFormatsLongGermanMobileNumber() throws PhoneNumberFormattingException {
+    public void ensureFormatsLongGermanMobileNumber() {
 
         final PhoneNumber phoneNumber = new PhoneNumber("0171123456789123");
 
-        Assert.assertEquals("+49 171 1234 5678 9123", phoneNumber.getInternationalFormattedPhoneNumber());
+        assertEquals("+49 171 1234 5678 9123", phoneNumber.getInternationalFormatOfPhoneNumber().get());
     }
 
 
@@ -61,8 +63,8 @@ public class PhoneNumberTest {
 
         final PhoneNumber phoneNumber = new PhoneNumber("00124278364736");
 
-        Assert.assertEquals("+1", phoneNumber.getCountry().getCountryCallingCode());
-        Assert.assertEquals("BS", phoneNumber.getCountry().getCountryCode());
+        assertEquals("+1", phoneNumber.getCountry().getCountryCallingCode());
+        assertEquals("BS", phoneNumber.getCountry().getCountryCode());
     }
 
 
@@ -71,24 +73,25 @@ public class PhoneNumberTest {
 
         final PhoneNumber phoneNumber = new PhoneNumber("00124278364736");
 
-        Assert.assertEquals("24278364736", phoneNumber.getNationalSignificantNumber());
+        assertEquals("24278364736", phoneNumber.getNationalSignificantNumber());
     }
 
+
     @Test
-    public void ensureGermanNumberToInternationalPhoneNumber() throws PhoneNumberFormattingException {
+    public void ensureGermanNumberToInternationalPhoneNumber() {
 
         final PhoneNumber phoneNumber = new PhoneNumber("02342323523423");
 
-        Assert.assertEquals("+49 234 2323 5234 23", phoneNumber.getInternationalFormattedPhoneNumber());
+        assertEquals("+49 234 2323 5234 23", phoneNumber.getInternationalFormatOfPhoneNumber().get());
     }
 
 
     @Test
-    public void ensureGettingCorrectNumberWithPhoneExtension() throws PhoneNumberFormattingException {
+    public void ensureGettingCorrectNumberWithPhoneExtension() {
 
         final PhoneNumber phoneNumber = new PhoneNumber("02342323523423");
         phoneNumber.setPhoneExtension("56");
 
-        Assert.assertEquals("+49 234 2323 5234 2356", phoneNumber.getInternationalFormattedPhoneNumber());
+        assertEquals("+49 234 2323 5234 2356", phoneNumber.getInternationalFormatOfPhoneNumber().get());
     }
 }

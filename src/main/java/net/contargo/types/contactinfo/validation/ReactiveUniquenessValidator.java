@@ -23,7 +23,6 @@ public class ReactiveUniquenessValidator implements ContactInfoConsumer, Loggabl
     private final ConcurrentMap<String, String> userUUIDToMobile;
     private final ConcurrentMap<String, Set<String>> mobileToUserUUIDs;
 
-
     private final ConcurrentMap<String, Set<String>> mailToUserUUIDs;
     private final PhoneNumberNormalizer phoneNumberNormalizer;
     private final EmailAddressNormalizer emailAddressNormalizer;
@@ -52,9 +51,10 @@ public class ReactiveUniquenessValidator implements ContactInfoConsumer, Loggabl
     @Override
     public void consume(final List<ContactInformation> allContactInformation) {
 
-        if(allContactInformation == null) {
+        if (allContactInformation == null) {
             return;
         }
+
         allContactInformation.forEach(this::extractMobileAndMailFromProfile);
     }
 
@@ -88,7 +88,7 @@ public class ReactiveUniquenessValidator implements ContactInfoConsumer, Loggabl
         }
 
         final String oldMobile = phoneNumberNormalizer.normalizeNumber(userUUIDToMobile.get(userUUID)).orElse("");
-        final String newMobile = phoneNumberNormalizer.normalizeNumber(contactInformation.getMobile()).orElse("");
+        final String newMobile = contactInformation.getMobile().getInternationalFormatOfPhoneNumber().orElse("");
 
         if (StringUtils.isNotBlank(newMobile) && StringUtils.isBlank(oldMobile)) {
             handleNewMobile(newMobile, userUUID);
@@ -179,14 +179,15 @@ public class ReactiveUniquenessValidator implements ContactInfoConsumer, Loggabl
         handleRemovedMailAddress(contactInformation.getUserUUID(),
             emailAddressNormalizer.normalizeEmailAddress(contactInformation.getEmail()));
         handleRemovedMobile(contactInformation.getUserUUID(),
-            phoneNumberNormalizer.normalizeNumber(contactInformation.getMobile()).orElse(""));
+            contactInformation.getMobile().getInternationalFormatOfPhoneNumber().orElse(""));
     }
 
 
     @Override
     public List<ValidationResult> checkUniqueness(final ContactInformation contactInformation) {
 
-        final boolean mobileUnique = isMobileUnique(contactInformation.getUserUUID(), contactInformation.getMobile());
+        final boolean mobileUnique = isMobileUnique(contactInformation.getUserUUID(),
+                contactInformation.getMobile().getInternationalFormatOfPhoneNumber().orElse(""));
 
         List<ValidationResult> messages = new ArrayList<>();
 
@@ -216,9 +217,7 @@ public class ReactiveUniquenessValidator implements ContactInfoConsumer, Loggabl
     @Override
     public boolean isMobileUnique(final String userUUID, final String mobile) {
 
-        final String normalizedMobileNumber = phoneNumberNormalizer.normalizeNumber(mobile).orElse("");
-
-        return isValueUniqueForKey(normalizedMobileNumber, userUUID, mobileToUserUUIDs);
+        return isValueUniqueForKey(mobile, userUUID, mobileToUserUUIDs);
     }
 
 

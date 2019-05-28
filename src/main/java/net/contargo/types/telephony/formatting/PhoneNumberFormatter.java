@@ -102,7 +102,7 @@ public class PhoneNumberFormatter {
         final String formattedBaseNumber = parseAndFormatToDIN5008(basePhoneNumber);
         final String sanitizedExtension = extension.replaceAll("\\s+", "").replaceAll("\\D+", "");
 
-        return String.format("%s-%s", formattedBaseNumber, sanitizedExtension);
+        return String.format("%s %s", formattedBaseNumber, sanitizedExtension);
     }
 
 
@@ -246,7 +246,9 @@ public class PhoneNumberFormatter {
      */
     private String trimPhoneNumber(String phoneNumber) {
 
-        return phoneNumber.replaceAll("\\s+", "").replaceAll("\n", "");
+        String phoneNumberWithoutNewLine = phoneNumber.replaceAll("\\s+", "").replaceAll("\n", "");
+
+        return phoneNumberWithoutNewLine.replaceAll("/", "").replaceAll("-", "");
     }
 
     private class AreaCodeAndConnectionNumber {
