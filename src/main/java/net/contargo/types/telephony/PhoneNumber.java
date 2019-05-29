@@ -6,7 +6,7 @@ import net.contargo.types.Loggable;
 import net.contargo.types.telephony.formatting.PhoneNumberFormatter;
 import net.contargo.types.telephony.formatting.PhoneNumberFormattingException;
 
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.Optional;
 
@@ -78,7 +78,7 @@ public final class PhoneNumber implements Loggable {
 
         logger().info("formatting phone number: {} into international phone number.", getPhoneNumber());
 
-        if (!StringUtils.hasText(rawPhoneNumber)) {
+        if (StringUtils.isBlank(rawPhoneNumber)) {
             logger().warn("Not able to parse phone number of {}", rawPhoneNumber);
 
             return Optional.empty();
@@ -96,7 +96,7 @@ public final class PhoneNumber implements Loggable {
 
     private String getPhoneNumber() {
 
-        if (StringUtils.hasText(phoneExtension)) {
+        if (StringUtils.isNotBlank(phoneExtension)) {
             return String.format("%s%s", rawPhoneNumber, phoneExtension);
         }
 
