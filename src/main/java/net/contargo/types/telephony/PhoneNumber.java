@@ -8,6 +8,7 @@ import net.contargo.types.telephony.formatting.PhoneNumberFormattingException;
 
 import org.apache.commons.lang.StringUtils;
 
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -44,6 +45,12 @@ public final class PhoneNumber implements Loggable {
         this(country, rawPhoneNumber, null);
     }
 
+    public String getRawPhoneNumber() {
+
+        return rawPhoneNumber;
+    }
+
+
     public String getPhoneExtension() {
 
         return phoneExtension;
@@ -58,7 +65,11 @@ public final class PhoneNumber implements Loggable {
 
     public Country getCountry() throws PhoneNumberFormattingException {
 
-        return new Country(phoneNumberFormatter.getRegionCode(rawPhoneNumber));
+        if (Objects.isNull(country)) {
+            country = new Country(phoneNumberFormatter.getRegionCode(rawPhoneNumber));
+        }
+
+        return country;
     }
 
 
@@ -78,13 +89,15 @@ public final class PhoneNumber implements Loggable {
 
         logger().info("formatting phone number: {} into international phone number.", getPhoneNumber());
 
-        if (StringUtils.isBlank(rawPhoneNumber)) {
+        if (StringUtils.isBlank(rawPhoneNumber) || containsOnlyZeros(rawPhoneNumber)) {
             logger().warn("Not able to parse phone number of {}", rawPhoneNumber);
 
             return Optional.empty();
         }
 
         try {
+            country = new Country(phoneNumberFormatter.getRegionCode(rawPhoneNumber));
+
             return Optional.of(phoneNumberFormatter.parseAndFormatToDIN5008(getPhoneNumber()));
         } catch (PhoneNumberFormattingException e) {
             logger().warn("Failed to parse and format number {}: {}", rawPhoneNumber, e.getMessage());
@@ -107,6 +120,12 @@ public final class PhoneNumber implements Loggable {
     public boolean isPhoneNumber() {
 
         return getInternationalFormatOfPhoneNumber().isPresent();
+    }
+
+
+    private boolean containsOnlyZeros(String number) {
+
+        return number.matches("0+$");
     }
 
 

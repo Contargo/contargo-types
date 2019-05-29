@@ -1,9 +1,8 @@
 package net.contargo.types.telephony.validation;
 
-import com.google.i18n.phonenumbers.NumberParseException;
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import net.contargo.types.telephony.PhoneNumber;
 
-import java.util.Objects;
+import org.apache.commons.lang.StringUtils;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -17,8 +16,6 @@ import javax.validation.ConstraintValidatorContext;
  */
 public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhoneNumber, String> {
 
-    private final PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
-
     @Override
     public void initialize(ValidPhoneNumber a) {
 
@@ -27,21 +24,21 @@ public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhone
 
 
     @Override
-    public boolean isValid(String phoneNumber, ConstraintValidatorContext cvc) {
+    public boolean isValid(String value, ConstraintValidatorContext cvc) {
+
+        PhoneNumber phoneNumber = new PhoneNumber(value);
 
         // We must assume non-null, non-empty is validated elsewhere
-        if (Objects.isNull(phoneNumber) || phoneNumber.trim().isEmpty()) {
+        if (StringUtils.isBlank(value) || phoneNumber.getRawPhoneNumber().trim().isEmpty()) {
             return true;
         }
 
-        String phoneNumberWithoutWhitespace = phoneNumber.replaceAll("\\s+", "");
+        return phoneNumber.isPhoneNumber() && !isPhoneNumberOnlyZeros(phoneNumber);
+    }
 
-        try {
-            phoneNumberUtil.parse(phoneNumberWithoutWhitespace, "DE");
 
-            return true;
-        } catch (NumberParseException e1) {
-            return false;
-        }
+    private boolean isPhoneNumberOnlyZeros(PhoneNumber phoneNumber) {
+
+        return phoneNumber.getRawPhoneNumber().matches("0+$");
     }
 }
