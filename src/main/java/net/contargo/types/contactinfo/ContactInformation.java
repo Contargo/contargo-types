@@ -17,9 +17,15 @@ public class ContactInformation {
 
     public ContactInformation(String userUUID, String mobile, String phone, String email) {
 
+        this(userUUID, new PhoneNumber(mobile), new PhoneNumber(phone), email);
+    }
+
+
+    public ContactInformation(String userUUID, PhoneNumber mobile, PhoneNumber phone, String email) {
+
         this.userUUID = userUUID;
-        this.mobile = new PhoneNumber(mobile);
-        this.phone = new PhoneNumber(phone);
+        this.mobile = mobile;
+        this.phone = phone;
         this.email = email;
     }
 
