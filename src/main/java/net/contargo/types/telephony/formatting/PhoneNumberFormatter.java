@@ -4,6 +4,8 @@ import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
+import org.apache.commons.lang.StringUtils;
+
 
 /**
  * Handles the formatting of telephone numbers.
@@ -207,33 +209,34 @@ public class PhoneNumberFormatter {
     private AreaCodeAndConnectionNumber getAreaCodeAndConnectionNumberFromFixedNumber(String preFormattedNumber)
         throws PhoneNumberFormattingException {
 
-        AreaCodeAndConnectionNumber areaCodeAndConnectionNumber;
+        // fist element should be the country code
         final String[] splittedPreformattedNumber = preFormattedNumber.split(" ");
 
-        if (splittedPreformattedNumber.length == 0) { // no elements -> must not happen in theory ;)
+        if (splittedPreformattedNumber.length <= 1) { // no or one elements -> must not happen in theory ;)
             throw new PhoneNumberFormattingException(String.format("Could not extract anything from input number: %s",
                     preFormattedNumber));
-        } else if (splittedPreformattedNumber.length == 1) { // one element -> take the whole number as connection
-            areaCodeAndConnectionNumber = new AreaCodeAndConnectionNumber("", preFormattedNumber);
+        } else if (splittedPreformattedNumber.length <= 2) { // two elements -> take the second element as connection
+            return new AreaCodeAndConnectionNumber("", splittedPreformattedNumber[1].replaceAll("\\D+", ""));
         } else { // more than one element -> take the second as area code and the third as connection number (first is country code)
-            areaCodeAndConnectionNumber = new AreaCodeAndConnectionNumber(preFormattedNumber.split(" ")[1],
-                    preFormattedNumber.split(" ")[2].replaceAll("\\D+", ""));
+            return new AreaCodeAndConnectionNumber(preFormattedNumber.split(" ")[1],
+                    splittedPreformattedNumber[2].replaceAll("\\D+", ""));
         }
-
-        return areaCodeAndConnectionNumber;
     }
 
 
     private String chunkAndFormatResult(int countryCode, AreaCodeAndConnectionNumber areaCodeAndConnectionNumber) {
 
-        final String numberFormat = "+%d %s %s";
-
         // chunk the number into blocks of 4 digits. the last block can be 1-4 digits
         final String chunkedConnectionNumber = String.join(" ",
                 areaCodeAndConnectionNumber.connectionNumber.split("(?<=\\G.{4})"));
 
-        // target format
-        return String.format(numberFormat, countryCode, areaCodeAndConnectionNumber.areaCode, chunkedConnectionNumber);
+        if (StringUtils.isBlank(areaCodeAndConnectionNumber.areaCode)) {
+            return String.format("+%d %s", countryCode, chunkedConnectionNumber);
+        } else {
+            // target format
+            return String.format("+%d %s %s", countryCode, areaCodeAndConnectionNumber.areaCode,
+                    chunkedConnectionNumber);
+        }
     }
 
 
