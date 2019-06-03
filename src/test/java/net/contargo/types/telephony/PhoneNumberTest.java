@@ -32,11 +32,10 @@ public class PhoneNumberTest {
 
 
     @Test
-    public void ensureInternationalFormattingPhoneNumberFromInvalidInputThrows()
-        throws PhoneNumberFormattingException {
+    public void ensureInternationalFormattingPhoneNumberFromInvalidInput() {
 
         final PhoneNumber phoneNumber = new PhoneNumber("i321%6&_-?`");
-        assertFalse(phoneNumber.getInternationalFormatOfPhoneNumber().isPresent());
+        assertFalse(phoneNumber.isPhoneNumber());
     }
 
 
@@ -65,6 +64,7 @@ public class PhoneNumberTest {
 
         assertEquals("+1", phoneNumber.getCountry().getCountryCallingCode());
         assertEquals("BS", phoneNumber.getCountry().getCountryCode());
+        assertEquals("+1 242 7836 4736", phoneNumber.getInternationalFormatOfPhoneNumber().get());
     }
 
 
@@ -93,5 +93,29 @@ public class PhoneNumberTest {
         phoneNumber.setPhoneExtension("56");
 
         assertEquals("+49 234 2323 5234 2356", phoneNumber.getInternationalFormatOfPhoneNumber().get());
+    }
+
+
+    @Test
+    public void ensureGettingCorrectFormattedGermanNumber() {
+
+        final PhoneNumber phoneNumber = new PhoneNumber("072183478374");
+
+        assertEquals("+49 721 8347 8374", phoneNumber.getInternationalFormatOfPhoneNumber().get());
+    }
+
+
+    @Test
+    public void ensureGetFormattingPhoneNumberFromMixedPhoneNumber() {
+
+        /*
+         * currently phoneNumber lib converts mixed numbers to correct phoneNumbers
+         * falsehoods of phone numbers says that 'numbers' can contain letters
+         * if there are too many problems think about excluding letters in a custom contargo phone number validator
+         */
+        final PhoneNumber phoneNumber = new PhoneNumber("a234svljshdf034");
+
+        assertEquals("+49 234 7585 7433 034", phoneNumber.getInternationalFormatOfPhoneNumber().get());
+        assertTrue(phoneNumber.isPhoneNumber());
     }
 }
