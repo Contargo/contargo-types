@@ -8,6 +8,9 @@ import net.contargo.types.telephony.formatting.PhoneNumberFormattingException;
 
 import org.apache.commons.lang.StringUtils;
 
+import java.util.Objects;
+import java.util.Optional;
+
 
 /**
  * Phone number to represents a callable number from a user. The number will be formatted in the international format.
@@ -20,44 +23,51 @@ public final class PhoneNumber implements Loggable {
 
     private final PhoneNumberFormatter phoneNumberFormatter = PhoneNumberFormatter.getInstance();
     private Country country;
-    private String nationalSignificantNumber;
+    private final String rawPhoneNumber;
     private String phoneExtension;
 
-    public PhoneNumber(String phoneCallingNumber) throws PhoneNumberFormattingException {
+    public PhoneNumber(String rawPhoneNumber) {
 
-        if (phoneCallingNumber == null) {
-            throw new IllegalArgumentException("Phone number must not be null.");
-        }
-
-        this.nationalSignificantNumber = phoneNumberFormatter.getNationalSignificantNumber(phoneCallingNumber);
-        this.country = new Country(phoneNumberFormatter.getRegionCode(phoneCallingNumber));
+        this.rawPhoneNumber = rawPhoneNumber;
     }
 
 
-    public PhoneNumber(Country country, String nationalSignificantNumber, String phoneExtension) {
+    public PhoneNumber(Country country, final String rawPhoneNumber, String phoneExtension) {
 
         this.country = country;
-        this.nationalSignificantNumber = nationalSignificantNumber;
+        this.rawPhoneNumber = rawPhoneNumber;
         this.phoneExtension = phoneExtension;
     }
 
 
-    public PhoneNumber(Country country, String nationalSignificantNumber) {
+    public PhoneNumber(Country country, final String rawPhoneNumber) {
 
-        this(country, nationalSignificantNumber, null);
+        this(country, rawPhoneNumber, null);
     }
 
+    public String getRawPhoneNumber() {
+
+        return rawPhoneNumber;
+    }
+
+
     public String getPhoneExtension() {
+
         return phoneExtension;
     }
 
 
     public void setPhoneExtension(String phoneExtension) {
+
         this.phoneExtension = phoneExtension;
     }
 
 
-    public Country getCountry() {
+    public Country getCountry() throws PhoneNumberFormattingException {
+
+        if (Objects.isNull(country)) {
+            country = new Country(phoneNumberFormatter.getRegionCode(rawPhoneNumber));
+        }
 
         return country;
     }
@@ -69,41 +79,53 @@ public final class PhoneNumber implements Loggable {
     }
 
 
-    public String getNationalSignificantNumber() {
+    public String getNationalSignificantNumber() throws PhoneNumberFormattingException {
 
-        return nationalSignificantNumber;
+        return phoneNumberFormatter.getNationalSignificantNumber(rawPhoneNumber);
     }
 
 
-    public void setNationalSignificantNumber(String nationalSignificantNumber) {
-
-        this.nationalSignificantNumber = nationalSignificantNumber;
-    }
-
-
-    public String getInternationalFormattedPhoneNumber() throws PhoneNumberFormattingException {
+    public Optional<String> getInternationalFormatOfPhoneNumber() {
 
         logger().info("formatting phone number: {} into international phone number.", getPhoneNumber());
 
-        String format = phoneNumberFormatter.parseAndFormatToDIN5008(getPhoneNumber());
+        if (StringUtils.isBlank(rawPhoneNumber) || containsOnlyZeros(rawPhoneNumber)) {
+            logger().warn("Not able to parse phone number of {}", rawPhoneNumber);
 
-        return format.replaceAll("/", "").replaceAll("-", "");
-    }
+            return Optional.empty();
+        }
 
+        try {
+            country = new Country(phoneNumberFormatter.getRegionCode(rawPhoneNumber));
 
-    public String getPhoneNumberInE164Format() throws PhoneNumberFormattingException {
+            return Optional.of(phoneNumberFormatter.parseAndFormatToDIN5008(getPhoneNumber()));
+        } catch (PhoneNumberFormattingException e) {
+            logger().warn("Failed to parse and format number {}: {}", rawPhoneNumber, e.getMessage());
 
-        return phoneNumberFormatter.parseAndFormatToE164Format(getPhoneNumber());
+            return Optional.empty();
+        }
     }
 
 
     private String getPhoneNumber() {
 
         if (StringUtils.isNotBlank(phoneExtension)) {
-            return String.format("%s%s%s", country.getCountryCallingCode(), nationalSignificantNumber, phoneExtension);
+            return String.format("%s%s", rawPhoneNumber, phoneExtension);
         }
 
-        return String.format("%s%s", country.getCountryCallingCode(), nationalSignificantNumber);
+        return rawPhoneNumber;
+    }
+
+
+    public boolean isPhoneNumber() {
+
+        return getInternationalFormatOfPhoneNumber().isPresent();
+    }
+
+
+    private boolean containsOnlyZeros(String number) {
+
+        return number.matches("0+$");
     }
 
 
@@ -111,9 +133,8 @@ public final class PhoneNumber implements Loggable {
     public String toString() {
 
         return "PhoneNumber {"
-            + "phoneNumber='" + getPhoneNumber() + '\''
+            + "rawPhoneNumber='" + rawPhoneNumber + '\''
             + ", country='" + country + '\''
-            + ", nationalSignificantNumber='" + nationalSignificantNumber + '\''
             + ", phoneExtension='" + phoneExtension + '\'' + '}';
     }
 }

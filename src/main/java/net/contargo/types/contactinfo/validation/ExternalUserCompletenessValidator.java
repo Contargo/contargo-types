@@ -9,8 +9,7 @@ import java.util.List;
 
 
 /**
- * Checks the completeness of a contact information object according to the
- * rules for external COLA users:
+ * Checks the completeness of a contact information object according to the rules for external COLA users:
  *
  * <ul>
  *   <li>Must be contactable via text message; This is either an e-mail address or a mobile number for SMS
@@ -26,8 +25,8 @@ public class ExternalUserCompletenessValidator implements CompletenessValidator 
         List<ValidationResult> messages = new ArrayList<>();
 
         final boolean missingEmail = StringUtils.isEmpty(contactInformation.getEmail());
-        final boolean missingMobile = StringUtils.isEmpty(contactInformation.getMobile());
-        final boolean missingPhone = StringUtils.isEmpty(contactInformation.getPhone());
+        final boolean missingMobile = !contactInformation.getMobile().isPhoneNumber();
+        final boolean missingPhone = !contactInformation.getPhone().isPhoneNumber();
 
         if (missingEmail && missingMobile) {
             messages.add(ValidationResult.MISSING_EMAIL);
