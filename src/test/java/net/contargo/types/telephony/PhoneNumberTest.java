@@ -115,7 +115,7 @@ public class PhoneNumberTest {
          */
         final PhoneNumber phoneNumber = new PhoneNumber("a234svljshdf034");
 
-        assertEquals("+49 234 7585 7433 034", phoneNumber.getInternationalFormatOfPhoneNumber().get());
+        assertEquals("+49 234 7855 7433 034", phoneNumber.getInternationalFormatOfPhoneNumber().get());
         assertTrue(phoneNumber.isPhoneNumber());
     }
 }
