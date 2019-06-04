@@ -1,7 +1,12 @@
 Contargo Types
 ===============
 
+## v0.17.2
+
+* fix broken tests from PhoneNumbers. 
+
 ## v0.17.1
+
 * use PhoneNumber in ContactInformation instead of String for phone- and mobile numbers
 * change PhoneNumber only format number if method is called. Has country code, raw phone number and extension 
 to a phone number. 
