@@ -3,7 +3,7 @@
 
     <groupId>net.contargo</groupId>
     <artifactId>contargo-types</artifactId>
-    <version>0.17.1</version>
+    <version>0.17.2</version>
     <packaging>jar</packaging>
 
     <name>Contargo Types</name>
