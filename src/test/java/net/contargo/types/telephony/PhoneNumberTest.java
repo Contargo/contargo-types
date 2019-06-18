@@ -49,6 +49,15 @@ public class PhoneNumberTest {
 
 
     @Test
+    public void ensureFormatsAlgeriaMobile() {
+
+        final PhoneNumber phoneNumber = new PhoneNumber("+213 5 934583");
+
+        assertEquals("+213 593 4583", phoneNumber.getInternationalFormatOfPhoneNumber().get());
+    }
+
+
+    @Test
     public void ensureFormatsLongGermanMobileNumber() {
 
         final PhoneNumber phoneNumber = new PhoneNumber("0171123456789123");
@@ -117,5 +126,14 @@ public class PhoneNumberTest {
 
         assertEquals("+49 234 7855 7433 034", phoneNumber.getInternationalFormatOfPhoneNumber().get());
         assertTrue(phoneNumber.isPhoneNumber());
+    }
+
+
+    @Test
+    public void ensureGettingCorrectFormattedPhoneNumber() {
+
+        final PhoneNumber phoneNumber = new PhoneNumber("+41 713111301");
+
+        assertEquals("+41 71 3111 301", phoneNumber.getInternationalFormatOfPhoneNumber().get());
     }
 }

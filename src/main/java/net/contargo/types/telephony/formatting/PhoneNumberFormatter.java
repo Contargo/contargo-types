@@ -2,9 +2,14 @@ package net.contargo.types.telephony.formatting;
 
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberType;
 import com.google.i18n.phonenumbers.Phonenumber;
 
+import net.contargo.types.Loggable;
+
 import org.apache.commons.lang.StringUtils;
+
+import java.util.Arrays;
 
 
 /**
@@ -13,7 +18,7 @@ import org.apache.commons.lang.StringUtils;
  * @author  Robin Jayasinghe - jayasinghe@synyx.de
  * @author  Julia Dasch - dasch@synyx.de
  */
-public class PhoneNumberFormatter {
+public class PhoneNumberFormatter implements Loggable {
 
     private static PhoneNumberFormatter instance = null;
 
@@ -67,22 +72,29 @@ public class PhoneNumberFormatter {
     public String parseAndFormatToDIN5008(final String phoneNumber) throws PhoneNumberFormattingException {
 
         // strip all whitespace and line breaks from input
-        final String phoneNumberWithoutWhitespace = trimPhoneNumber(phoneNumber);
+        final String trimPhoneNumber = trimPhoneNumber(phoneNumber);
 
         // pre-validation and formatting with libphonenumber
-        final Phonenumber.PhoneNumber parsedNumber = parsePhoneNumber(phoneNumber, phoneNumberWithoutWhitespace);
+        final Phonenumber.PhoneNumber parsedNumber = parsePhoneNumber(phoneNumber, trimPhoneNumber);
         final String formattedNumber = phoneNumberUtil.format(parsedNumber,
                 PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL);
 
         // extract primitives from libphonenumber parse result
         final String nationalNumber = String.valueOf(parsedNumber.getNationalNumber());
         final int countryCode = parsedNumber.getCountryCode();
-        final PhoneNumberUtil.PhoneNumberType phoneNumberType = PhoneNumberUtil.getInstance()
-                .getNumberType(parsedNumber);
+        final PhoneNumberType phoneNumberType = getPhoneNumberType(phoneNumber);
 
         // trigger the actual formatting
-        return formatDIN5008(countryCode, nationalNumber, formattedNumber,
-                phoneNumberType.equals(PhoneNumberUtil.PhoneNumberType.FIXED_LINE));
+        String formatDIN5008 = formatDIN5008(countryCode, nationalNumber, formattedNumber,
+                phoneNumberType.equals(PhoneNumberType.FIXED_LINE));
+
+        if (formatDIN5008.length() >= trimPhoneNumber.length()) {
+            return formatDIN5008;
+        } else {
+            throw new PhoneNumberFormattingException(String.format(
+                    "can not format number. the formatted phone number('%s') has less digits than the incoming phone number('%s')",
+                    formatDIN5008, phoneNumber));
+        }
     }
 
 
@@ -152,8 +164,7 @@ public class PhoneNumberFormatter {
      *
      * @throws  PhoneNumberFormattingException  if the phoneNumber cannot be parsed
      */
-    public PhoneNumberUtil.PhoneNumberType getPhoneNumberType(final String phoneNumber)
-        throws PhoneNumberFormattingException {
+    public PhoneNumberType getPhoneNumberType(final String phoneNumber) throws PhoneNumberFormattingException {
 
         Phonenumber.PhoneNumber parsedNumber = parsePhoneNumber(phoneNumber, trimPhoneNumber(phoneNumber));
 
@@ -179,34 +190,32 @@ public class PhoneNumberFormatter {
     private String formatDIN5008(final int countryCode, final String nationalNumber, final String preFormattedNumber,
         final boolean isFixedLine) throws PhoneNumberFormattingException {
 
-        final AreaCodeAndConnectionNumber areaCodeAndConnectionNumber;
+        final NationalNumber areaCodeAndConnectionNumber;
 
         if (isFixedLine) {
-            areaCodeAndConnectionNumber = getAreaCodeAndConnectionNumberFromFixedNumber(preFormattedNumber);
+            areaCodeAndConnectionNumber = getNationalNumberFromFixedNumber(preFormattedNumber);
         } else {
-            areaCodeAndConnectionNumber = getAreaCodeAndConnectionNumberFromMobileNumber(nationalNumber);
+            areaCodeAndConnectionNumber = getNationalNumberFromMobileNumber(nationalNumber);
         }
 
         return chunkAndFormatResult(countryCode, areaCodeAndConnectionNumber);
     }
 
 
-    private AreaCodeAndConnectionNumber getAreaCodeAndConnectionNumberFromMobileNumber(String nationalNumber) {
-
-        AreaCodeAndConnectionNumber areaCodeAndConnectionNumber;
+    private NationalNumber getNationalNumberFromMobileNumber(String nationalNumber) {
 
         if (nationalNumber.length() > 4) { // only for numbers longer than 4 digits
-            areaCodeAndConnectionNumber = new AreaCodeAndConnectionNumber(nationalNumber.substring(0, 3),
-                    nationalNumber.substring(3, nationalNumber.length()).replaceAll("\\D", ""));
-        } else { // for the shorter numbers
-            areaCodeAndConnectionNumber = new AreaCodeAndConnectionNumber("", nationalNumber);
-        }
 
-        return areaCodeAndConnectionNumber;
+            String connectionNumber = nationalNumber.substring(3).replaceAll("\\D", "");
+
+            return new NationalNumber(nationalNumber.substring(0, 3), connectionNumber);
+        } else { // for the shorter numbers
+            return new NationalNumber("", nationalNumber);
+        }
     }
 
 
-    private AreaCodeAndConnectionNumber getAreaCodeAndConnectionNumberFromFixedNumber(String preFormattedNumber)
+    private NationalNumber getNationalNumberFromFixedNumber(String preFormattedNumber)
         throws PhoneNumberFormattingException {
 
         // fist element should be the country code
@@ -216,26 +225,29 @@ public class PhoneNumberFormatter {
             throw new PhoneNumberFormattingException(String.format("Could not extract anything from input number: %s",
                     preFormattedNumber));
         } else if (splittedPreformattedNumber.length <= 2) { // two elements -> take the second element as connection
-            return new AreaCodeAndConnectionNumber("", splittedPreformattedNumber[1].replaceAll("\\D+", ""));
+            return new NationalNumber("", splittedPreformattedNumber[1].replaceAll("\\D+", ""));
         } else { // more than one element -> take the second as area code and the third as connection number (first is country code)
-            return new AreaCodeAndConnectionNumber(preFormattedNumber.split(" ")[1],
-                    splittedPreformattedNumber[2].replaceAll("\\D+", ""));
+
+            String[] connectionNumbers = Arrays.copyOfRange(splittedPreformattedNumber, 2,
+                    splittedPreformattedNumber.length);
+            String connectionNumber = StringUtils.join(connectionNumbers, "");
+
+            return new NationalNumber(splittedPreformattedNumber[1], connectionNumber.replaceAll("\\D+", ""));
         }
     }
 
 
-    private String chunkAndFormatResult(int countryCode, AreaCodeAndConnectionNumber areaCodeAndConnectionNumber) {
+    private String chunkAndFormatResult(int countryCode, NationalNumber nationalNumber) {
 
-        // chunk the number into blocks of 4 digits. the last block can be 1-4 digits
-        final String chunkedConnectionNumber = String.join(" ",
-                areaCodeAndConnectionNumber.connectionNumber.split("(?<=\\G.{4})"));
+        logger().debug("chunk the number:'{} {} {}' into blocks of 4 digits. the last block can be 1-4 digits",
+            countryCode, nationalNumber.areaCode, nationalNumber.connectionNumber);
 
-        if (StringUtils.isBlank(areaCodeAndConnectionNumber.areaCode)) {
+        final String chunkedConnectionNumber = String.join(" ", nationalNumber.connectionNumber.split("(?<=\\G.{4})"));
+
+        if (StringUtils.isBlank(nationalNumber.areaCode)) {
             return String.format("+%d %s", countryCode, chunkedConnectionNumber);
         } else {
-            // target format
-            return String.format("+%d %s %s", countryCode, areaCodeAndConnectionNumber.areaCode,
-                    chunkedConnectionNumber);
+            return String.format("+%d %s %s", countryCode, nationalNumber.areaCode, chunkedConnectionNumber);
         }
     }
 
@@ -249,17 +261,21 @@ public class PhoneNumberFormatter {
      */
     private String trimPhoneNumber(String phoneNumber) {
 
-        String phoneNumberWithoutNewLine = phoneNumber.replaceAll("\\s+", "").replaceAll("\n", "");
+        logger().debug("trim number:'{}' remove spaces, new Lines, '/', '-' and '()'.", phoneNumber);
 
-        return phoneNumberWithoutNewLine.replaceAll("/", "").replaceAll("-", "");
+        String phoneNumberWithoutNewLine = phoneNumber.replaceAll("\\s+", "").replaceAll("\n", "");
+        String phoneNumberWithoutBraces = phoneNumberWithoutNewLine.replaceAll("\\(", "").replaceAll("\\)", "");
+
+        return phoneNumberWithoutBraces.replaceAll("/", "").replaceAll("-", "");
     }
 
-    private class AreaCodeAndConnectionNumber {
+    // National number contains areaCode and connectionNumber
+    private class NationalNumber {
 
         public final String areaCode;
         public final String connectionNumber;
 
-        private AreaCodeAndConnectionNumber(String areaCode, String connectionNumber) {
+        private NationalNumber(String areaCode, String connectionNumber) {
 
             this.areaCode = areaCode;
             this.connectionNumber = connectionNumber;
