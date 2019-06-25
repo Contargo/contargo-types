@@ -35,7 +35,7 @@ public class PhoneNumberTest {
     public void ensureInternationalFormattingPhoneNumberFromInvalidInput() {
 
         final PhoneNumber phoneNumber = new PhoneNumber("i321%6&_-?`");
-        assertFalse(phoneNumber.isPhoneNumber());
+        assertFalse(phoneNumber.canBeFormatted());
     }
 
 
@@ -125,7 +125,7 @@ public class PhoneNumberTest {
         final PhoneNumber phoneNumber = new PhoneNumber("a234svljshdf034");
 
         assertEquals("+49 234 7855 7433 034", phoneNumber.getInternationalFormatOfPhoneNumber().get());
-        assertTrue(phoneNumber.isPhoneNumber());
+        assertTrue(phoneNumber.canBeFormatted());
     }
 
 
