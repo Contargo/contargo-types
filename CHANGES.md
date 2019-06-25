@@ -1,6 +1,12 @@
 Contargo Types
 ===============
 
+## v0.17.3
+
+* fix PhoneNumberFormatter, the numbers was formatted by the google library and then splitted into country code, areaCode 
+and connectionNumber. If the Number does have connectionNumbers with mor than on empty space splitted only the first part
+was used. 
+
 ## v0.17.2
 
 * fix broken tests from PhoneNumbers. 
