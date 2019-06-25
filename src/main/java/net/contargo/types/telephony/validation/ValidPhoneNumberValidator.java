@@ -40,10 +40,10 @@ public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhone
 
         validationResults.forEach(validationResult -> {
             final String messageTemplate;
-            String propertyName = "phoneNumber";
+            String propertyName = "phone";
 
             if (value.isMobile()) {
-                propertyName = "mobileNumber";
+                propertyName = "mobile";
             }
 
             switch (validationResult) {
@@ -55,8 +55,8 @@ public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhone
                     messageTemplate = "{CAN_NOT_FORMATTED}";
                     break;
 
-                case TO_LARGE:
-                    messageTemplate = "{TO_LARGE}";
+                case TOO_LARGE:
+                    messageTemplate = "{TOO_LARGE}";
                     break;
 
                 default:
@@ -84,7 +84,7 @@ public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhone
             }
 
             if (phoneNumber.getRawPhoneNumber().length() > PHONE_NUMBER_SIZE) {
-                phoneNumberValidationResults.add(PhoneNumberValidationResult.TO_LARGE);
+                phoneNumberValidationResults.add(PhoneNumberValidationResult.TOO_LARGE);
             }
         }
 

@@ -4,5 +4,5 @@ public enum PhoneNumberValidationResult {
 
     ZERO_NUMBER,
     CAN_NOT_FORMATTED,
-    TO_LARGE
+    TOO_LARGE
 }
