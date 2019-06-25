@@ -26,6 +26,12 @@ public final class PhoneNumber implements Loggable {
     private final String rawPhoneNumber;
     private String phoneExtension;
 
+    public PhoneNumber() {
+
+        this.rawPhoneNumber = "";
+    }
+
+
     public PhoneNumber(String rawPhoneNumber) {
 
         this.rawPhoneNumber = rawPhoneNumber;

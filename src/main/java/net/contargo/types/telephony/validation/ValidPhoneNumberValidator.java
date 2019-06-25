@@ -14,7 +14,7 @@ import javax.validation.ConstraintValidatorContext;
  * @author  Robin Jayasinghe - jayasinghe@synyx.de
  * @author  Olle Törnström - toernstroem@synyx.de
  */
-public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhoneNumber, String> {
+public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhoneNumber, PhoneNumber> {
 
     @Override
     public void initialize(ValidPhoneNumber a) {
@@ -24,16 +24,14 @@ public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhone
 
 
     @Override
-    public boolean isValid(String value, ConstraintValidatorContext cvc) {
-
-        PhoneNumber phoneNumber = new PhoneNumber(value);
+    public boolean isValid(PhoneNumber value, ConstraintValidatorContext cvc) {
 
         // We must assume non-null, non-empty is validated elsewhere
-        if (StringUtils.isBlank(value) || phoneNumber.getRawPhoneNumber().trim().isEmpty()) {
+        if (value == null) {
             return true;
         }
 
-        return phoneNumber.isPhoneNumber() && !isPhoneNumberOnlyZeros(phoneNumber);
+        return value.isPhoneNumber() && !isPhoneNumberOnlyZeros(value);
     }
 
 
