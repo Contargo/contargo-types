@@ -25,8 +25,8 @@ public class ExternalUserCompletenessValidator implements CompletenessValidator 
         List<ValidationResult> messages = new ArrayList<>();
 
         final boolean missingEmail = StringUtils.isEmpty(contactInformation.getEmail());
-        final boolean missingMobile = !contactInformation.getMobile().isPhoneNumber();
-        final boolean missingPhone = !contactInformation.getPhone().isPhoneNumber();
+        final boolean missingMobile = !contactInformation.getMobile().canBeFormatted();
+        final boolean missingPhone = !contactInformation.getPhone().canBeFormatted();
 
         if (missingEmail && missingMobile) {
             messages.add(ValidationResult.MISSING_EMAIL);

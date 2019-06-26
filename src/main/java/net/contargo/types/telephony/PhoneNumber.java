@@ -25,6 +25,13 @@ public final class PhoneNumber implements Loggable {
     private Country country;
     private final String rawPhoneNumber;
     private String phoneExtension;
+    private boolean isMobile = false;
+
+    public PhoneNumber() {
+
+        this.rawPhoneNumber = "";
+    }
+
 
     public PhoneNumber(String rawPhoneNumber) {
 
@@ -89,7 +96,7 @@ public final class PhoneNumber implements Loggable {
 
         logger().info("formatting phone number: {} into international phone number.", getPhoneNumber());
 
-        if (StringUtils.isBlank(rawPhoneNumber) || containsOnlyZeros(rawPhoneNumber)) {
+        if (StringUtils.isBlank(rawPhoneNumber) || containsOnlyZeros()) {
             logger().warn("Not able to parse phone number of {}", rawPhoneNumber);
 
             return Optional.empty();
@@ -117,15 +124,27 @@ public final class PhoneNumber implements Loggable {
     }
 
 
-    public boolean isPhoneNumber() {
+    public boolean canBeFormatted() {
 
         return getInternationalFormatOfPhoneNumber().isPresent();
     }
 
 
-    private boolean containsOnlyZeros(String number) {
+    public boolean containsOnlyZeros() {
 
-        return number.matches("0+$");
+        return rawPhoneNumber.matches("0+$");
+    }
+
+
+    public boolean isMobile() {
+
+        return isMobile;
+    }
+
+
+    public void setMobile(boolean mobile) {
+
+        isMobile = mobile;
     }
 
 
