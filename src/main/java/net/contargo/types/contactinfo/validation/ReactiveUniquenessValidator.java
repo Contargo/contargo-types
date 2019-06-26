@@ -111,6 +111,18 @@ public class ReactiveUniquenessValidator implements ContactInfoConsumer, Loggabl
     }
 
 
+    @Override
+    public void reset() {
+
+        userUUIDToMail.clear();
+        userUUIDToMobile.clear();
+        mobileToUserUUIDs.clear();
+        mailToUserUUIDs.clear();
+
+        logger().info("cleared all internal data structures");
+    }
+
+
     private void handleChangedMailAddress(final String newMail, final String userUUID, final String oldMail) {
 
         userUUIDToMail.put(userUUID, newMail);
