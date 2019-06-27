@@ -18,10 +18,4 @@ public interface UniquenessValidator {
 
 
     boolean isMobileUnique(String userUuid, String mobile);
-
-
-    default void reset() {
-
-        // noop
-    }
 }
