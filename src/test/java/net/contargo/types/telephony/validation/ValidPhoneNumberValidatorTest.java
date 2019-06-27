@@ -30,7 +30,7 @@ public class ValidPhoneNumberValidatorTest {
         final ValidPhoneNumberValidator validPhoneNumberValidator = new ValidPhoneNumberValidator();
 
         assertTrue("failed to validate valid phone number successfully",
-            validPhoneNumberValidator.isValid(new PhoneNumber("12344321"), null));
+            validPhoneNumberValidator.isValid("12344321", null));
     }
 
 
@@ -38,8 +38,7 @@ public class ValidPhoneNumberValidatorTest {
     public void ensureThatEmptyStringIsIgnored() {
 
         ValidPhoneNumberValidator sut = new ValidPhoneNumberValidator();
-        assertTrue("Empty phone number (whitespace) must be ignored, as valid",
-            sut.isValid(new PhoneNumber(""), null));
+        assertTrue("Empty phone number (whitespace) must be ignored, as valid", sut.isValid("", null));
     }
 
 
@@ -47,7 +46,7 @@ public class ValidPhoneNumberValidatorTest {
     public void ensureOnlyWhitespaceStringIsIgnored() {
 
         ValidPhoneNumberValidator sut = new ValidPhoneNumberValidator();
-        assertTrue("Empty phone number must be ignored, as valid", sut.isValid(new PhoneNumber("    "), null));
+        assertTrue("Empty phone number must be ignored, as valid", sut.isValid("    ", null));
     }
 
 

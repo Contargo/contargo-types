@@ -17,7 +17,7 @@ import javax.validation.ConstraintValidatorContext;
  * @author  Robin Jayasinghe - jayasinghe@synyx.de
  * @author  Olle Törnström - toernstroem@synyx.de
  */
-public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhoneNumber, PhoneNumber> {
+public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhoneNumber, String> {
 
     private static final int PHONE_NUMBER_SIZE = 64;
 
@@ -29,20 +29,20 @@ public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhone
 
 
     @Override
-    public boolean isValid(PhoneNumber value, ConstraintValidatorContext cvc) {
+    public boolean isValid(String value, ConstraintValidatorContext cvc) {
 
-        // We must assume non-null, non-empty is validated elsewhere
-        if (value == null) {
+        if (StringUtils.isEmpty(value)) {
             return true;
         }
 
-        List<PhoneNumberValidationResult> validationResults = checkPhoneNumber(value);
+        final PhoneNumber phoneNumber = new PhoneNumber(value);
+        List<PhoneNumberValidationResult> validationResults = checkPhoneNumber(phoneNumber);
 
         validationResults.forEach(validationResult -> {
             final String messageTemplate;
             String propertyName = "phone";
 
-            if (value.isMobile()) {
+            if (phoneNumber.isMobile()) {
                 propertyName = "mobile";
             }
 
