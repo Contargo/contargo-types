@@ -23,8 +23,6 @@ public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhone
 
     @Override
     public void initialize(ValidPhoneNumber a) {
-
-        // nothing to do
     }
 
 
@@ -40,11 +38,6 @@ public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhone
 
         validationResults.forEach(validationResult -> {
             final String messageTemplate;
-            String propertyName = "phone";
-
-            if (phoneNumber.isMobile()) {
-                propertyName = "mobile";
-            }
 
             switch (validationResult) {
                 case ZERO_NUMBER:
@@ -63,7 +56,7 @@ public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhone
                     throw new IllegalArgumentException("unknown validation result for contact info");
             }
 
-            reportConstraintViolation(cvc, messageTemplate, propertyName);
+            reportConstraintViolation(cvc, messageTemplate);
         });
 
         return validationResults.isEmpty();
@@ -92,10 +85,8 @@ public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhone
     }
 
 
-    private void reportConstraintViolation(final ConstraintValidatorContext context, final String messageTemplate,
-        final String propertyName) {
+    private void reportConstraintViolation(final ConstraintValidatorContext context, final String messageTemplate) {
 
-        context.buildConstraintViolationWithTemplate(messageTemplate)
-            .addPropertyNode(propertyName).addConstraintViolation();
+        context.buildConstraintViolationWithTemplate(messageTemplate).addConstraintViolation();
     }
 }
