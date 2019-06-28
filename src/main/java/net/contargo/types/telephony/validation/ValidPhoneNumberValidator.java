@@ -39,17 +39,17 @@ public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhone
 
         if (!StringUtils.isBlank(phoneNumber.getRawPhoneNumber())) {
             if (phoneNumber.containsOnlyZeros()) {
-                reportConstraintViolation(cvc, "{ZERO_NUMBER}");
+                reportConstraintViolation(cvc, "{PHONE_NUMBER_IS_ZERO_NUMBER}");
                 foundError = true;
             }
 
             if (!phoneNumber.canBeFormatted()) {
-                reportConstraintViolation(cvc, "{CAN_NOT_FORMATTED}");
+                reportConstraintViolation(cvc, "{PHONE_NUMBER_CANNOT_BE_FORMATTED}");
                 foundError = true;
             }
 
             if (phoneNumber.getRawPhoneNumber().length() > PHONE_NUMBER_SIZE) {
-                reportConstraintViolation(cvc, "{TOO_LARGE}");
+                reportConstraintViolation(cvc, "{PHONE_NUMBER_TOO_LARGE}");
                 foundError = true;
             }
         }
