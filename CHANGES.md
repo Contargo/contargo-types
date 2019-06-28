@@ -1,6 +1,10 @@
 Contargo Types
 ===============
 
+## v0.17.5
+
+* Optimize ValidPhoneNumberValidator, checking for different constraints such as phone number is zero number, can not be formatted or is to long.
+
 ## v0.17.4
 
 * Introduce the possibility to reset UniquenessValidator implementations. Reset means that all in-memory data is
