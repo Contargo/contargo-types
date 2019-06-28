@@ -1,6 +1,11 @@
 Contargo Types
 ===============
 
+## v0.17.4
+
+* Introduce the possibility to reset UniquenessValidator implementations. Reset means that all in-memory data is
+  deleted. Reprovisioning the data lies in the responsibility of the calling code.
+
 ## v0.17.3
 
 * fix PhoneNumberFormatter, the numbers was formatted by the google library and then splitted into country code, areaCode 

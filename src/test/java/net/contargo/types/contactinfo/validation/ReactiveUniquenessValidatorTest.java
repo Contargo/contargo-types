@@ -92,6 +92,26 @@ public class ReactiveUniquenessValidatorTest {
 
 
     @Test
+    public void ensureThatResetClearsAllData() {
+
+        ReactiveUniquenessValidator reactiveUniquenessValidator = new ReactiveUniquenessValidator(
+                new PhoneNumberNormalizer(), new EmailAddressNormalizer());
+
+        consumeColaProfiles(reactiveUniquenessValidator);
+
+        reactiveUniquenessValidator.reset();
+
+        ContactInformation contactInformationWithDuplicateMobile =
+            contactInformationWithDuplicateMobileAfterNormalization();
+        List<ValidationResult> validationResults = reactiveUniquenessValidator.checkUniqueness(
+                contactInformationWithDuplicateMobile);
+
+        assertEquals(0, validationResults.size());
+        // no validation errors since data of validator should be empty
+    }
+
+
+    @Test
     public void ensureThatDuplicateMobileIsDetectedAfterNormalization() {
 
         ReactiveUniquenessValidator reactiveUniquenessValidator = new ReactiveUniquenessValidator(
