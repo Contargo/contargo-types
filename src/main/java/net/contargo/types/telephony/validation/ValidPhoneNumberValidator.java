@@ -34,54 +34,27 @@ public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhone
         }
 
         final PhoneNumber phoneNumber = new PhoneNumber(value);
-        List<PhoneNumberValidationResult> validationResults = checkPhoneNumber(phoneNumber);
 
-        validationResults.forEach(validationResult -> {
-            final String messageTemplate;
-
-            switch (validationResult) {
-                case ZERO_NUMBER:
-                    messageTemplate = "{ZERO_NUMBER}";
-                    break;
-
-                case CAN_NOT_FORMATTED:
-                    messageTemplate = "{CAN_NOT_FORMATTED}";
-                    break;
-
-                case TOO_LARGE:
-                    messageTemplate = "{TOO_LARGE}";
-                    break;
-
-                default:
-                    throw new IllegalArgumentException("unknown validation result for contact info");
-            }
-
-            reportConstraintViolation(cvc, messageTemplate);
-        });
-
-        return validationResults.isEmpty();
-    }
-
-
-    private List<PhoneNumberValidationResult> checkPhoneNumber(final PhoneNumber phoneNumber) {
-
-        List<PhoneNumberValidationResult> phoneNumberValidationResults = new ArrayList<>();
+        boolean foundError = false;
 
         if (!StringUtils.isBlank(phoneNumber.getRawPhoneNumber())) {
             if (phoneNumber.containsOnlyZeros()) {
-                phoneNumberValidationResults.add(PhoneNumberValidationResult.ZERO_NUMBER);
+                reportConstraintViolation(cvc, "{ZERO_NUMBER}");
+                foundError = true;
             }
 
             if (!phoneNumber.canBeFormatted()) {
-                phoneNumberValidationResults.add(PhoneNumberValidationResult.CAN_NOT_FORMATTED);
+                reportConstraintViolation(cvc, "{CAN_NOT_FORMATTED}");
+                foundError = true;
             }
 
             if (phoneNumber.getRawPhoneNumber().length() > PHONE_NUMBER_SIZE) {
-                phoneNumberValidationResults.add(PhoneNumberValidationResult.TOO_LARGE);
+                reportConstraintViolation(cvc, "{TOO_LARGE}");
+                foundError = true;
             }
         }
 
-        return phoneNumberValidationResults;
+        return foundError;
     }
 
 
