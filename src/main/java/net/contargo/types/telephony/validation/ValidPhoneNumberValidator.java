@@ -4,9 +4,6 @@ import net.contargo.types.telephony.PhoneNumber;
 
 import org.apache.commons.lang.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
@@ -35,26 +32,26 @@ public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhone
 
         final PhoneNumber phoneNumber = new PhoneNumber(value);
 
-        boolean foundError = false;
+        boolean isValid = true;
 
         if (!StringUtils.isBlank(phoneNumber.getRawPhoneNumber())) {
             if (phoneNumber.containsOnlyZeros()) {
                 reportConstraintViolation(cvc, "{PHONE_NUMBER_IS_ZERO_NUMBER}");
-                foundError = true;
+                isValid = false;
             }
 
             if (!phoneNumber.canBeFormatted()) {
                 reportConstraintViolation(cvc, "{PHONE_NUMBER_CANNOT_BE_FORMATTED}");
-                foundError = true;
+                isValid = false;
             }
 
             if (phoneNumber.getRawPhoneNumber().length() > PHONE_NUMBER_SIZE) {
                 reportConstraintViolation(cvc, "{PHONE_NUMBER_TOO_LARGE}");
-                foundError = true;
+                isValid = false;
             }
         }
 
-        return foundError;
+        return isValid;
     }
 
 
