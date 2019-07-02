@@ -25,7 +25,6 @@ public final class PhoneNumber implements Loggable {
     private Country country;
     private final String rawPhoneNumber;
     private String phoneExtension;
-    private boolean isMobile = false;
 
     public PhoneNumber() {
 
@@ -132,19 +131,7 @@ public final class PhoneNumber implements Loggable {
 
     public boolean containsOnlyZeros() {
 
-        return rawPhoneNumber.matches("0+$");
-    }
-
-
-    public boolean isMobile() {
-
-        return isMobile;
-    }
-
-
-    public void setMobile(boolean mobile) {
-
-        isMobile = mobile;
+        return rawPhoneNumber.matches("^\\+?0+$");
     }
 
 
