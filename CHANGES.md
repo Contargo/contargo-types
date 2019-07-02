@@ -1,6 +1,16 @@
 Contargo Types
 ===============
 
+## v0.17.7
+
+* fix regex for the check of number contains only zeros. A number which starts with a + 
+was always not a null number but it should be.
+
+## v0.17.6
+
+* fix ValidPhoneNumberValidator before always returns false if the number was valid. 
+Now is valid is true if the number is correct.
+
 ## v0.17.5
 
 * Optimize ValidPhoneNumberValidator, checking for different constraints such as phone number is zero number, can not be formatted or is to long.
