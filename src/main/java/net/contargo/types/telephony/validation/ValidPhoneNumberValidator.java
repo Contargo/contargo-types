@@ -1,9 +1,8 @@
 package net.contargo.types.telephony.validation;
 
-import com.google.i18n.phonenumbers.NumberParseException;
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import net.contargo.types.telephony.PhoneNumber;
 
-import java.util.Objects;
+import org.apache.commons.lang.StringUtils;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -17,31 +16,47 @@ import javax.validation.ConstraintValidatorContext;
  */
 public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhoneNumber, String> {
 
-    private final PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
+    private static final int PHONE_NUMBER_SIZE = 64;
 
     @Override
     public void initialize(ValidPhoneNumber a) {
-
-        // nothing to do
     }
 
 
     @Override
-    public boolean isValid(String phoneNumber, ConstraintValidatorContext cvc) {
+    public boolean isValid(String value, ConstraintValidatorContext cvc) {
 
-        // We must assume non-null, non-empty is validated elsewhere
-        if (Objects.isNull(phoneNumber) || phoneNumber.trim().isEmpty()) {
+        if (StringUtils.isEmpty(value)) {
             return true;
         }
 
-        String phoneNumberWithoutWhitespace = phoneNumber.replaceAll("\\s+", "");
+        final PhoneNumber phoneNumber = new PhoneNumber(value);
 
-        try {
-            phoneNumberUtil.parse(phoneNumberWithoutWhitespace, "DE");
+        boolean isValid = true;
 
-            return true;
-        } catch (NumberParseException e1) {
-            return false;
+        if (!StringUtils.isBlank(phoneNumber.getRawPhoneNumber())) {
+            if (phoneNumber.containsOnlyZeros()) {
+                reportConstraintViolation(cvc, "{PHONE_NUMBER_IS_ZERO_NUMBER}");
+                isValid = false;
+            }
+
+            if (!phoneNumber.canBeFormatted()) {
+                reportConstraintViolation(cvc, "{PHONE_NUMBER_CANNOT_BE_FORMATTED}");
+                isValid = false;
+            }
+
+            if (phoneNumber.getRawPhoneNumber().length() > PHONE_NUMBER_SIZE) {
+                reportConstraintViolation(cvc, "{PHONE_NUMBER_TOO_LARGE}");
+                isValid = false;
+            }
         }
+
+        return isValid;
+    }
+
+
+    private void reportConstraintViolation(final ConstraintValidatorContext context, final String messageTemplate) {
+
+        context.buildConstraintViolationWithTemplate(messageTemplate).addConstraintViolation();
     }
 }

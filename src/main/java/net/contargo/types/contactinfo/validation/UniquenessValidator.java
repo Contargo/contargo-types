@@ -6,8 +6,8 @@ import java.util.List;
 
 
 /**
- * Implementations of this interface can check whether certain properties in a contact information object are
- * unique within the context of the validators implementation.
+ * Implementations of this interface can check whether certain properties in a contact information object are unique
+ * within the context of the validators implementation.
  */
 public interface UniquenessValidator {
 

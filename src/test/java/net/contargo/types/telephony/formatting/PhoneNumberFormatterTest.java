@@ -81,9 +81,18 @@ public class PhoneNumberFormatterTest {
     @Test
     public void ensureThatFormattingWithExtensionWorks() throws PhoneNumberFormattingException {
 
-        Assert.assertEquals("+49 6222 1234 5678-89",
+        Assert.assertEquals("+49 6222 1234 5678 89",
             phoneNumberFormatter.parseAndFormatToDIN5008("0622212345678", "8-9"));
-        Assert.assertEquals("+49 6222 1234 5678-89",
+        Assert.assertEquals("+49 6222 1234 5678 89",
             phoneNumberFormatter.parseAndFormatToDIN5008("0622212345678", "89"));
+    }
+
+
+    @Test
+    public void ensureAreaCodeIsCorrectly() throws PhoneNumberFormattingException {
+
+        Assert.assertEquals("+252 4243 27", phoneNumberFormatter.parseAndFormatToDIN5008("+252424327"));
+        Assert.assertEquals("424327", phoneNumberFormatter.getNationalSignificantNumber("+252424327"));
+        Assert.assertEquals("SO", phoneNumberFormatter.getRegionCode("+252424327")); // SO = Somalia
     }
 }

@@ -93,10 +93,30 @@ Direction.TURN_OUT
 
 The `Direction` enum describes the direction of a unit movement regarding one location.
 
+### Phone numbers
+
+```java
+PhoneNumber phoneNumber = new PhoneNumber(string);
+```
+The built phone number instance provides various information about the phone number, such as the country code or country calling code or the regional phone number. 
+
+#### Format
+The phone number instance can return the phone number in a international phone number formate.
+
 ## Development
 
 This is a pretty straight-forward Java-project, use `mvn` to build, test and
 deploy.
+
+## Release
+
+The project use the [Jitpack](https://jitpack.io) to be build.
+Steps before you can create an release:
+1. update the `CHANGE.md`
+2. update the project version in `pom.xml` to the version which should be released
+3. check the `README.md` if it is still correct else make an update
+
+If the steps are done an release can be done by a Contargo-User on GitHub (release -> draft a new release) 
 
 ## License
 

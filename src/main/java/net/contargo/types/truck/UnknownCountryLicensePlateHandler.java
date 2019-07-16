@@ -11,7 +11,7 @@ package net.contargo.types.truck;
  */
 class UnknownCountryLicensePlateHandler implements LicensePlateHandler {
 
-    private static final int MAXIMUM_NUMBER_OF_CHARACTERS = 64;
+    private static final int MAXIMUM_NUMBER_OF_CHARACTERS = 15;
 
     /**
      * Normalizes the given {@link LicensePlate} value by trimming and upper casing value.

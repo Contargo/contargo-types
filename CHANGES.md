@@ -1,6 +1,51 @@
 Contargo Types
 ===============
 
+## v0.17.7
+
+* fix regex for the check of number contains only zeros. A number which starts with a + 
+was always not a null number but it should be.
+
+## v0.17.6
+
+* fix ValidPhoneNumberValidator before always returns false if the number was valid. 
+Now is valid is true if the number is correct.
+
+## v0.17.5
+
+* Optimize ValidPhoneNumberValidator, checking for different constraints such as phone number is zero number, can not be formatted or is to long.
+
+## v0.17.4
+
+* Introduce the possibility to reset UniquenessValidator implementations. Reset means that all in-memory data is
+  deleted. Reprovisioning the data lies in the responsibility of the calling code.
+
+## v0.17.3
+
+* fix PhoneNumberFormatter, the numbers was formatted by the google library and then splitted into country code, areaCode 
+and connectionNumber. If the Number does have connectionNumbers with mor than on empty space splitted only the first part
+was used. 
+
+## v0.17.2
+
+* fix broken tests from PhoneNumbers. 
+
+## v0.17.1
+
+* use PhoneNumber in ContactInformation instead of String for phone- and mobile numbers
+* change PhoneNumber only format number if method is called. Has country code, raw phone number and extension 
+to a phone number. 
+
+## v0.17.0
+
+* Adds PhoneNumber to format phone numbers and get information to a specific phone number, 
+like the country code or country calling code.
+* Change the amount of characters for license plates to max. 15 characters.
+
+## v0.16.1
+
+* Adds handlingcode 20OS with ISO-Code 22G2
+
 ## v0.15.0
 
 * Separated uniqueness- and completeness validators in order to support use cases where only one of the checks

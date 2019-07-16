@@ -22,4 +22,10 @@ public interface ContactInfoConsumer {
 
         // OK
     }
+
+
+    default void reset() {
+
+        // OK
+    }
 }

@@ -36,6 +36,6 @@ class DefaultLicensePlateHandler implements LicensePlateHandler {
     public boolean validate(String value) {
 
         // allowed: any letter or digit, but no special characters except '-' and ' '
-        return normalize(value).matches("[\\p{L}0-9\\- ]*");
+        return normalize(value).matches("[\\p{L}0-9\\- ]{2,15}");
     }
 }

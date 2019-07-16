@@ -1,5 +1,8 @@
 package net.contargo.types.contactinfo;
 
+import net.contargo.types.telephony.PhoneNumber;
+
+
 /**
  * Contact options for a user in the COLA environment.
  *
@@ -8,15 +11,15 @@ package net.contargo.types.contactinfo;
 public class ContactInformation {
 
     private final String userUUID;
-    private final String mobile;
-    private final String phone;
+    private final PhoneNumber mobile;
+    private final PhoneNumber phone;
     private final String email;
 
     public ContactInformation(String userUUID, String mobile, String phone, String email) {
 
         this.userUUID = userUUID;
-        this.mobile = mobile;
-        this.phone = phone;
+        this.mobile = new PhoneNumber(mobile);
+        this.phone = new PhoneNumber(phone);
         this.email = email;
     }
 
@@ -26,16 +29,17 @@ public class ContactInformation {
     }
 
 
-    public String getMobile() {
+    public PhoneNumber getMobile() {
 
         return mobile;
     }
 
 
-    public String getPhone() {
+    public PhoneNumber getPhone() {
 
         return phone;
     }
+
 
     public String getEmail() {
 

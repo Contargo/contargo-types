@@ -2,16 +2,30 @@ package net.contargo.types.telephony.validation;
 
 import com.google.i18n.phonenumbers.NumberParseException;
 
+import net.contargo.types.telephony.PhoneNumber;
+
+import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintValidatorContextImpl;
+
+import org.junit.Before;
 import org.junit.Test;
+
+import org.mockito.Mock;
+import org.mockito.Mockito;
+
+import javax.validation.ConstraintValidatorContext;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import static org.mockito.Matchers.anyString;
+
+import static org.mockito.Mockito.*;
 
 
 public class ValidPhoneNumberValidatorTest {
 
     @Test
-    public void ensureThatValidatorSucceedsWhenFormatterSuceeds() throws NumberParseException {
+    public void ensureThatValidatorSucceedsWhenFormatterSucceeds() {
 
         final ValidPhoneNumberValidator validPhoneNumberValidator = new ValidPhoneNumberValidator();
 
@@ -29,7 +43,7 @@ public class ValidPhoneNumberValidatorTest {
 
 
     @Test
-    public void ensureOnlyWhitespaceStringIsIgnored() throws Exception {
+    public void ensureOnlyWhitespaceStringIsIgnored() {
 
         ValidPhoneNumberValidator sut = new ValidPhoneNumberValidator();
         assertTrue("Empty phone number must be ignored, as valid", sut.isValid("    ", null));
@@ -41,14 +55,5 @@ public class ValidPhoneNumberValidatorTest {
 
         final ValidPhoneNumberValidator sut = new ValidPhoneNumberValidator();
         assertTrue("Missing phone number (null) must be ignored, as valid", sut.isValid(null, null));
-    }
-
-
-    @Test
-    public void ensureThatValidatorFailsWhenFormatterThrows() throws NumberParseException {
-
-        final ValidPhoneNumberValidator validPhoneNumberValidator = new ValidPhoneNumberValidator();
-
-        assertFalse("failed to detect invalid phone number", validPhoneNumberValidator.isValid("&§", null));
     }
 }
