@@ -20,6 +20,7 @@ public enum LicensePlateCountry implements Country {
     CZECH_REPUBLIC("CZ", "2H2 7149", new CzechLicensePlateHandler()),
     ROMANIA("RO", "B 183 CTL", new RomanianLicensePlateHandler()),
     BULGARIA("BG", "CA 7845 XC", new BulgarianLicensePlateHandler()),
+    LITHUANIA("LT", "KRK 365", new LithuanianLicensePlateHandler()),
     UNKNOWN_COUNTRY("", "", new UnknownCountryLicensePlateHandler());
 
     private final String countryCode;
