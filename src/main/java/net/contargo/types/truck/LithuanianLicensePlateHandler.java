@@ -1,6 +1,21 @@
 package net.contargo.types.truck;
 
 /**
+ * Can handle Lithuanian {@link LicensePlate}s.
+ *
+ * <p>Examples of Lithuanian license plates:</p>
+ *
+ * <ul>
+ *   <li>KRK 365</li>
+ *   <li>DFZ 289</li>
+ * </ul>
+ *
+ * <p>For more more information: <a href="https://en.wikipedia.org/wiki/Vehicle_registration_plates_of_Lithuania" ></a>
+ * </p>
+ *
+ * <p>Lithiuania also allows so called vanity plates. Those are not correctly validated, as they don't follow the
+ * structure of a normal license plate.</p>
+ *
  * @author  Marius van Herpen - mvanherpen@contargo.net
  */
 public class LithuanianLicensePlateHandler implements LicensePlateHandler {
@@ -35,7 +50,6 @@ public class LithuanianLicensePlateHandler implements LicensePlateHandler {
      *
      * @return  {@code true} if the given {@link LicensePlate} is valid, else {@code false}
      */
-
     @Override
     public boolean validate(String value) {
 

@@ -24,6 +24,7 @@ public class LithuanianLicensePlateHandlerTest extends AbstractLicensePlateHandl
         assertIsNormalizedFromTo.accept("abc-123", "ABC 123");
         assertIsNormalizedFromTo.accept("abc 123", "ABC 123");
         assertIsNormalizedFromTo.accept("abc--123", "ABC 123");
+        assertIsNormalizedFromTo.accept("abc123", "ABC 123");
     }
 
 
@@ -34,6 +35,7 @@ public class LithuanianLicensePlateHandlerTest extends AbstractLicensePlateHandl
 
         assertIsValid.accept("ABC 123");
         assertIsValid.accept("KRK 365");
+        assertIsValid.accept("JKS645");
     }
 
 
@@ -46,5 +48,8 @@ public class LithuanianLicensePlateHandlerTest extends AbstractLicensePlateHandl
         assertIsNotValid.accept("JKR 65");
         assertIsNotValid.accept("JKR 6435");
         assertIsNotValid.accept("JK 645");
+        assertIsNotValid.accept("JKST 645");
+        assertIsNotValid.accept("JH-TL-05");
+        assertIsNotValid.accept("JHTL505");
     }
 }
