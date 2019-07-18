@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -135,5 +136,22 @@ public class PhoneNumberTest {
         final PhoneNumber phoneNumber = new PhoneNumber("+41 713111301");
 
         assertEquals("+41 71 3111 301", phoneNumber.getInternationalFormatOfPhoneNumber().get());
+    }
+
+
+    @Test
+    public void ensureCheckPhoneNumberIsNotValid() {
+
+        String[] invalidNumbers = {
+            "042439414", "35998896844", "069-26515774", "9785", "00000", "35998896844", "49 786275110", "504958072",
+            "71589034410", "98989898", "0141-9988", "0123456999", "0123456789", "008157411", "0042-653614703",
+            "000491786657531", "001785852792", "00040738757400", "0001111", "400769000001", "+31 78", "+00724076802"
+        };
+
+        Arrays.stream(invalidNumbers).forEach(number -> {
+            PhoneNumber phoneNumber = new PhoneNumber(number);
+
+            assertFalse("the given number should be invalid - phone number: " + number, phoneNumber.isValidNumber());
+        });
     }
 }

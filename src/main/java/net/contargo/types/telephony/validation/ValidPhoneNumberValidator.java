@@ -1,6 +1,7 @@
 package net.contargo.types.telephony.validation;
 
 import net.contargo.types.telephony.PhoneNumber;
+import net.contargo.types.telephony.formatting.PhoneNumberFormattingException;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -47,6 +48,11 @@ public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhone
 
             if (phoneNumber.getRawPhoneNumber().length() > PHONE_NUMBER_SIZE) {
                 reportConstraintViolation(cvc, "{PHONE_NUMBER_TOO_LARGE}");
+                isValid = false;
+            }
+
+            if (phoneNumber.isValidNumber()) {
+                reportConstraintViolation(cvc, "{PHONE_NUMBER_VALID}");
                 isValid = false;
             }
         }

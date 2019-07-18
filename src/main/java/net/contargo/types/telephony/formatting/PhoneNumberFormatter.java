@@ -269,6 +269,12 @@ public class PhoneNumberFormatter implements Loggable {
         return phoneNumberWithoutBraces.replaceAll("/", "").replaceAll("-", "");
     }
 
+
+    public boolean isPossibleNumber(String phoneNumber) {
+
+        return phoneNumberUtil.isPossibleNumber(phoneNumber, "");
+    }
+
     // National number contains areaCode and connectionNumber
     private class NationalNumber {
 
