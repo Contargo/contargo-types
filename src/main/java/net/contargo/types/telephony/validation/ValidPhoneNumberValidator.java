@@ -60,7 +60,7 @@ public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhone
     }
 
 
-    private voaid reportConstraintViolation(final ConstraintValidatorContext context, final String messageTemplate) {
+    private void reportConstraintViolation(final ConstraintValidatorContext context, final String messageTemplate) {
 
         context.buildConstraintViolationWithTemplate(messageTemplate).addConstraintViolation();
     }
