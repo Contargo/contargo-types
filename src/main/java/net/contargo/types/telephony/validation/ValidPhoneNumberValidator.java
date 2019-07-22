@@ -1,7 +1,6 @@
 package net.contargo.types.telephony.validation;
 
 import net.contargo.types.telephony.PhoneNumber;
-import net.contargo.types.telephony.formatting.PhoneNumberFormattingException;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -51,7 +50,7 @@ public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhone
                 isValid = false;
             }
 
-            if (phoneNumber.isValidNumber()) {
+            if (!phoneNumber.isValidNumber()) {
                 reportConstraintViolation(cvc, "{PHONE_NUMBER_VALID}");
                 isValid = false;
             }
@@ -61,7 +60,7 @@ public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhone
     }
 
 
-    private void reportConstraintViolation(final ConstraintValidatorContext context, final String messageTemplate) {
+    private voaid reportConstraintViolation(final ConstraintValidatorContext context, final String messageTemplate) {
 
         context.buildConstraintViolationWithTemplate(messageTemplate).addConstraintViolation();
     }
