@@ -49,6 +49,11 @@ public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhone
                 reportConstraintViolation(cvc, "{PHONE_NUMBER_TOO_LARGE}");
                 isValid = false;
             }
+
+            if (!phoneNumber.isValidNumber()) {
+                reportConstraintViolation(cvc, "{PHONE_NUMBER_VALID}");
+                isValid = false;
+            }
         }
 
         return isValid;

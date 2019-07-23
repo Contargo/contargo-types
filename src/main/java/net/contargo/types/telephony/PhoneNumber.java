@@ -135,6 +135,12 @@ public final class PhoneNumber implements Loggable {
     }
 
 
+    public boolean isValidNumber() {
+
+        return phoneNumberFormatter.isPossibleNumber(getPhoneNumber());
+    }
+
+
     @Override
     public String toString() {
 
