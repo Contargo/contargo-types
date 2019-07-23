@@ -1,6 +1,14 @@
 Contargo Types
 ===============
 
+## v0.18.1
+
+* Adds extra validation of telephonenumbers.
+
+## v0.18.0
+
+* Handling of Lithuanian license plates.
+
 ## v0.17.7
 
 * fix regex for the check of number contains only zeros. A number which starts with a + 
