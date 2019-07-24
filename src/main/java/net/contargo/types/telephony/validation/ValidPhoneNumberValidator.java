@@ -1,5 +1,6 @@
 package net.contargo.types.telephony.validation;
 
+import net.contargo.types.Loggable;
 import net.contargo.types.telephony.PhoneNumber;
 
 import org.apache.commons.lang.StringUtils;
@@ -14,7 +15,7 @@ import javax.validation.ConstraintValidatorContext;
  * @author  Robin Jayasinghe - jayasinghe@synyx.de
  * @author  Olle Törnström - toernstroem@synyx.de
  */
-public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhoneNumber, String> {
+public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhoneNumber, String>, Loggable {
 
     private static final int PHONE_NUMBER_SIZE = 64;
 
@@ -51,8 +52,9 @@ public class ValidPhoneNumberValidator implements ConstraintValidator<ValidPhone
             }
 
             if (!phoneNumber.isValidNumber()) {
-                reportConstraintViolation(cvc, "{PHONE_NUMBER_VALID}");
-                isValid = false;
+                // TODO: to be discussed if the phone numbers has to be validated harder. currently only log info if the number is not valid.
+                logger().info("PHONE_NUMBER_INVALID - the given number '{}' ist not valid!",
+                    phoneNumber.getRawPhoneNumber());
             }
         }
 
