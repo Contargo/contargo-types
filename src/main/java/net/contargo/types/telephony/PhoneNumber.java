@@ -96,7 +96,7 @@ public final class PhoneNumber implements Loggable {
         logger().info("formatting phone number: {} into international phone number.", getPhoneNumber());
 
         if (StringUtils.isBlank(rawPhoneNumber) || containsOnlyZeros()) {
-            logger().warn("Not able to parse phone number of {}", rawPhoneNumber);
+            logger().info("Skipping formatting of empty phone number '{}'", rawPhoneNumber);
 
             return Optional.empty();
         }
