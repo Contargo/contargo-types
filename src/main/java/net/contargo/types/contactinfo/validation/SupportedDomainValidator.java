@@ -2,10 +2,11 @@ package net.contargo.types.contactinfo.validation;
 
 import org.apache.commons.lang.StringUtils;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 
 
 /**
@@ -20,7 +21,6 @@ public class SupportedDomainValidator implements ConstraintValidator<SupportedDo
 
     private List<String> domains;
 
-
     @Override
     public void initialize(SupportedDomain constraintAnnotation) {
 
@@ -31,7 +31,14 @@ public class SupportedDomainValidator implements ConstraintValidator<SupportedDo
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
 
-        if (value == null || value.isEmpty() || !value.contains("@") || !value.contains(".")) {
+        boolean isValid = true;
+
+        if (value == null || value.isEmpty()) {
+            // is checked else where in the separate user completeness validators
+            return true;
+        }
+
+        if (!value.contains("@") || !value.contains(".")) {
             return false;
         }
 
@@ -39,12 +46,16 @@ public class SupportedDomainValidator implements ConstraintValidator<SupportedDo
         int beginIndex = value.lastIndexOf('@') + 1;
 
         if (beginIndex > endIndex) {
-            return false;
+            isValid = false;
         }
 
         String domain = value.substring(beginIndex, endIndex);
         domain = StringUtils.lowerCase(domain);
 
-        return domains.stream().noneMatch(domain::contains);
+        if (domains.stream().anyMatch(domain::contains)) {
+            isValid = false;
+        }
+
+        return isValid;
     }
 }
