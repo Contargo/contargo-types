@@ -13,7 +13,7 @@ import javax.validation.Payload;
  * @author  Marius van Herpen - mvanherpen@contargo.net
  * @author  Julia Dasch - dasch@synyx.com
  */
-@Target({ ElementType.METHOD, ElementType.FIELD })
+@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = SupportedDomainValidator.class)
 public @interface SupportedDomain {
