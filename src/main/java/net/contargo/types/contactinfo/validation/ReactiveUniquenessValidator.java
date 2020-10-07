@@ -22,10 +22,11 @@ public class ReactiveUniquenessValidator implements ContactInfoConsumer, Loggabl
     private final ConcurrentMap<String, String> userUUIDToMail;
     private final ConcurrentMap<String, String> userUUIDToMobile;
     private final ConcurrentMap<String, Set<String>> mobileToUserUUIDs;
-
     private final ConcurrentMap<String, Set<String>> mailToUserUUIDs;
+
     private final PhoneNumberNormalizer phoneNumberNormalizer;
     private final EmailAddressNormalizer emailAddressNormalizer;
+
     private boolean isConsumingRegistrations = true;
 
     public ReactiveUniquenessValidator(PhoneNumberNormalizer phoneNumberNormalizer,
@@ -105,9 +106,15 @@ public class ReactiveUniquenessValidator implements ContactInfoConsumer, Loggabl
     private void handleChangedMobile(final String newMobile, final String userUUID, final String oldMobile) {
 
         userUUIDToMobile.put(userUUID, newMobile);
-        mobileToUserUUIDs.getOrDefault(oldMobile, Collections.emptySet()).remove(userUUID);
-        mobileToUserUUIDs.putIfAbsent(newMobile, new HashSet<>());
-        mobileToUserUUIDs.get(newMobile).add(userUUID);
+
+        mobileToUserUUIDs.computeIfPresent(oldMobile,
+            (k, userUUIDs) -> {
+                userUUIDs.remove(userUUID);
+
+                return userUUIDs;
+            });
+
+        mobileToUserUUIDs.computeIfAbsent(newMobile, k -> new HashSet<>()).add(userUUID);
     }
 
 
@@ -126,9 +133,14 @@ public class ReactiveUniquenessValidator implements ContactInfoConsumer, Loggabl
     private void handleChangedMailAddress(final String newMail, final String userUUID, final String oldMail) {
 
         userUUIDToMail.put(userUUID, newMail);
-        mailToUserUUIDs.getOrDefault(oldMail, Collections.emptySet()).remove(userUUID);
-        mailToUserUUIDs.putIfAbsent(newMail, new HashSet<>());
-        mailToUserUUIDs.get(newMail).add(userUUID);
+
+        mailToUserUUIDs.computeIfPresent(oldMail, (k, v) -> {
+                v.remove(userUUID);
+
+                return v;
+            });
+
+        mailToUserUUIDs.computeIfAbsent(newMail, k -> new HashSet<>()).add(userUUID);
     }
 
 
@@ -137,7 +149,12 @@ public class ReactiveUniquenessValidator implements ContactInfoConsumer, Loggabl
         userUUIDToMobile.remove(userUUID);
 
         if (StringUtils.isNotBlank(oldMobile)) {
-            mobileToUserUUIDs.getOrDefault(oldMobile, Collections.emptySet()).remove(userUUID);
+            mobileToUserUUIDs.computeIfPresent(oldMobile,
+                (k, userUUIDs) -> {
+                    userUUIDs.remove(userUUID);
+
+                    return userUUIDs;
+                });
         }
     }
 
@@ -147,11 +164,7 @@ public class ReactiveUniquenessValidator implements ContactInfoConsumer, Loggabl
         userUUIDToMobile.put(userUUID, newMobile);
 
         // add reverse mapping
-        if (!mobileToUserUUIDs.containsKey(newMobile)) {
-            mobileToUserUUIDs.putIfAbsent(newMobile, new HashSet<>());
-        }
-
-        mobileToUserUUIDs.get(newMobile).add(userUUID);
+        mobileToUserUUIDs.computeIfAbsent(newMobile, k -> new HashSet<>()).add(userUUID);
     }
 
 
@@ -160,7 +173,12 @@ public class ReactiveUniquenessValidator implements ContactInfoConsumer, Loggabl
         userUUIDToMail.remove(userUUID);
 
         if (StringUtils.isNotBlank(oldMail)) {
-            mailToUserUUIDs.getOrDefault(oldMail, Collections.emptySet()).remove(userUUID);
+            mailToUserUUIDs.computeIfPresent(oldMail,
+                (k, userUUIDs) -> {
+                    userUUIDs.remove(userUUID);
+
+                    return userUUIDs;
+                });
         }
     }
 
@@ -170,11 +188,7 @@ public class ReactiveUniquenessValidator implements ContactInfoConsumer, Loggabl
         userUUIDToMail.put(userUUID, newMail);
 
         // add reverse mapping
-        if (!mailToUserUUIDs.containsKey(newMail)) {
-            mailToUserUUIDs.putIfAbsent(newMail, new HashSet<>());
-        }
-
-        mailToUserUUIDs.get(newMail).add(userUUID);
+        mailToUserUUIDs.computeIfAbsent(newMail, k -> new HashSet<>()).add(userUUID);
     }
 
 
@@ -234,27 +248,25 @@ public class ReactiveUniquenessValidator implements ContactInfoConsumer, Loggabl
 
 
     protected boolean isValueUniqueForKey(final String key, final String value,
-        final Map<String, Set<String>> dataToCheck) {
+        final ConcurrentMap<String, Set<String>> dataToCheck) {
 
-        if (dataToCheck.containsKey(key)) {
-            Set<String> values = dataToCheck.get(key);
+        // Use local copy of values, since modifications on the mapped set may occur
+        HashSet<String> values = new HashSet<>(dataToCheck.getOrDefault(key, Collections.emptySet()));
 
-            // only one presence and mapped to the requester's userUUID
-            if (!values.isEmpty()) { // there are values for this key
-
-                if (values.size() == 1 && values.contains(value)) { // only one value equals to the requested value: unique
-                    return true;
-                } else { // more values or one not equal to the requested one: not unique
-                    logger().info("detected non-unique value {}. claimed by {} but already taken by {}.", key, value,
-                        String.join(",", values));
-
-                    return false;
-                }
-            } else {
-                return true;
-            }
-        } else { // no mappings yet -> unique
+        // No values for key: implied unique (we don't know)
+        if (values.isEmpty()) {
             return true;
         }
+
+        // Exactly one value equal to the requested value: distinct unique, for key.
+        if (values.size() == 1 && values.contains(value)) {
+            return true;
+        }
+
+        // More values or one that is not equal to the requested: distinct not unique, for key.
+        logger().info("detected non-unique value {}. claimed by {} but already taken by {}.", key, value,
+            String.join(",", values));
+
+        return false;
     }
 }
