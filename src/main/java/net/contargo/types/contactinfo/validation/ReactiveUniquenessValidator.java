@@ -233,7 +233,7 @@ public class ReactiveUniquenessValidator implements ContactInfoConsumer, Loggabl
     }
 
 
-    private boolean isValueUniqueForKey(final String key, final String value,
+    protected boolean isValueUniqueForKey(final String key, final String value,
         final Map<String, Set<String>> dataToCheck) {
 
         if (dataToCheck.containsKey(key)) {

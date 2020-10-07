@@ -17,77 +17,16 @@ import static org.junit.Assert.assertTrue;
 
 public class ReactiveUniquenessValidatorTest {
 
-    private void consumeColaProfiles(ContactInfoConsumer colaProfileConsumer) {
+    private void consumeColaProfilesFixtures(ContactInfoConsumer colaProfileConsumer) {
 
         List<ContactInformation> allProfiles = new ArrayList<>();
 
-        ContactInformation contactInformation1 = new ContactInformation("uuid1", "01234", "04567", "foo1@bar");
-        allProfiles.add(contactInformation1);
-
-        ContactInformation contactInformation2 = new ContactInformation("uuid2", "01233", "04567", "foo@bar");
-        allProfiles.add(contactInformation2);
-
-        ContactInformation contactInformation3 = new ContactInformation("uuid3", "0171789987", "04567", "foo@baz");
-        allProfiles.add(contactInformation3);
-
-        ContactInformation contactInformation4 = new ContactInformation("uuid4", "0171789987", "04567", "foo@bazl");
-        allProfiles.add(contactInformation4);
+        allProfiles.add(new ContactInformation("uuid1", "01234", "04567", "foo1@bar"));
+        allProfiles.add(new ContactInformation("uuid2", "01233", "04567", "foo@bar"));
+        allProfiles.add(new ContactInformation("uuid3", "0171789987", "04567", "foo@baz"));
+        allProfiles.add(new ContactInformation("uuid4", "0171789987", "04567", "foo@bazl"));
 
         colaProfileConsumer.consume(allProfiles);
-    }
-
-
-    private ContactInformation contactInformationWithAllData() {
-
-        return new ContactInformation("uuid1", "0171789987", "0721321451", "foo@bar");
-    }
-
-
-    private ContactInformation contactInformationWithAllDataAndDuplicateMailOfOtherUser() {
-
-        return new ContactInformation("uuid1", "", "0721321451", "foo@baz");
-    }
-
-
-    private ContactInformation contactInformationWithDuplicateMailAfterNormalization() {
-
-        return new ContactInformation("uuid1-1", "", "0721321451", "foo1@BAR");
-    }
-
-
-    private ContactInformation contactInformationWithAllDataAndDistinctMail() {
-
-        return new ContactInformation("uuid3", "", "0721321451", "foo@baz");
-    }
-
-
-    private ContactInformation contactInformationWithAllDataAndDistinctMobile() {
-
-        return new ContactInformation("uuid4", "0171789988", "0721321451", "foo@barz");
-    }
-
-
-    private ContactInformation contactInformationWithDuplicateMobileAfterNormalization() {
-
-        return new ContactInformation("uuid5", "+49171789987", "0721321451", null);
-    }
-
-
-    private ContactInformation contactInformationWithDuplicateMobile() {
-
-        return new ContactInformation("uuid5", "0171789987", "0721321451", null);
-    }
-
-
-    private ContactInformation contactInformationWithoutPhoneNumbers() {
-
-        return new ContactInformation("uuid1", null, null, "foo@bar");
-    }
-
-
-    private ContactInformation contactInformationWithoutEmailAndMobile() {
-
-        return new ContactInformation("uuid1", null, "01728092174", null);
     }
 
 
@@ -97,12 +36,12 @@ public class ReactiveUniquenessValidatorTest {
         ReactiveUniquenessValidator reactiveUniquenessValidator = new ReactiveUniquenessValidator(
                 new PhoneNumberNormalizer(), new EmailAddressNormalizer());
 
-        consumeColaProfiles(reactiveUniquenessValidator);
+        consumeColaProfilesFixtures(reactiveUniquenessValidator);
 
         reactiveUniquenessValidator.reset();
 
-        ContactInformation contactInformationWithDuplicateMobile =
-            contactInformationWithDuplicateMobileAfterNormalization();
+        ContactInformation contactInformationWithDuplicateMobile = new ContactInformation("uuid5", "+49171789987",
+                "0721321451", null);
         List<ValidationResult> validationResults = reactiveUniquenessValidator.checkUniqueness(
                 contactInformationWithDuplicateMobile);
 
@@ -117,10 +56,10 @@ public class ReactiveUniquenessValidatorTest {
         ReactiveUniquenessValidator reactiveUniquenessValidator = new ReactiveUniquenessValidator(
                 new PhoneNumberNormalizer(), new EmailAddressNormalizer());
 
-        consumeColaProfiles(reactiveUniquenessValidator);
+        consumeColaProfilesFixtures(reactiveUniquenessValidator);
 
-        ContactInformation contactInformationWithDuplicateMobile =
-            contactInformationWithDuplicateMobileAfterNormalization();
+        ContactInformation contactInformationWithDuplicateMobile = new ContactInformation("uuid5", "+49171789987",
+                "0721321451", null);
         List<ValidationResult> validationResults = reactiveUniquenessValidator.checkUniqueness(
                 contactInformationWithDuplicateMobile);
 
@@ -163,9 +102,10 @@ public class ReactiveUniquenessValidatorTest {
 
         ReactiveUniquenessValidator reactiveUniquenessValidator = new ReactiveUniquenessValidator(
                 new PhoneNumberNormalizer(), new EmailAddressNormalizer());
-        consumeColaProfiles(reactiveUniquenessValidator);
+        consumeColaProfilesFixtures(reactiveUniquenessValidator);
 
-        assertDetectionOfDuplicateMobile(reactiveUniquenessValidator, contactInformationWithDuplicateMobile());
+        assertDetectionOfDuplicateMobile(reactiveUniquenessValidator,
+            new ContactInformation("uuid5", "0171789987", "0721321451", null));
     }
 
 
@@ -198,9 +138,10 @@ public class ReactiveUniquenessValidatorTest {
 
         ReactiveUniquenessValidator reactiveUniquenessValidator = new ReactiveUniquenessValidator(
                 new PhoneNumberNormalizer(), new EmailAddressNormalizer());
-        consumeColaProfiles(reactiveUniquenessValidator);
+        consumeColaProfilesFixtures(reactiveUniquenessValidator);
 
-        assertDetectionOfDuplicateMobile(reactiveUniquenessValidator, contactInformationWithDuplicateMobile());
+        assertDetectionOfDuplicateMobile(reactiveUniquenessValidator,
+            new ContactInformation("uuid5", "0171789987", "0721321451", null));
 
         reactiveUniquenessValidator.consume(contactInfoToBeChanged);
         assertThatNoValidationErrorIsReported(reactiveUniquenessValidator, contactInfoToBeValidated);
@@ -234,7 +175,7 @@ public class ReactiveUniquenessValidatorTest {
         ReactiveUniquenessValidator reactiveUniquenessValidator = new ReactiveUniquenessValidator(
                 new PhoneNumberNormalizer(), new EmailAddressNormalizer());
 
-        consumeColaProfiles(reactiveUniquenessValidator);
+        consumeColaProfilesFixtures(reactiveUniquenessValidator);
 
         assertDetectionOfDuplicateMail(reactiveUniquenessValidator, contactInfoToBeValidated);
 
@@ -248,9 +189,10 @@ public class ReactiveUniquenessValidatorTest {
 
         ReactiveUniquenessValidator reactiveUniquenessValidator = new ReactiveUniquenessValidator(
                 new PhoneNumberNormalizer(), new EmailAddressNormalizer());
-        consumeColaProfiles(reactiveUniquenessValidator);
+        consumeColaProfilesFixtures(reactiveUniquenessValidator);
 
-        assertDetectionOfDuplicateMobile(reactiveUniquenessValidator, contactInformationWithDuplicateMobile());
+        assertDetectionOfDuplicateMobile(reactiveUniquenessValidator,
+            new ContactInformation("uuid5", "0171789987", "0721321451", null));
 
         ContactInformation contactInfoToBeRemoved = new ContactInformation("uuid2", "01233", "04567", "foo@bar");
         ContactInformation contactInfoToBeValidated = new ContactInformation("uuid8", "01233", "04567", "foo@bar");
@@ -264,10 +206,10 @@ public class ReactiveUniquenessValidatorTest {
 
         ReactiveUniquenessValidator reactiveUniquenessValidator = new ReactiveUniquenessValidator(
                 new PhoneNumberNormalizer(), new EmailAddressNormalizer());
-        consumeColaProfiles(reactiveUniquenessValidator);
+        consumeColaProfilesFixtures(reactiveUniquenessValidator);
 
         assertDetectionOfDuplicateMail(reactiveUniquenessValidator,
-            contactInformationWithDuplicateMailAfterNormalization());
+            new ContactInformation("uuid1-1", "", "0721321451", "foo1@BAR"));
 
         ContactInformation contactInfoToBeRemoved = new ContactInformation("uuid3", "01233", "04567", "foo@baz");
         ContactInformation contactInfoToBeValidated = new ContactInformation("uuid8", "01233123", "04567", "foo@baz");
@@ -281,9 +223,9 @@ public class ReactiveUniquenessValidatorTest {
 
         ReactiveUniquenessValidator reactiveUniquenessValidator = new ReactiveUniquenessValidator(
                 new PhoneNumberNormalizer(), new EmailAddressNormalizer());
-        consumeColaProfiles(reactiveUniquenessValidator);
+        consumeColaProfilesFixtures(reactiveUniquenessValidator);
 
-        ContactInformation contactInfoWithAllData = contactInformationWithAllDataAndDuplicateMailOfOtherUser();
+        ContactInformation contactInfoWithAllData = new ContactInformation("uuid1", "", "0721321451", "foo@baz");
         List<ValidationResult> validationResults = reactiveUniquenessValidator.checkUniqueness(contactInfoWithAllData);
         assertEquals(1, validationResults.size());
         assertEquals(ValidationResult.NON_UNIQUE_EMAIL, validationResults.get(0));
@@ -295,9 +237,10 @@ public class ReactiveUniquenessValidatorTest {
 
         ReactiveUniquenessValidator reactiveUniquenessValidator = new ReactiveUniquenessValidator(
                 new PhoneNumberNormalizer(), new EmailAddressNormalizer());
-        consumeColaProfiles(reactiveUniquenessValidator);
+        consumeColaProfilesFixtures(reactiveUniquenessValidator);
 
-        ContactInformation contactInfoWithAllData = contactInformationWithAllDataAndDistinctMobile();
+        ContactInformation contactInfoWithAllData = new ContactInformation("uuid4", "0171789988", "0721321451",
+                "foo@barz");
         List<ValidationResult> validationResults = reactiveUniquenessValidator.checkUniqueness(contactInfoWithAllData);
         assertEquals(0, validationResults.size());
     }
@@ -308,9 +251,9 @@ public class ReactiveUniquenessValidatorTest {
 
         ReactiveUniquenessValidator reactiveUniquenessValidator = new ReactiveUniquenessValidator(
                 new PhoneNumberNormalizer(), new EmailAddressNormalizer());
-        consumeColaProfiles(reactiveUniquenessValidator);
+        consumeColaProfilesFixtures(reactiveUniquenessValidator);
 
-        ContactInformation contactInfoWithAllData = contactInformationWithAllDataAndDistinctMail();
+        ContactInformation contactInfoWithAllData = new ContactInformation("uuid3", "", "0721321451", "foo@baz");
         List<ValidationResult> validationResults = reactiveUniquenessValidator.checkUniqueness(contactInfoWithAllData);
         assertTrue(validationResults.isEmpty());
     }
@@ -364,9 +307,9 @@ public class ReactiveUniquenessValidatorTest {
 
         ReactiveUniquenessValidator reactiveUniquenessValidator = new ReactiveUniquenessValidator(
                 new PhoneNumberNormalizer(), new EmailAddressNormalizer());
-        consumeColaProfiles(reactiveUniquenessValidator);
+        consumeColaProfilesFixtures(reactiveUniquenessValidator);
 
-        ContactInformation contactInfoWithAllData = contactInformationWithDuplicateMailAfterNormalization();
+        ContactInformation contactInfoWithAllData = new ContactInformation("uuid1-1", "", "0721321451", "foo1@BAR");
         List<ValidationResult> validationResults = reactiveUniquenessValidator.checkUniqueness(contactInfoWithAllData);
         assertEquals(1, validationResults.size());
         assertEquals(ValidationResult.NON_UNIQUE_EMAIL, validationResults.get(0));
